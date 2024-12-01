@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "emptyLog.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

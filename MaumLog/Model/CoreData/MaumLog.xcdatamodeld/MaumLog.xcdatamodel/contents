@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23G93" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="LogCoreData" representedClassName="LogCoreData" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="medicineCards" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MedicineCardCoreData" inverseName="logData" inverseEntity="MedicineCardCoreData"/>
+        <relationship name="symptomCards" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="SymptomCardCoreData" inverseName="logData" inverseEntity="SymptomCardCoreData"/>
+    </entity>
+    <entity name="MedicineCardCoreData" representedClassName="MedicineCardCoreData" syncable="YES">
+        <attribute name="medicine" optional="YES" attributeType="String"/>
+        <relationship name="logData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LogCoreData" inverseName="medicineCards" inverseEntity="LogCoreData"/>
+    </entity>
+    <entity name="MedicineCoreData" representedClassName="MedicineCoreData" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="SymptomCardCoreData" representedClassName="SymptomCardCoreData" syncable="YES">
+        <attribute name="hex" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isNegative" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="rate" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="logData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LogCoreData" inverseName="symptomCards" inverseEntity="LogCoreData"/>
+    </entity>
+    <entity name="SymptomCoreData" representedClassName="SymptomCoreData" syncable="YES">
+        <attribute name="createDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="hex" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isNegative" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+    </entity>
+</model>
