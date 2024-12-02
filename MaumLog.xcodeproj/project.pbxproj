@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		510282B02C5D69C6008B8F15 /* RateCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510282AF2C5D69C6008B8F15 /* RateCardCell.swift */; };
-		5103A2462C554458008F8218 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103A2452C554458008F8218 /* Extension.swift */; };
 		5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103A2472C554F75008F8218 /* CapsuleCell.swift */; };
 		5103A24A2C555643008F8218 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103A2492C555643008F8218 /* HomeVM.swift */; };
 		511831792C6C96D600B25184 /* LogSectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511831782C6C96D600B25184 /* LogSectionData.swift */; };
@@ -42,6 +41,19 @@
 		518386E72C64087700437696 /* PropertyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518386E62C64087700437696 /* PropertyWrapper.swift */; };
 		5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5188EC752C6696B3004873D1 /* SettingsVM.swift */; };
 		5188EC782C66979C004873D1 /* ButtonTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5188EC772C66979C004873D1 /* ButtonTypeCell.swift */; };
+		518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EEB2CFDF9380067DF38 /* UIColor+.swift */; };
+		518E5EEE2CFDF9580067DF38 /* AttributeContainer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EED2CFDF9580067DF38 /* AttributeContainer+.swift */; };
+		518E5EF02CFDF96A0067DF38 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EEF2CFDF96A0067DF38 /* UIViewController+.swift */; };
+		518E5EF22CFDF9730067DF38 /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EF12CFDF9730067DF38 /* UICollectionView+.swift */; };
+		518E5EF42CFDF97F0067DF38 /* DateFormatter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EF32CFDF97F0067DF38 /* DateFormatter+.swift */; };
+		518E5EF62CFDF9910067DF38 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EF52CFDF9910067DF38 /* Int+.swift */; };
+		518E5EF82CFDF9A20067DF38 /* Int16+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EF72CFDF9A20067DF38 /* Int16+.swift */; };
+		518E5EFA2CFDF9AB0067DF38 /* Int32+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EF92CFDF9AB0067DF38 /* Int32+.swift */; };
+		518E5EFC2CFDF9C30067DF38 /* Array+Int16.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EFB2CFDF9C30067DF38 /* Array+Int16.swift */; };
+		518E5EFE2CFDF9D30067DF38 /* Array+Int32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EFD2CFDF9D30067DF38 /* Array+Int32.swift */; };
+		518E5F002CFDF9DF0067DF38 /* Array+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EFF2CFDF9DF0067DF38 /* Array+Int.swift */; };
+		518E5F022CFDF9F00067DF38 /* CGFloat+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5F012CFDF9F00067DF38 /* CGFloat+.swift */; };
+		518E5F042CFDF9F60067DF38 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5F032CFDF9F60067DF38 /* UIImage+.swift */; };
 		5195AB382C69EBD9000A7BED /* AddSymptomVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */; };
 		51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */; };
 		51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A0D2C42C6FD07400B564B3 /* LogDataManager.swift */; };
@@ -81,7 +93,6 @@
 
 /* Begin PBXFileReference section */
 		510282AF2C5D69C6008B8F15 /* RateCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateCardCell.swift; sourceTree = "<group>"; };
-		5103A2452C554458008F8218 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		5103A2472C554F75008F8218 /* CapsuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleCell.swift; sourceTree = "<group>"; };
 		5103A2492C555643008F8218 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 		511831782C6C96D600B25184 /* LogSectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSectionData.swift; sourceTree = "<group>"; };
@@ -114,6 +125,19 @@
 		518386E62C64087700437696 /* PropertyWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyWrapper.swift; sourceTree = "<group>"; };
 		5188EC752C6696B3004873D1 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
 		5188EC772C66979C004873D1 /* ButtonTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTypeCell.swift; sourceTree = "<group>"; };
+		518E5EEB2CFDF9380067DF38 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		518E5EED2CFDF9580067DF38 /* AttributeContainer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttributeContainer+.swift"; sourceTree = "<group>"; };
+		518E5EEF2CFDF96A0067DF38 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
+		518E5EF12CFDF9730067DF38 /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
+		518E5EF32CFDF97F0067DF38 /* DateFormatter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+.swift"; sourceTree = "<group>"; };
+		518E5EF52CFDF9910067DF38 /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
+		518E5EF72CFDF9A20067DF38 /* Int16+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int16+.swift"; sourceTree = "<group>"; };
+		518E5EF92CFDF9AB0067DF38 /* Int32+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int32+.swift"; sourceTree = "<group>"; };
+		518E5EFB2CFDF9C30067DF38 /* Array+Int16.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Int16.swift"; sourceTree = "<group>"; };
+		518E5EFD2CFDF9D30067DF38 /* Array+Int32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Int32.swift"; sourceTree = "<group>"; };
+		518E5EFF2CFDF9DF0067DF38 /* Array+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Int.swift"; sourceTree = "<group>"; };
+		518E5F012CFDF9F00067DF38 /* CGFloat+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+.swift"; sourceTree = "<group>"; };
+		518E5F032CFDF9F60067DF38 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymptomVM.swift; sourceTree = "<group>"; };
 		51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomDataManager.swift; sourceTree = "<group>"; };
 		51A0D2C42C6FD07400B564B3 /* LogDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDataManager.swift; sourceTree = "<group>"; };
@@ -166,47 +190,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5103A2422C5543C3008F8218 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				51E739A62C64969600F957A3 /* TabBarVC.swift */,
-				5188EC6F2C665A35004873D1 /* HomeVC */,
-				51E739AE2C6526AC00F957A3 /* AddSymptomVC.swift */,
-				51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */,
-				51412A0F2C5EB2D900381B7C /* LogVC.swift */,
-				517E7F0F2C60FF730003AAA3 /* AddLogVC.swift */,
-				51E6A2292C664BEB004C2BBA /* SettingsVC.swift */,
-				51BB20A62C7DB69200C8A453 /* Cell */,
-				51BB20A72C7DB78D00C8A453 /* CustomView */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		5103A2432C5543D0008F8218 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				51AC42DA2C74981B0079CCB8 /* HomeVM */,
-				5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */,
-				51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */,
-				51412A112C5EB7CB00381B7C /* LogVM.swift */,
-				517E7F132C6142A00003AAA3 /* AddLogVM.swift */,
-				5188EC752C6696B3004873D1 /* SettingsVM.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		5103A2442C5543D7008F8218 /* Model */ = {
+		5103A2442C5543D7008F8218 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				51E4904A2C7DDA0C00F0150A /* LogData */,
 				51E4904D2C7DDAA600F0150A /* SymptomData */,
 				51E490562C7DDC1800F0150A /* MedicineData */,
-				516130222C721AC00037127A /* CoreData */,
 				517A6EB22C7E4A2F00F61AD5 /* Protocols.swift */,
-				516F59FC2C67BC5700BD640B /* SettingValuesStorage.swift */,
-				515B95652C766BC100B4FE26 /* HapticManager.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		51563D4D2C52DFFF005BBCC2 = {
@@ -228,17 +220,9 @@
 		51563D582C52DFFF005BBCC2 /* MaumLog */ = {
 			isa = PBXGroup;
 			children = (
-				51563D592C52DFFF005BBCC2 /* AppDelegate.swift */,
-				51563D5B2C52DFFF005BBCC2 /* SceneDelegate.swift */,
-				5103A2422C5543C3008F8218 /* View */,
-				5103A2432C5543D0008F8218 /* ViewModel */,
-				5103A2442C5543D7008F8218 /* Model */,
-				518386E82C6408C100437696 /* Utils */,
-				51563D702C52E08C005BBCC2 /* Localizable.xcstrings */,
-				51563D722C52E09B005BBCC2 /* InfoPlist.xcstrings */,
-				51563D652C52E001005BBCC2 /* Assets.xcassets */,
-				51563D672C52E001005BBCC2 /* LaunchScreen.storyboard */,
 				51563D6A2C52E001005BBCC2 /* Info.plist */,
+				518E5EDF2CFDF35C0067DF38 /* Feature */,
+				518E5EE62CFDF5130067DF38 /* Common */,
 			);
 			path = MaumLog;
 			sourceTree = "<group>";
@@ -264,7 +248,6 @@
 		518386E82C6408C100437696 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				5103A2452C554458008F8218 /* Extension.swift */,
 				518386E62C64087700437696 /* PropertyWrapper.swift */,
 			);
 			path = Utils;
@@ -281,6 +264,162 @@
 			path = HomeVC;
 			sourceTree = "<group>";
 		};
+		518E5EDF2CFDF35C0067DF38 /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				518E5EE02CFDF3820067DF38 /* Home */,
+				518E5EE12CFDF3A10067DF38 /* AddSymptom */,
+				518E5EE22CFDF40C0067DF38 /* AddMedicine */,
+				518E5EE42CFDF4400067DF38 /* AddLog */,
+				518E5EE32CFDF4230067DF38 /* Log */,
+				518E5EE52CFDF4B50067DF38 /* Settings */,
+			);
+			path = Feature;
+			sourceTree = "<group>";
+		};
+		518E5EE02CFDF3820067DF38 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5188EC6F2C665A35004873D1 /* HomeVC */,
+				51AC42DA2C74981B0079CCB8 /* HomeVM */,
+				5103A2472C554F75008F8218 /* CapsuleCell.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		518E5EE12CFDF3A10067DF38 /* AddSymptom */ = {
+			isa = PBXGroup;
+			children = (
+				51E739AE2C6526AC00F957A3 /* AddSymptomVC.swift */,
+				5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */,
+				51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */,
+			);
+			path = AddSymptom;
+			sourceTree = "<group>";
+		};
+		518E5EE22CFDF40C0067DF38 /* AddMedicine */ = {
+			isa = PBXGroup;
+			children = (
+				51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */,
+				51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */,
+			);
+			path = AddMedicine;
+			sourceTree = "<group>";
+		};
+		518E5EE32CFDF4230067DF38 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				51412A0F2C5EB2D900381B7C /* LogVC.swift */,
+				51412A112C5EB7CB00381B7C /* LogVM.swift */,
+				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
+				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
+				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
+				515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */,
+				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
+		518E5EE42CFDF4400067DF38 /* AddLog */ = {
+			isa = PBXGroup;
+			children = (
+				517E7F0F2C60FF730003AAA3 /* AddLogVC.swift */,
+				517E7F132C6142A00003AAA3 /* AddLogVM.swift */,
+				517E7F152C6143BF0003AAA3 /* PendingLogCell.swift */,
+				517E7F112C6106FE0003AAA3 /* LoggableCapsuleCell.swift */,
+			);
+			path = AddLog;
+			sourceTree = "<group>";
+		};
+		518E5EE52CFDF4B50067DF38 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				51E6A2292C664BEB004C2BBA /* SettingsVC.swift */,
+				5188EC752C6696B3004873D1 /* SettingsVM.swift */,
+				5188EC772C66979C004873D1 /* ButtonTypeCell.swift */,
+				516F59FA2C67B7F900BD640B /* ToggleTypeCell.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		518E5EE62CFDF5130067DF38 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				518E5EE72CFDF5210067DF38 /* Application */,
+				51563D672C52E001005BBCC2 /* LaunchScreen.storyboard */,
+				51563D652C52E001005BBCC2 /* Assets.xcassets */,
+				5103A2442C5543D7008F8218 /* Models */,
+				516130222C721AC00037127A /* CoreData */,
+				518E5EE92CFDF5980067DF38 /* Components */,
+				518E5EEA2CFDF5B00067DF38 /* Managers */,
+				518E5F052CFDFA030067DF38 /* Extensions */,
+				518386E82C6408C100437696 /* Utils */,
+				518E5EE82CFDF5550067DF38 /* Localization */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		518E5EE72CFDF5210067DF38 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				51563D592C52DFFF005BBCC2 /* AppDelegate.swift */,
+				51563D5B2C52DFFF005BBCC2 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		518E5EE82CFDF5550067DF38 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				51563D702C52E08C005BBCC2 /* Localizable.xcstrings */,
+				51563D722C52E09B005BBCC2 /* InfoPlist.xcstrings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		518E5EE92CFDF5980067DF38 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				51E739A62C64969600F957A3 /* TabBarVC.swift */,
+				512C87B62C752D5F0025A8A1 /* OutlinedView.swift */,
+				512C966C2C77AF4700FA1D22 /* DividerView.swift */,
+				51E4905D2C7DF15700F0150A /* EmptyView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		518E5EEA2CFDF5B00067DF38 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				516F59FC2C67BC5700BD640B /* SettingValuesStorage.swift */,
+				515B95652C766BC100B4FE26 /* HapticManager.swift */,
+				51A0D2C42C6FD07400B564B3 /* LogDataManager.swift */,
+				51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */,
+				51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		518E5F052CFDFA030067DF38 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				518E5F032CFDF9F60067DF38 /* UIImage+.swift */,
+				518E5F012CFDF9F00067DF38 /* CGFloat+.swift */,
+				518E5EFF2CFDF9DF0067DF38 /* Array+Int.swift */,
+				518E5EFD2CFDF9D30067DF38 /* Array+Int32.swift */,
+				518E5EFB2CFDF9C30067DF38 /* Array+Int16.swift */,
+				518E5EF92CFDF9AB0067DF38 /* Int32+.swift */,
+				518E5EF72CFDF9A20067DF38 /* Int16+.swift */,
+				518E5EF52CFDF9910067DF38 /* Int+.swift */,
+				518E5EF32CFDF97F0067DF38 /* DateFormatter+.swift */,
+				518E5EF12CFDF9730067DF38 /* UICollectionView+.swift */,
+				518E5EEF2CFDF96A0067DF38 /* UIViewController+.swift */,
+				518E5EED2CFDF9580067DF38 /* AttributeContainer+.swift */,
+				518E5EEB2CFDF9380067DF38 /* UIColor+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		51AC42DA2C74981B0079CCB8 /* HomeVM */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,54 +431,9 @@
 			path = HomeVM;
 			sourceTree = "<group>";
 		};
-		51BB20A62C7DB69200C8A453 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				51BB20A82C7DB7C300C8A453 /* CollectionView */,
-				51BB20A92C7DB7F200C8A453 /* TableView */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
-		51BB20A72C7DB78D00C8A453 /* CustomView */ = {
-			isa = PBXGroup;
-			children = (
-				512C87B62C752D5F0025A8A1 /* OutlinedView.swift */,
-				512C966C2C77AF4700FA1D22 /* DividerView.swift */,
-				51E4905D2C7DF15700F0150A /* EmptyView.swift */,
-			);
-			path = CustomView;
-			sourceTree = "<group>";
-		};
-		51BB20A82C7DB7C300C8A453 /* CollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				5103A2472C554F75008F8218 /* CapsuleCell.swift */,
-				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
-				515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */,
-				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
-				51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */,
-				517E7F112C6106FE0003AAA3 /* LoggableCapsuleCell.swift */,
-			);
-			path = CollectionView;
-			sourceTree = "<group>";
-		};
-		51BB20A92C7DB7F200C8A453 /* TableView */ = {
-			isa = PBXGroup;
-			children = (
-				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
-				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
-				517E7F152C6143BF0003AAA3 /* PendingLogCell.swift */,
-				5188EC772C66979C004873D1 /* ButtonTypeCell.swift */,
-				516F59FA2C67B7F900BD640B /* ToggleTypeCell.swift */,
-			);
-			path = TableView;
-			sourceTree = "<group>";
-		};
 		51E4904A2C7DDA0C00F0150A /* LogData */ = {
 			isa = PBXGroup;
 			children = (
-				51A0D2C42C6FD07400B564B3 /* LogDataManager.swift */,
 				51E4904B2C7DDA5B00F0150A /* LogData.swift */,
 				511831782C6C96D600B25184 /* LogSectionData.swift */,
 			);
@@ -349,7 +443,6 @@
 		51E4904D2C7DDAA600F0150A /* SymptomData */ = {
 			isa = PBXGroup;
 			children = (
-				51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */,
 				51E4904E2C7DDB4D00F0150A /* SymptomData.swift */,
 				51E490502C7DDB9000F0150A /* SymptomSectionData.swift */,
 				51E490542C7DDBF500F0150A /* SymptomCardData.swift */,
@@ -360,7 +453,6 @@
 		51E490562C7DDC1800F0150A /* MedicineData */ = {
 			isa = PBXGroup;
 			children = (
-				51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */,
 				51E490572C7DDC7100F0150A /* MedicineData.swift */,
 				51E490592C7DDCAA00F0150A /* MedicineSectionData.swift */,
 				51E4905B2C7DDCDE00F0150A /* MedicineCardData.swift */,
@@ -453,25 +545,29 @@
 			files = (
 				51E4905C2C7DDCDE00F0150A /* MedicineCardData.swift in Sources */,
 				517E7F122C6106FE0003AAA3 /* LoggableCapsuleCell.swift in Sources */,
-				5103A2462C554458008F8218 /* Extension.swift in Sources */,
 				51E739B12C653C5F00F957A3 /* ColorPaletteCell.swift in Sources */,
 				515B95662C766BC100B4FE26 /* HapticManager.swift in Sources */,
 				51563D5E2C52DFFF005BBCC2 /* HomeVC.swift in Sources */,
 				51E4904F2C7DDB4D00F0150A /* SymptomData.swift in Sources */,
 				516F59FD2C67BC5700BD640B /* SettingValuesStorage.swift in Sources */,
 				51E739A72C64969600F957A3 /* TabBarVC.swift in Sources */,
+				518E5F002CFDF9DF0067DF38 /* Array+Int.swift in Sources */,
 				512C966D2C77AF4700FA1D22 /* DividerView.swift in Sources */,
+				518E5F022CFDF9F00067DF38 /* CGFloat+.swift in Sources */,
+				518E5EF02CFDF96A0067DF38 /* UIViewController+.swift in Sources */,
 				512445512C58C8910044B8A4 /* SymptomLogCell.swift in Sources */,
 				51FE74A62C7CB8C500EDA685 /* MedicineCardCell.swift in Sources */,
 				518386E72C64087700437696 /* PropertyWrapper.swift in Sources */,
 				5103A24A2C555643008F8218 /* HomeVM.swift in Sources */,
 				5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */,
 				51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */,
+				518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */,
 				517E7F102C60FF730003AAA3 /* AddLogVC.swift in Sources */,
 				511831792C6C96D600B25184 /* LogSectionData.swift in Sources */,
 				517E7F162C6143BF0003AAA3 /* PendingLogCell.swift in Sources */,
 				51E4905E2C7DF15700F0150A /* EmptyView.swift in Sources */,
 				51E6A22A2C664BEB004C2BBA /* SettingsVC.swift in Sources */,
+				518E5F042CFDF9F60067DF38 /* UIImage+.swift in Sources */,
 				510282B02C5D69C6008B8F15 /* RateCardCell.swift in Sources */,
 				516F59FB2C67B7F900BD640B /* ToggleTypeCell.swift in Sources */,
 				51412A102C5EB2D900381B7C /* LogVC.swift in Sources */,
@@ -480,23 +576,29 @@
 				5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */,
 				51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */,
 				51E739AF2C6526AC00F957A3 /* AddSymptomVC.swift in Sources */,
+				518E5EF42CFDF97F0067DF38 /* DateFormatter+.swift in Sources */,
+				518E5EF22CFDF9730067DF38 /* UICollectionView+.swift in Sources */,
 				5188EC782C66979C004873D1 /* ButtonTypeCell.swift in Sources */,
 				51412A122C5EB7CB00381B7C /* LogVM.swift in Sources */,
+				518E5EFC2CFDF9C30067DF38 /* Array+Int16.swift in Sources */,
 				51CD57292C7C8DEA00B8858D /* AddMedicineVM.swift in Sources */,
 				51563D5A2C52DFFF005BBCC2 /* AppDelegate.swift in Sources */,
 				51563D642C52DFFF005BBCC2 /* MaumLog.xcdatamodeld in Sources */,
 				516130242C72300C0037127A /* RegisteredSymptomView.swift in Sources */,
 				51CD57222C7C64D400B8858D /* AddedMedicineSubVM.swift in Sources */,
+				518E5EEE2CFDF9580067DF38 /* AttributeContainer+.swift in Sources */,
 				51CD57272C7C8D8200B8858D /* AddMedicineVC.swift in Sources */,
 				512C87B72C752D5F0025A8A1 /* OutlinedView.swift in Sources */,
 				51E7B71C2C7315FC00D6B7C4 /* AddedSymptomSubVM.swift in Sources */,
 				51CD57202C7C5F0A00B8858D /* MedicineDataManager.swift in Sources */,
+				518E5EF62CFDF9910067DF38 /* Int+.swift in Sources */,
 				51E4905A2C7DDCAA00F0150A /* MedicineSectionData.swift in Sources */,
 				51E490512C7DDB9000F0150A /* SymptomSectionData.swift in Sources */,
 				51CD57122C7C49E700B8858D /* RegisteredMedicineView.swift in Sources */,
 				515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */,
 				51563D5C2C52DFFF005BBCC2 /* SceneDelegate.swift in Sources */,
 				517E7F142C6142A00003AAA3 /* AddLogVM.swift in Sources */,
+				518E5EF82CFDF9A20067DF38 /* Int16+.swift in Sources */,
 				51E490552C7DDBF500F0150A /* SymptomCardData.swift in Sources */,
 				51AC42D92C746C6F0079CCB8 /* CalendarSubVM.swift in Sources */,
 				51E7B71E2C7330D500D6B7C4 /* AverageRateCalendarView.swift in Sources */,
@@ -504,11 +606,13 @@
 				51FE74992C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift in Sources */,
 				51FE749A2C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift in Sources */,
 				51FE749B2C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift in Sources */,
+				518E5EFE2CFDF9D30067DF38 /* Array+Int32.swift in Sources */,
 				51FE749C2C7CA29400EDA685 /* MedicineCoreData+CoreDataProperties.swift in Sources */,
 				51FE749D2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataClass.swift in Sources */,
 				51FE749E2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataProperties.swift in Sources */,
 				51FE749F2C7CA29400EDA685 /* SymptomCardCoreData+CoreDataClass.swift in Sources */,
 				51FE74A02C7CA29400EDA685 /* SymptomCardCoreData+CoreDataProperties.swift in Sources */,
+				518E5EFA2CFDF9AB0067DF38 /* Int32+.swift in Sources */,
 				51FE74A42C7CB7CC00EDA685 /* MedicineLogCell.swift in Sources */,
 				517A6EB32C7E4A2F00F61AD5 /* Protocols.swift in Sources */,
 				51FE74A12C7CA29400EDA685 /* SymptomCoreData+CoreDataClass.swift in Sources */,
