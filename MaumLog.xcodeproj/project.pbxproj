@@ -54,8 +54,6 @@
 		518E5F002CFDF9DF0067DF38 /* Array+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EFF2CFDF9DF0067DF38 /* Array+Int.swift */; };
 		518E5F022CFDF9F00067DF38 /* CGFloat+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5F012CFDF9F00067DF38 /* CGFloat+.swift */; };
 		518E5F042CFDF9F60067DF38 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5F032CFDF9F60067DF38 /* UIImage+.swift */; };
-		518E5F0A2CFE0F530067DF38 /* AddedSymptomSubVM 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5F092CFE0F530067DF38 /* AddedSymptomSubVM 2.swift */; };
-		518E5F0C2CFE0FB20067DF38 /* RegisteredSymptomView 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5F0B2CFE0FB20067DF38 /* RegisteredSymptomView 2.swift */; };
 		518E5F0E2CFE160E0067DF38 /* OnlyOnce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5F0D2CFE160E0067DF38 /* OnlyOnce.swift */; };
 		5195AB382C69EBD9000A7BED /* AddSymptomVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */; };
 		51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */; };
@@ -66,6 +64,7 @@
 		51CD57222C7C64D400B8858D /* AddedMedicineSubVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57212C7C64D400B8858D /* AddedMedicineSubVM.swift */; };
 		51CD57272C7C8D8200B8858D /* AddMedicineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */; };
 		51CD57292C7C8DEA00B8858D /* AddMedicineVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */; };
+		51D599122D0097BB002119A9 /* HomeVC+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D599112D0097B5002119A9 /* HomeVC+Alert.swift */; };
 		51E4904C2C7DDA5B00F0150A /* LogData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E4904B2C7DDA5B00F0150A /* LogData.swift */; };
 		51E4904F2C7DDB4D00F0150A /* SymptomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E4904E2C7DDB4D00F0150A /* SymptomData.swift */; };
 		51E490512C7DDB9000F0150A /* SymptomSectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E490502C7DDB9000F0150A /* SymptomSectionData.swift */; };
@@ -141,8 +140,6 @@
 		518E5EFF2CFDF9DF0067DF38 /* Array+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Int.swift"; sourceTree = "<group>"; };
 		518E5F012CFDF9F00067DF38 /* CGFloat+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+.swift"; sourceTree = "<group>"; };
 		518E5F032CFDF9F60067DF38 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
-		518E5F092CFE0F530067DF38 /* AddedSymptomSubVM 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AddedSymptomSubVM 2.swift"; sourceTree = "<group>"; };
-		518E5F0B2CFE0FB20067DF38 /* RegisteredSymptomView 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RegisteredSymptomView 2.swift"; sourceTree = "<group>"; };
 		518E5F0D2CFE160E0067DF38 /* OnlyOnce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlyOnce.swift; sourceTree = "<group>"; };
 		5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymptomVM.swift; sourceTree = "<group>"; };
 		51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomDataManager.swift; sourceTree = "<group>"; };
@@ -153,6 +150,7 @@
 		51CD57212C7C64D400B8858D /* AddedMedicineSubVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddedMedicineSubVM.swift; sourceTree = "<group>"; };
 		51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineVC.swift; sourceTree = "<group>"; };
 		51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineVM.swift; sourceTree = "<group>"; };
+		51D599112D0097B5002119A9 /* HomeVC+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+Alert.swift"; sourceTree = "<group>"; };
 		51E4904B2C7DDA5B00F0150A /* LogData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogData.swift; sourceTree = "<group>"; };
 		51E4904E2C7DDB4D00F0150A /* SymptomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomData.swift; sourceTree = "<group>"; };
 		51E490502C7DDB9000F0150A /* SymptomSectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionData.swift; sourceTree = "<group>"; };
@@ -264,6 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				51563D5D2C52DFFF005BBCC2 /* HomeVC.swift */,
+				51D599112D0097B5002119A9 /* HomeVC+Alert.swift */,
 				516130232C72300C0037127A /* RegisteredSymptomView.swift */,
 				51CD57112C7C49E700B8858D /* RegisteredMedicineView.swift */,
 				51E7B71D2C7330D500D6B7C4 /* AverageRateCalendarView.swift */,
@@ -439,8 +438,6 @@
 		518E5F0F2CFE265B0067DF38 /* Archive */ = {
 			isa = PBXGroup;
 			children = (
-				518E5F0B2CFE0FB20067DF38 /* RegisteredSymptomView 2.swift */,
-				518E5F092CFE0F530067DF38 /* AddedSymptomSubVM 2.swift */,
 			);
 			path = Archive;
 			sourceTree = "<group>";
@@ -582,7 +579,6 @@
 				518E5F022CFDF9F00067DF38 /* CGFloat+.swift in Sources */,
 				518E5EF02CFDF96A0067DF38 /* UIViewController+.swift in Sources */,
 				512445512C58C8910044B8A4 /* SymptomLogCell.swift in Sources */,
-				518E5F0A2CFE0F530067DF38 /* AddedSymptomSubVM 2.swift in Sources */,
 				51FE74A62C7CB8C500EDA685 /* MedicineCardCell.swift in Sources */,
 				518386E72C64087700437696 /* PropertyWrapper.swift in Sources */,
 				5103A24A2C555643008F8218 /* HomeVM.swift in Sources */,
@@ -622,6 +618,7 @@
 				51E4905A2C7DDCAA00F0150A /* MedicineSectionData.swift in Sources */,
 				51E490512C7DDB9000F0150A /* SymptomSectionData.swift in Sources */,
 				51CD57122C7C49E700B8858D /* RegisteredMedicineView.swift in Sources */,
+				51D599122D0097BB002119A9 /* HomeVC+Alert.swift in Sources */,
 				515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */,
 				51563D5C2C52DFFF005BBCC2 /* SceneDelegate.swift in Sources */,
 				517E7F142C6142A00003AAA3 /* AddLogVM.swift in Sources */,
@@ -629,7 +626,6 @@
 				51E490552C7DDBF500F0150A /* SymptomCardData.swift in Sources */,
 				51AC42D92C746C6F0079CCB8 /* CalendarSubVM.swift in Sources */,
 				51E7B71E2C7330D500D6B7C4 /* AverageRateCalendarView.swift in Sources */,
-				518E5F0C2CFE0FB20067DF38 /* RegisteredSymptomView 2.swift in Sources */,
 				5195AB382C69EBD9000A7BED /* AddSymptomVM.swift in Sources */,
 				51FE74992C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift in Sources */,
 				51FE749A2C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift in Sources */,

@@ -58,8 +58,7 @@ final class HomeVC: UIViewController {
         return sv
     }()
     
-//    let symptomView = RegisteredSymptomView()
-    let symptomView = RegisteredSymptomView2()
+    let symptomView = RegisteredSymptomView()
     
     let medicineView = RegisteredMedicineView()
 
@@ -119,8 +118,11 @@ final class HomeVC: UIViewController {
 
         let input = HomeVM.Input(
             tappedGoSettingsButton: goSettingsBarButton.rx.tap.asObservable(),
-            startRefreshing: startRefreshing)
+            startRefreshing: startRefreshing,
+            goAddSymptom: symptomView.goAddSymptom.asObservable(),
+            presentRemoveAlert: symptomView.presentRemoveAlert.asObservable())
         
+        // MARK: - Output
         let output = homeVM.transform(input)
         
         // 설정 화면 이동
@@ -139,6 +141,37 @@ final class HomeVC: UIViewController {
                 HapticManager.shared.occurSuccess()
             }
             .disposed(by: bag)
+        
+        // 증상 추가 모달 띄우기
+        output.goAddSymptom
+            .bind(with: self) { owner, _ in
+                let vc = AddSymptomVC()
+                let fraction = UISheetPresentationController.Detent.custom { _ in owner.view.frame.height * 0.5 }
+                if let sheet = vc.sheetPresentationController {
+                    sheet.detents = [fraction]
+                    sheet.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
+                }
+                // 창을 닫을 때 리로드 메시지 전송
+                vc.dismissTask = { owner.symptomView.reloadCV.onNext(()) }
+                owner.present(vc, animated: true)
+            }
+            .disposed(by: bag)
+        
+        
+        output.presentRemoveAlert
+            .bind(with: self) { owner, item in
+                guard let item = item as? SymptomData else { return }
+                owner.presentAlert(
+                    title: String(localized: "알림"),
+                    message: String(localized: "\"\(item.name)\" 증상을 목록에서 삭제할까요?"),
+                    acceptTitle: String(localized: "삭제"),
+                    acceptTask: {
+                        SymptomDataManager.shared.delete(target: item) // 등록한 증상 삭제
+                        owner.symptomView.reloadCV.onNext(()) // 리로드 메시지 전송
+                    })
+            }
+            .disposed(by: bag)
+            
         
         // input ===============================================================================================
 //        symptomView.addButton
@@ -188,9 +221,9 @@ final class HomeVC: UIViewController {
 //            .disposed(by: bag)
         
         // 컬렉션 뷰 바인딩, 복용중인 약
-        homeVM.medicineSubVM.output.cellData
-            .bind(to: medicineView.collectionView.rx.items(dataSource: bindingCapsuleCellCV(MedicineSectionData.self)))
-            .disposed(by: bag)
+//        homeVM.medicineSubVM.output.cellData
+//            .bind(to: medicineView.collectionView.rx.items(dataSource: bindingCapsuleCellCV(MedicineSectionData.self)))
+//            .disposed(by: bag)
         
         
 //        homeVM.symptomsSubVM.output.goAddSymptom
@@ -237,13 +270,13 @@ final class HomeVC: UIViewController {
             .disposed(by: bag)
         
         
-        homeVM.output.goSettings
-            .bind(onNext: { [weak self] in
-                let vc = SettingsVC()
-                vc.hidesBottomBarWhenPushed = true
-                self?.navigationController?.pushViewController(vc, animated: true)
-            })
-            .disposed(by: bag)
+//        homeVM.output.goSettings
+//            .bind(onNext: { [weak self] in
+//                let vc = SettingsVC()
+//                vc.hidesBottomBarWhenPushed = true
+//                self?.navigationController?.pushViewController(vc, animated: true)
+//            })
+//            .disposed(by: bag)
         
         
         // 증상의 편집버튼을 누르면 버튼의 디자인이 바뀜

@@ -16,17 +16,21 @@ final class HomeVM {
     
     private let bag = DisposeBag()
 
-    let input: Input
-    let output: Output
+//    let input: Input
+//    let output: Output
 
-    struct Input { // 모든 입력 이벤트를 전달받아오는 친구들, 그냥 뷰에서 발생한 이벤트 여기로 가지고 오는 용도
+    struct Input {
         let tappedGoSettingsButton: Observable<Void>
         let startRefreshing: Observable<Void>
+        let goAddSymptom: Observable<Void>
+        let presentRemoveAlert: Observable<EditButtonCellModel>
     }
     
     struct Output {
         let goSettings: Observable<Void>
         let endRefreshing: Observable<Void>
+        let goAddSymptom: Observable<Void>
+        let presentRemoveAlert: Observable<EditButtonCellModel>
     }
     
     
@@ -35,7 +39,7 @@ final class HomeVM {
     private let endRefreshingSubject = PublishSubject<Void>() // 리프레시 아웃풋 전용
 
     
-    init() {
+//    init() {
         // 리프레시 트리거 됨
 //        startRefreshingSubject
 //            .bind(onNext: { [symptomsSubVM, medicineSubVM, calendarSubVM, endRefreshingSubject] in
@@ -49,14 +53,14 @@ final class HomeVM {
 //            })
 //            .disposed(by: bag)
         
-        input = .init( // observer 기능만 분리 (onNext 밖에 못함)
-            tappedGoSettingsButton: goSettingsButtonSubject.asObserver(),
-            startRefreshing: startRefreshingSubject.asObserver())
-        
-        output = .init(
-            goSettings: goSettingsButtonSubject.asObservable(), 
-            endRefreshing: endRefreshingSubject.asObservable())
-    }
+//        input = .init( // observer 기능만 분리 (onNext 밖에 못함)
+//            tappedGoSettingsButton: goSettingsButtonSubject.asObserver(),
+//            startRefreshing: startRefreshingSubject.asObserver())
+//        
+//        output = .init(
+//            goSettings: goSettingsButtonSubject.asObservable(), 
+//            endRefreshing: endRefreshingSubject.asObservable())
+//    }
     
     func transform(_ input: Input) -> Output {
         let goSettings = input.tappedGoSettingsButton
@@ -65,10 +69,15 @@ final class HomeVM {
             .delay(.milliseconds(750), scheduler: MainScheduler.instance) // 리프레시 기분을 내는 0.75초 지연
             // 리프레쉬 로직 추가해야함
         
+        let goAddSymptom = input.goAddSymptom
+        
+        let presentRemoveAlert = input.presentRemoveAlert
         
         return Output(
             goSettings: goSettings,
-            endRefreshing: endRefreshing)
+            endRefreshing: endRefreshing,
+            goAddSymptom: goAddSymptom,
+            presentRemoveAlert: presentRemoveAlert)
     }
     
 }
