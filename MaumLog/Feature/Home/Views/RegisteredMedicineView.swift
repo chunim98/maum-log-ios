@@ -7,25 +7,32 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import RxDataSources
 
 final class RegisteredMedicineView: UIView {
+    typealias SectionDataSource = RxCollectionViewSectionedAnimatedDataSource
     
-    private var isSetCVLayout = false
+    private let medicineSubVM = AddedMedicineSubVM()
+    private let bag = DisposeBag()
     
-    // MARK: - 컴포넌트
-    let overallSV = {
+    private let itemToRemove = PublishSubject<EditButtonCellModel>()
+    let reloadCV = PublishSubject<Void>()
+    let presentRemoveMedicineAlert = PublishSubject<EditButtonCellModel>()
+    let goAddMedicine = PublishSubject<Void>()
+
+    // MARK: - Components
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.spacing = 1
-        sv.distribution = .fill
         return sv
     }()
 
-    let titleSV = {
+    let titleHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.spacing = 10
-        sv.distribution = .fill
         sv.backgroundColor = .chuWhite
         sv.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         sv.clipsToBounds = true
@@ -62,11 +69,10 @@ final class RegisteredMedicineView: UIView {
         return UIButton(configuration: config)
     }()
     
-    let collectionViewSV = {
+    let collectionViewVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.spacing = 10
-        sv.distribution = .fill
         sv.backgroundColor = .chuWhite
         sv.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         sv.clipsToBounds = true
@@ -88,48 +94,36 @@ final class RegisteredMedicineView: UIView {
     
     let emptyView = EmptyView(text: String(localized: "복용 중인 약이 있다면 등록해 주세요."), textSize: 14)
     
-    //MARK: - 라이프사이클
+    // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setCVLayout()
+        setBinding()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
-    func setAutoLayout() {
-        self.addSubview(overallSV)
+    // MARK: - Layout
+    private func setAutoLayout() {
+        self.addSubview(mainVStack)
         
-        overallSV.addArrangedSubview(titleSV)
-        overallSV.addArrangedSubview(collectionViewSV)
+        mainVStack.addArrangedSubview(titleHStack)
+        mainVStack.addArrangedSubview(collectionViewVStack)
         
-        titleSV.addArrangedSubview(titleLabel)
-        titleSV.addArrangedSubview(editButton)
-        titleSV.addArrangedSubview(addButton)
+        titleHStack.addArrangedSubview(titleLabel)
+        titleHStack.addArrangedSubview(editButton)
+        titleHStack.addArrangedSubview(addButton)
         
-        collectionViewSV.addArrangedSubview(collectionView)
+        collectionViewVStack.addArrangedSubview(collectionView)
         
         titleLabel.setContentHuggingPriority(.init(249), for: .horizontal)
         
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
-    
-    
-    private func setCVLayout() {
-        // 제약은 최초로 한번만 걸어주게 하기
-        guard !(isSetCVLayout) else { return }
-        // 서브뷰의 레이아웃이 완전히 결정되지 않는 경우에 대비해 레이아웃 업데이트
-        layoutIfNeeded()
-        
+
+    func setCVLayout() {
         // flowLayout설정 (익스텐션)
         collectionView.setMultilineLayout(spacing: 10, itemCount: 2, itemHeight: 30)
         
@@ -144,14 +138,58 @@ final class RegisteredMedicineView: UIView {
                 make.height.equalTo(height)
             }
         }
-        
-        // 제약은 최초로 한번만 걸어주게 하기
-        isSetCVLayout = true
     }
     
-    
-    // 뷰컨에서 UI.animate()에 파라미터로 던져짐
-    func updateCVHeight() {
+    // MARK: - Binding
+    private func setBinding() {
+        let input = AddedMedicineSubVM.Input(
+            tappedAddButton: addButton.rx.tap.asObservable(),
+            tappedEditButton: editButton.rx.tap.asObservable(),
+            reloadCV: reloadCV.asObservable(),
+            itemToRemove: itemToRemove.asObservable())
+        
+        let output = medicineSubVM.transform(input)
+        
+        // 컬렉션 뷰 바인딩, 복용중인 약
+        output.cellData
+            .bind(to: collectionView.rx.items(dataSource: bindingCapsuleCellCV(MedicineSectionData.self)))
+            .disposed(by: bag)
+        
+        // 컬렉션 뷰 레이아웃 재계산
+        output.needUpdateCV
+            .bind(with: self) { owner, _ in
+                UIView.animate(withDuration: 0.5) {
+                    owner.updateCVHeight()
+                    owner.layoutIfNeeded()
+                }
+            }
+            .disposed(by: bag)
+        
+        // 증상의 편집버튼을 누르면 버튼의 디자인이 바뀜
+        output.isEditMode
+            .bind(with: self) { owner, isEditMode in
+                owner.updateEditButton(isEditMode: isEditMode)
+            }
+            .disposed(by: bag)
+
+        // 약물이 등록된 게 없으면 이미지 표시
+        output.isDataEmpty
+            .bind(with: self) { owner, isDataEmpty in
+                owner.setCVBackground(isDataEmpty)
+            }
+            .disposed(by: bag)
+        
+        output.presentRemoveMedicineAlert
+            .bind(to: presentRemoveMedicineAlert)
+            .disposed(by: bag)
+        
+        output.goAddMedicine
+            .bind(to: goAddMedicine)
+            .disposed(by: bag)
+    }
+
+    // MARK: - Methods
+    private func updateCVHeight() {
         // 최신 콘텐츠 높이 가져오기
         layoutIfNeeded()
         // 현재 컬렉션 뷰 안에 있는 열 높이 가져오기
@@ -161,37 +199,59 @@ final class RegisteredMedicineView: UIView {
         collectionView.snp.updateConstraints { make in
             if height <= 30 {
                 make.height.equalTo(30)
-            }else{
+            } else {
                 make.height.equalTo(height)
             }
         }
     }
     
-    
-    func updateEditButton(isEditMode: Bool) {
+    private func updateEditButton(isEditMode: Bool) {
         if isEditMode {
             editButton.configuration?.title = String(localized: "완료")
             editButton.configuration?.baseForegroundColor = .chuWhite
             editButton.configuration?.baseBackgroundColor = .chuTint
-        }else{
+        } else {
             editButton.configuration?.title = String(localized: "편집")
             editButton.configuration?.baseForegroundColor = .chuBlack
             editButton.configuration?.baseBackgroundColor = .clear
         }
     }
     
-    
-    func setCVBackground(isEmpty: Bool) {
+    private func setCVBackground(_ isEmpty: Bool) {
         layoutIfNeeded()
         
         if isEmpty {
             collectionView.backgroundView = emptyView
-        }else{
+        } else {
             collectionView.backgroundView = .none
         }
     }
 
-
+    private func bindingCapsuleCellCV<T: AnimatableSectionModelType>(_: T.Type) -> SectionDataSource<T> where T.Item: CapsuleCellModel {
+        
+        /// CapsuleCellModel을 사용하는 모든 컬렉션뷰들과 바인딩
+        /// 이름 없는 파라미터는 컴파일러에게 T가 무슨 타입인지 알려주는 용도
+        /// CapsuleCellModel을 따르는 타입만 섹션데이터의 아이템으로 쓸 수 있게
+        
+        let animatedDataSource = SectionDataSource<T> { [weak self] animatedDataSource, collectionView, indexPath, item in
+            guard
+                let self,
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CapsuleCell.identifier, for: indexPath) as? CapsuleCell
+            else { return UICollectionViewCell() }
+            
+            cell.setAttributes(item: item)
+            
+            cell.itemToRemove
+                .bind(to: self.itemToRemove)
+                .disposed(by: bag)
+            
+            return cell
+        }
+        
+        // 애니메이션 구성 (생성자에서 구현해도 되긴 함)
+        animatedDataSource.animationConfiguration = .init(insertAnimation: .fade, reloadAnimation: .fade, deleteAnimation: .fade)
+        return animatedDataSource
+    }
 }
 
 #Preview(traits: .fixedLayout(width: 400, height: 600)) {

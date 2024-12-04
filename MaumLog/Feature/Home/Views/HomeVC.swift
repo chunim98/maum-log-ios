@@ -81,6 +81,7 @@ final class HomeVC: UIViewController {
         super.viewDidAppear(animated)
         once.excute {
             symptomView.setCVLayout()
+            medicineView.setCVLayout()
         }
     }
     
@@ -120,7 +121,9 @@ final class HomeVC: UIViewController {
             tappedGoSettingsButton: goSettingsBarButton.rx.tap.asObservable(),
             startRefreshing: startRefreshing,
             goAddSymptom: symptomView.goAddSymptom.asObservable(),
-            presentRemoveAlert: symptomView.presentRemoveAlert.asObservable())
+            presentRemoveAlert: symptomView.presentRemoveAlert.asObservable(),
+            goAddMedicine: medicineView.goAddMedicine.asObservable(),
+            presentRemoveMedicineAlert: medicineView.presentRemoveMedicineAlert.asObservable())
         
         // MARK: - Output
         let output = homeVM.transform(input)
@@ -171,57 +174,36 @@ final class HomeVC: UIViewController {
                     })
             }
             .disposed(by: bag)
-            
-        // MARK: - Legacies
-        // input ===============================================================================================
-        medicineView.addButton
-            .rx.tap
-            .bind(to: homeVM.medicineSubVM.input.tappedAddButton)
-            .disposed(by: bag)
         
-        medicineView.editButton
-            .rx.tap
-            .bind(to: homeVM.medicineSubVM.input.tappedEditButton)
-            .disposed(by: bag)
-
-        // output ===============================================================================================
-        // 컬렉션 뷰 바인딩, 복용중인 약
-//        homeVM.medicineSubVM.output.cellData
-//            .bind(to: medicineView.collectionView.rx.items(dataSource: bindingCapsuleCellCV(MedicineSectionData.self)))
-//            .disposed(by: bag)
-
-        homeVM.medicineSubVM.output.goAddMedicine
-            .bind(onNext: { [weak self] in
-                guard let self else { return }
-                
+        output.goAddMedicine
+            .bind(with: self) { owner, _ in
                 let vc = AddMedicineVC()
-                let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.3 }
+                let fraction = UISheetPresentationController.Detent.custom { _ in owner.view.frame.height * 0.3 }
                 if let sheet = vc.sheetPresentationController {
                     sheet.detents = [fraction]
                     sheet.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
                 }
-                vc.dismissTask = {
-                    self.homeVM.medicineSubVM.input.reloadCV.onNext(()) // 컬렉션 뷰 리로드 이벤트 전송
-                    UIView.animate(withDuration: 0.5) {
-                        self.medicineView.updateCVHeight() // 컬렉션 뷰 레이아웃 재계산
-                        self.view.layoutIfNeeded()
-                    }
-                }
-                self.present(vc, animated: true)
-            })
-            .disposed(by: bag)
-
-        // 복용중인 약의 편집버튼을 누르면 버튼의 디자인이 바뀜
-        homeVM.medicineSubVM.output.isEditMode
-            .bind(onNext: { [weak self] in self?.medicineView.updateEditButton(isEditMode: $0) })
+                // 창을 닫을 때 리로드 메시지 전송
+                vc.dismissTask = { owner.medicineView.reloadCV.onNext(()) }
+                owner.present(vc, animated: true)
+            }
             .disposed(by: bag)
         
-        
-        // 복용중인 약이 등록된 게 없으면 이미지 표시
-        homeVM.medicineSubVM.output.isDataEmpty
-            .bind(onNext: { [weak self] in self?.medicineView.setCVBackground(isEmpty: $0) })
+        output.presentRemoveMedicineAlert
+            .bind(with: self) { owner, item in
+                guard let item = item as? MedicineData else { return }
+                owner.presentAlert(
+                    title: String(localized: "알림"),
+                    message: String(localized: "\"\(item.name)\" 을 목록에서 삭제할까요?"),
+                    acceptTitle: String(localized: "삭제"),
+                    acceptTask: {
+                        MedicineDataManager.shared.delete(target: item) // 등록한 약물 삭제
+                        owner.medicineView.reloadCV.onNext(()) // 리로드 이벤트 전송
+                    })
+            }
             .disposed(by: bag)
-        
+            
+        // MARK: - Legacies
         // 달력 업데이트, 완료 얼럿
         homeVM.calendarSubVM.output.targetReloadDate
             .bind(onNext: { [weak self] in
@@ -230,73 +212,7 @@ final class HomeVC: UIViewController {
             })
             .disposed(by: bag)
     }
-
 }
-
-
-extension HomeVC: EditButtonCellDelegate {
-    // CapsuleCellModel을 사용하는 모든 컬렉션뷰들과 바인딩
-    private func bindingCapsuleCellCV<T: AnimatableSectionModelType>( // 제네릭으로 타입 결정 지연
-        _: T.Type // 컴파일러에게 T가 무슨 타입인지 알려주는 용도
-    ) -> RxCollectionViewSectionedAnimatedDataSource<T> where T.Item: CapsuleCellModel { // CapsuleCellModel을 따르는 타입만 섹션데이터의 아이템으로 쓸 수 있게
-        
-        let animatedDataSource = RxCollectionViewSectionedAnimatedDataSource<T> {
-            [weak self] animatedDataSource, collectionView, indexPath, item in
-            
-            let cell = collectionView
-                .dequeueReusableCell(withReuseIdentifier: CapsuleCell.identifier, for: indexPath) as? CapsuleCell
-            guard let cell, let self else { return UICollectionViewCell() }
-            cell.setAttributes(item: item)
-            cell.delegate = self
-            return cell
-        }
-        
-        // 애니메이션 구성 (생성자에서 구현해도 되긴 함)
-        animatedDataSource.animationConfiguration = .init(
-            insertAnimation: .fade,
-            reloadAnimation: .fade,
-            deleteAnimation: .fade)
-        return animatedDataSource
-    }
-    
-    
-    func removeTask(item: any EditButtonCellModel) {
-        switch item {
-//        case let item as SymptomData:
-//            presentAlert( // 얼럿 띄우기
-//                title: String(localized: "알림"),
-//                message: String(localized: "\"\(item.name)\" 증상을 목록에서 삭제할까요?"),
-//                acceptTitle: String(localized: "삭제"),
-//                acceptTask: { [weak self] in
-//                    SymptomDataManager.shared.delete(target: item) // 등록한 증상 삭제
-//                    self?.homeVM.symptomsSubVM.input.reloadCV.onNext(()) // 컬렉션 뷰 리로드 이벤트 전송
-//                    UIView.animate(withDuration: 0.5) {
-//                        self?.symptomView.updateCVHeight() // 컬렉션 뷰 레이아웃 재계산
-//                        self?.view.layoutIfNeeded()
-//                    }
-//                })
-            
-        case let item as MedicineData:
-            presentAlert( // 얼럿 띄우기
-                title: String(localized: "알림"),
-                message: String(localized: "\"\(item.name)\" 을 목록에서 삭제할까요?"),
-                acceptTitle: String(localized: "삭제"),
-                acceptTask: { [weak self] in
-                    MedicineDataManager.shared.delete(target: item) // 등록한 증상 삭제
-                    self?.homeVM.medicineSubVM.input.reloadCV.onNext(()) // 컬렉션 뷰 리로드 이벤트 전송
-                    UIView.animate(withDuration: 0.5) {
-                        self?.medicineView.updateCVHeight() // 컬렉션 뷰 레이아웃 재계산
-                        self?.view.layoutIfNeeded()
-                    }
-                })
-            
-        default:
-            print("오류발생", #function)
-            return
-        }
-    }
-}
-
 
 extension HomeVC: UICalendarViewDelegate {
     func calendarView(_ calendarView: UICalendarView, decorationFor dateComponents: DateComponents) -> UICalendarView.Decoration? {

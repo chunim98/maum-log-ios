@@ -7,18 +7,15 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 final class AddedMedicineSubVM {
-    
-    private let bag = DisposeBag()
-
-    let input: Input
-    let output: Output
 
     struct Input {
-        let tappedAddButton: AnyObserver<Void>
-        let tappedEditButton: AnyObserver<Void>
-        let reloadCV: AnyObserver<Void>
+        let tappedAddButton: Observable<Void>
+        let tappedEditButton: Observable<Void>
+        let reloadCV: Observable<Void>
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     struct Output {
@@ -26,31 +23,30 @@ final class AddedMedicineSubVM {
         let goAddMedicine: Observable<Void>
         let isEditMode: Observable<Bool>
         let isDataEmpty: Observable<Bool>
+        let needUpdateCV: Observable<Void>
+        let presentRemoveMedicineAlert: Observable<EditButtonCellModel>
     }
     
-    
-    private let medicineDataSubject = BehaviorSubject<[MedicineData]>(value: MedicineDataManager.shared.read())
-    private let isEditModeSubject = BehaviorSubject<Bool>(value: false) // 편집버튼 상태만 바꿔주는 용도 ( 나중에 리펙터링 할 것 )
-    private let addButtonSubject = PublishSubject<Void>()
-    private let editButtonSubject = PublishSubject<Void>()
-    private let reloadCVSubject = PublishSubject<Void>() // 증상 컬렉션뷰 리로드 이벤트를 처리하기 위한 섭젝
+    private let bag = DisposeBag()
 
-    
-    init() {
-        // 편집모드 값 토글
-        editButtonSubject
-            .withLatestFrom(isEditModeSubject)
-            .map {
-                HapticManager.shared.occurLight() // 진동 울리기
-                return !$0
-            }
-            .bind(to: isEditModeSubject)
-            .disposed(by: bag)
+    func transform(_ input: Input) -> Output {
+        // 약물 데이터
+        let cellDataArr = BehaviorSubject<[MedicineData]>(value: MedicineDataManager.shared.read())
+        // 편집버튼 상태
+        let isEditMode = BehaviorSubject<Bool>(value: false)
         
+        // 편집모드 값 토글
+        input.tappedEditButton
+            .withLatestFrom(isEditMode) { _, isEditMode in
+                HapticManager.shared.occurLight() // 진동 울리기
+                return !isEditMode
+            }
+            .bind(to: isEditMode)
+            .disposed(by: bag)
         
         // 토글된 값 적용, 부작용
         let cellData = Observable
-            .combineLatest(medicineDataSubject, isEditModeSubject)
+            .combineLatest(cellDataArr, isEditMode)
             .map { data, isEdit in
                 // 증상 데이터 안에 들어있는 편집모드 값을 외부 값으로 변경
                 var cellData = data
@@ -63,33 +59,32 @@ final class AddedMedicineSubVM {
                 return [MedicineSectionData(items: cellData)]
             }
             .share(replay: 1)
-
+        
+        // 약물 추가 모달 띄우기
+        let goAddMedicine = input.tappedAddButton
         
         // 컬렉션뷰 리로드
-        reloadCVSubject
+        input.reloadCV
             .map { MedicineDataManager.shared.read() }
-            .bind(to: medicineDataSubject)
+            .bind(to: cellDataArr)
             .disposed(by: bag)
         
-        
-        // 셀 데이터가 없는지
-        let isDataEmpty = medicineDataSubject
+        // 셀 데이터가 없는지 확인
+        let isDataEmpty = cellDataArr
             .map { $0.isEmpty }
             .share(replay: 1)
-
-
-
-        input = .init(
-            tappedAddButton: addButtonSubject.asObserver(),
-            tappedEditButton: editButtonSubject.asObserver(),
-            reloadCV: reloadCVSubject.asObserver())
         
-        output = .init(
+        let needUpdateCV = input.reloadCV
+        
+        let presentRemoveMedicineAlert = input.itemToRemove
+        
+        return Output(
             cellData: cellData,
-            goAddMedicine: addButtonSubject.asObservable(),
-            isEditMode: isEditModeSubject.asObservable(),
-            isDataEmpty: isDataEmpty)
+            goAddMedicine: goAddMedicine,
+            isEditMode: isEditMode.asObservable(),
+            isDataEmpty: isDataEmpty,
+            needUpdateCV: needUpdateCV,
+            presentRemoveMedicineAlert: presentRemoveMedicineAlert)
     }
-
 }
 

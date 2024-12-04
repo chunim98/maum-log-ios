@@ -15,6 +15,8 @@ final class HomeVM {
         let startRefreshing: Observable<Void>
         let goAddSymptom: Observable<Void>
         let presentRemoveAlert: Observable<EditButtonCellModel>
+        let goAddMedicine: Observable<Void>
+        let presentRemoveMedicineAlert: Observable<EditButtonCellModel>
     }
     
     struct Output {
@@ -22,9 +24,11 @@ final class HomeVM {
         let endRefreshing: Observable<Void>
         let goAddSymptom: Observable<Void>
         let presentRemoveAlert: Observable<EditButtonCellModel>
+        let goAddMedicine: Observable<Void>
+        let presentRemoveMedicineAlert: Observable<EditButtonCellModel>
+
     }
     
-    let medicineSubVM = AddedMedicineSubVM()
     let calendarSubVM = CalendarSubVM()
     
     private let bag = DisposeBag()
@@ -44,10 +48,18 @@ final class HomeVM {
         // 증상 삭제 얼럿 띄우기
         let presentRemoveAlert = input.presentRemoveAlert
         
+        // 약물 추가 모달 띄우기
+        let goAddMedicine = input.goAddMedicine
+        
+        // 약물 삭제 얼럿 띄우기
+        let presentRemoveMedicineAlert = input.presentRemoveMedicineAlert
+        
         return Output(
             goSettings: goSettings,
             endRefreshing: endRefreshing,
             goAddSymptom: goAddSymptom,
-            presentRemoveAlert: presentRemoveAlert)
+            presentRemoveAlert: presentRemoveAlert,
+            goAddMedicine: goAddMedicine,
+            presentRemoveMedicineAlert: presentRemoveMedicineAlert)
     }
 }
