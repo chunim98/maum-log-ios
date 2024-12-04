@@ -12,32 +12,32 @@ import RxCocoa
 import RxDataSources
 
 final class RegisteredSymptomView2: UIView {
+    typealias SectionDataSource = RxCollectionViewSectionedAnimatedDataSource
+
     private let addedSymptomSubVM = AddedSymptomSubVM2()
     private let bag = DisposeBag()
-    private let once = OnlyOnce()
     
+    private let itemToRemove = PublishSubject<EditButtonCellModel>()
     let reloadCV = PublishSubject<Void>()
+    let presentRemoveAlert = PublishSubject<EditButtonCellModel>()
     
     // MARK: - Components
-    let overallSV = {
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.spacing = 1
-        sv.distribution = .fill
         return sv
     }()
 
-    let titleSV = {
+    let titleHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.spacing = 10
-        sv.distribution = .fill
-        sv.backgroundColor = .chuWhite
         sv.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        sv.clipsToBounds = true
-        sv.layer.cornerRadius = 15
-        sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 5, leading: 10, bottom: 5, trailing: 0)
+        sv.isLayoutMarginsRelativeArrangement = true
+        sv.layer.cornerRadius = 15
+        sv.clipsToBounds = true
+        sv.backgroundColor = .chuWhite
         return sv
     }()
     
@@ -46,7 +46,6 @@ final class RegisteredSymptomView2: UIView {
         label.text = String(localized: "등록된 증상")
         label.font = .boldSystemFont(ofSize: 18)
         label.textColor = .chuBlack
-        label.backgroundColor = .clear
         return label
     }()
     
@@ -68,17 +67,16 @@ final class RegisteredSymptomView2: UIView {
         return UIButton(configuration: config)
     }()
     
-    let collectionViewSV = {
+    let collectionViewVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.spacing = 10
-        sv.distribution = .fill
-        sv.backgroundColor = .chuWhite
         sv.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        sv.clipsToBounds = true
-        sv.layer.cornerRadius = 15
-        sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
+        sv.isLayoutMarginsRelativeArrangement = true
+        sv.layer.cornerRadius = 15
+        sv.clipsToBounds = true
+        sv.backgroundColor = .chuWhite
         return sv
     }()
 
@@ -153,16 +151,8 @@ final class RegisteredSymptomView2: UIView {
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        self.snp.makeConstraints { make in make.width.equalTo(400) }
         setAutoLayout()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        once.excute {
-            layoutIfNeeded()
-            setCVLayout()
-        }
+        setBinding()
     }
 
     required init?(coder: NSCoder) {
@@ -171,30 +161,27 @@ final class RegisteredSymptomView2: UIView {
     
     // MARK: - Layout
     private func setAutoLayout() {
-        self.addSubview(overallSV)
+        self.addSubview(mainVStack)
         
-        overallSV.addArrangedSubview(titleSV)
-        overallSV.addArrangedSubview(collectionViewSV)
+        mainVStack.addArrangedSubview(titleHStack)
+        mainVStack.addArrangedSubview(collectionViewVStack)
         
-        titleSV.addArrangedSubview(titleLabel)
-        titleSV.addArrangedSubview(editButton)
-        titleSV.addArrangedSubview(addButton)
+        titleHStack.addArrangedSubview(titleLabel)
+        titleHStack.addArrangedSubview(editButton)
+        titleHStack.addArrangedSubview(addButton)
         
-        collectionViewSV.addArrangedSubview(negativeTitleLabel)
-        collectionViewSV.addArrangedSubview(negativeCV)
-        collectionViewSV.addArrangedSubview(otherTitleLabel)
-        collectionViewSV.addArrangedSubview(otherCV)
-
+        collectionViewVStack.addArrangedSubview(negativeTitleLabel)
+        collectionViewVStack.addArrangedSubview(negativeCV)
+        collectionViewVStack.addArrangedSubview(otherTitleLabel)
+        collectionViewVStack.addArrangedSubview(otherCV)
 
         titleLabel.setContentHuggingPriority(.init(249), for: .horizontal)
 
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
-    private func setCVLayout() {
+    // 뷰컨에서 호출
+    func setCVLayout() {
         // flowLayout설정 (익스텐션)
         negativeCV.setMultilineLayout(spacing: 10, itemCount: 3, itemHeight: 50)
         otherCV.setMultilineLayout(spacing: 10, itemCount: 3, itemHeight: 50)
@@ -225,7 +212,8 @@ final class RegisteredSymptomView2: UIView {
         let input = AddedSymptomSubVM2.Input(
             tappedAddButton: addButton.rx.tap.asObservable(),
             tappedEditButton: editButton.rx.tap.asObservable(),
-            reloadCV: reloadCV.asObservable())
+            reloadCV: reloadCV.asObservable(),
+            itemToRemove: itemToRemove)
         
         let output = addedSymptomSubVM.transform(input: input)
         
@@ -265,12 +253,16 @@ final class RegisteredSymptomView2: UIView {
             })
             .disposed(by: bag)
         
+        output.presentRemoveAlert
+            .bind(to: presentRemoveAlert)
+            .disposed(by: bag)
+        
     }
 
+    // MARK: - Methods
     private func updateCVHeight() {
         // 최신 콘텐츠 높이 가져오기
         layoutIfNeeded()
-        
         // 현재 컬렉션 뷰 안에 있는 열 높이 가져오기
         let negativeHeight = negativeCV.collectionViewLayout.collectionViewContentSize.height
         let otherHeight = otherCV.collectionViewLayout.collectionViewContentSize.height
@@ -306,8 +298,6 @@ final class RegisteredSymptomView2: UIView {
     
     
     private func setCVBackground(_ isNegativeEmpty: Bool, _ isOtherEmpty: Bool) {
-        layoutIfNeeded()
-        
         if isNegativeEmpty {
             negativeCV.backgroundView = negativeEmptyView
         } else {
@@ -320,21 +310,25 @@ final class RegisteredSymptomView2: UIView {
             otherCV.backgroundView = .none
         }
     }
-
-
-}
-
-extension RegisteredSymptomView2: EditButtonCellDelegate {
-    // CapsuleCellModel을 사용하는 모든 컬렉션뷰들과 바인딩
-    private func bindingCapsuleCellCV<T: AnimatableSectionModelType>( // 제네릭으로 타입 결정 지연
-        _: T.Type // 컴파일러에게 T가 무슨 타입인지 알려주는 용도
-    ) -> RxCollectionViewSectionedAnimatedDataSource<T> where T.Item: CapsuleCellModel { // CapsuleCellModel을 따르는 타입만 섹션데이터의 아이템으로 쓸 수 있게
+    
+    private func bindingCapsuleCellCV<T: AnimatableSectionModelType>(_: T.Type) -> SectionDataSource<T> where T.Item: CapsuleCellModel {
         
-        let animatedDataSource = RxCollectionViewSectionedAnimatedDataSource<T> { [weak self] animatedDataSource, collectionView, indexPath, item in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CapsuleCell.identifier, for: indexPath) as? CapsuleCell
-            guard let cell, let self else { return UICollectionViewCell() }
+        /// CapsuleCellModel을 사용하는 모든 컬렉션뷰들과 바인딩
+        /// 이름 없는 파라미터는 컴파일러에게 T가 무슨 타입인지 알려주는 용도
+        /// CapsuleCellModel을 따르는 타입만 섹션데이터의 아이템으로 쓸 수 있게
+        
+        let animatedDataSource = SectionDataSource<T> { [weak self] animatedDataSource, collectionView, indexPath, item in
+            guard
+                let self,
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CapsuleCell.identifier, for: indexPath) as? CapsuleCell
+            else { return UICollectionViewCell() }
+            
             cell.setAttributes(item: item)
-            cell.delegate = self
+            
+            cell.itemToRemove
+                .bind(to: self.itemToRemove)
+                .disposed(by: bag)
+            
             return cell
         }
         
@@ -342,40 +336,8 @@ extension RegisteredSymptomView2: EditButtonCellDelegate {
         animatedDataSource.animationConfiguration = .init(insertAnimation: .fade, reloadAnimation: .fade, deleteAnimation: .fade)
         return animatedDataSource
     }
-    
-    func removeTask(item: any EditButtonCellModel) {
-//        switch item {
-//        case let item as SymptomData:
-//            presentAlert( // 얼럿 띄우기
-//                title: String(localized: "알림"),
-//                message: String(localized: "\"\(item.name)\" 증상을 목록에서 삭제할까요?"),
-//                acceptTitle: String(localized: "삭제"),
-//                acceptTask: { [weak self] in
-//                    SymptomDataManager.shared.delete(target: item) // 등록한 증상 삭제
-//                    self?.reloadCV.onNext(()) // 컬렉션 뷰 리로드 이벤트 전송
-//                })
-//            
-//        case let item as MedicineData:
-//            presentAlert( // 얼럿 띄우기
-//                title: String(localized: "알림"),
-//                message: String(localized: "\"\(item.name)\" 을 목록에서 삭제할까요?"),
-//                acceptTitle: String(localized: "삭제"),
-//                acceptTask: { [weak self] in
-//                    MedicineDataManager.shared.delete(target: item) // 등록한 증상 삭제
-//                    self?.reloadCV.onNext(()) // 컬렉션 뷰 리로드 이벤트 전송
-//                    UIView.animate(withDuration: 0.5) {
-//                        self?.medicineView.updateCVHeight() // 컬렉션 뷰 레이아웃 재계산
-//                        self?.view.layoutIfNeeded()
-//                    }
-//                })
-//            
-//        default:
-//            print("오류발생", #function)
-//            return
-//        }
-    }
 }
 
 #Preview(traits: .fixedLayout(width: 400, height: 600)) {
-    RegisteredSymptomView()
+    RegisteredSymptomView2()
 }

@@ -15,6 +15,7 @@ final class AddedSymptomSubVM2 {
         let tappedAddButton: Observable<Void>
         let tappedEditButton: Observable<Void>
         let reloadCV: Observable<Void>
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     struct Output {
@@ -24,6 +25,7 @@ final class AddedSymptomSubVM2 {
         let isEditMode: Observable<Bool>
         let isDataEmpty: Observable<(Bool, Bool)>
         let needUpdateCV: Observable<Void>
+        let presentRemoveAlert: Observable<EditButtonCellModel>
     }
     
     private let bag = DisposeBag()
@@ -98,9 +100,11 @@ final class AddedSymptomSubVM2 {
             }
             .share(replay: 1)
         
+        let presentRemoveAlert = input.itemToRemove
+        
         let needUpdateCV = input.reloadCV
 
-            
+        
         
         return Output(
             negativeCellDataArr: negativeCellDataArr,
@@ -108,7 +112,8 @@ final class AddedSymptomSubVM2 {
             goAddSymptom: goAddSymptom,
             isEditMode: isEditMode.asObservable(),
             isDataEmpty: isDataEmpty,
-            needUpdateCV: needUpdateCV)
+            needUpdateCV: needUpdateCV,
+            presentRemoveAlert: presentRemoveAlert)
     }
 
 }

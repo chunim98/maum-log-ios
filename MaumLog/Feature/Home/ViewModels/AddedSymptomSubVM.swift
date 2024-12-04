@@ -7,7 +7,7 @@
 
 import UIKit
 import RxSwift
-
+/*
 final class AddedSymptomSubVM {
     
     private let bag = DisposeBag()
@@ -120,3 +120,4 @@ final class AddedSymptomSubVM {
     }
 
 }
+*/

@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-
+/*
 final class RegisteredSymptomView: UIView {
     
     /* 컬렉션 뷰를 한번만 초기화 하기 위해 필요한 변수
@@ -287,3 +287,4 @@ final class RegisteredSymptomView: UIView {
 #Preview(traits: .fixedLayout(width: 400, height: 600)) {
     RegisteredSymptomView()
 }
+*/

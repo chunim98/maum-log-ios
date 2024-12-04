@@ -17,6 +17,8 @@ final class CapsuleCell: UICollectionViewCell, EditButtonCellType {
     
     var delegate: (any EditButtonCellDelegate)?
     var item: (any EditButtonCellModel)?
+    
+    let itemToRemove = PublishSubject<EditButtonCellModel>()
 
     //MARK: - 컴포넌트
     let button = {
@@ -85,6 +87,7 @@ final class CapsuleCell: UICollectionViewCell, EditButtonCellType {
             .bind(onNext: { [weak self] in
                 guard let self, let item else { return }
                 self.delegate?.removeTask(item: item)
+                self.itemToRemove.onNext(item)
             })
             .disposed(by: bag)
     }

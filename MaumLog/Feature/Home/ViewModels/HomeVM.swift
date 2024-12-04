@@ -10,7 +10,7 @@ import RxSwift
 
 final class HomeVM {
     // 서브 뷰모델
-    let symptomsSubVM = AddedSymptomSubVM()
+//    let symptomsSubVM = AddedSymptomSubVM()
     let medicineSubVM = AddedMedicineSubVM()
     let calendarSubVM = CalendarSubVM()
     
@@ -20,8 +20,8 @@ final class HomeVM {
     let output: Output
 
     struct Input { // 모든 입력 이벤트를 전달받아오는 친구들, 그냥 뷰에서 발생한 이벤트 여기로 가지고 오는 용도
-        let tappedGoSettingsButton: AnyObserver<Void>
-        let startRefreshing: AnyObserver<Void>
+        let tappedGoSettingsButton: Observable<Void>
+        let startRefreshing: Observable<Void>
     }
     
     struct Output {
@@ -37,18 +37,17 @@ final class HomeVM {
     
     init() {
         // 리프레시 트리거 됨
-        startRefreshingSubject
-            .bind(onNext: { [symptomsSubVM, medicineSubVM, calendarSubVM, endRefreshingSubject] in
-                // 그냥 리프레시 되는 기분을 내주기 위해 구현한 0.75초 지연 코드
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                    symptomsSubVM.input.reloadCV.onNext(())
-                    medicineSubVM.input.reloadCV.onNext(())
-                    calendarSubVM.input.reloadCalender.onNext(())
-                    endRefreshingSubject.onNext(())
-                }
-            })
-            .disposed(by: bag)
-        
+//        startRefreshingSubject
+//            .bind(onNext: { [symptomsSubVM, medicineSubVM, calendarSubVM, endRefreshingSubject] in
+//                // 그냥 리프레시 되는 기분을 내주기 위해 구현한 0.75초 지연 코드
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+//                    symptomsSubVM.input.reloadCV.onNext(())
+//                    medicineSubVM.input.reloadCV.onNext(())
+//                    calendarSubVM.input.reloadCalender.onNext(())
+//                    endRefreshingSubject.onNext(())
+//                }
+//            })
+//            .disposed(by: bag)
         
         input = .init( // observer 기능만 분리 (onNext 밖에 못함)
             tappedGoSettingsButton: goSettingsButtonSubject.asObserver(),
@@ -57,6 +56,19 @@ final class HomeVM {
         output = .init(
             goSettings: goSettingsButtonSubject.asObservable(), 
             endRefreshing: endRefreshingSubject.asObservable())
+    }
+    
+    func transform(_ input: Input) -> Output {
+        let goSettings = input.tappedGoSettingsButton
+        
+        let endRefreshing = input.startRefreshing
+            .delay(.milliseconds(750), scheduler: MainScheduler.instance) // 리프레시 기분을 내는 0.75초 지연
+            // 리프레쉬 로직 추가해야함
+        
+        
+        return Output(
+            goSettings: goSettings,
+            endRefreshing: endRefreshing)
     }
     
 }
