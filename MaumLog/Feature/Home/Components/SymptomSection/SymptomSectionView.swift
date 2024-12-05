@@ -19,7 +19,7 @@ final class SymptomSectionView: UIView {
     
     private let itemToRemove = PublishSubject<EditButtonCellModel>()
     let reloadCV = PublishSubject<Void>()
-    let presentRemoveAlert = PublishSubject<EditButtonCellModel>()
+    let presentRemoveSymptomAlert = PublishSubject<EditButtonCellModel>()
     let goAddSymptom = PublishSubject<Void>()
     
     // MARK: - Components
@@ -256,7 +256,7 @@ final class SymptomSectionView: UIView {
         
         // 삭제 얼럿을 띄우기
         output.presentRemoveAlert
-            .bind(to: presentRemoveAlert)
+            .bind(to: presentRemoveSymptomAlert)
             .disposed(by: bag)
         
         // 증상 추가 모달 띄우기

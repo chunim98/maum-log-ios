@@ -50,10 +50,9 @@ final class HomeVC: UIViewController {
         return view
     }()
     
-    let overallSV = {
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
         sv.spacing = 15
         return sv
     }()
@@ -88,17 +87,17 @@ final class HomeVC: UIViewController {
     func setAutoLayout() {
         view.addSubview(scrollview)
         scrollview.addSubview(contentView)
-        contentView.addSubview(overallSV)
-        overallSV.addArrangedSubview(symptomView)
-        overallSV.addArrangedSubview(medicineView)
-        overallSV.addArrangedSubview(calendarView)
+        contentView.addSubview(mainVStack)
+        mainVStack.addArrangedSubview(symptomView)
+        mainVStack.addArrangedSubview(medicineView)
+        mainVStack.addArrangedSubview(calendarView)
         
         scrollview.snp.makeConstraints { $0.edges.equalTo(view.safeAreaLayoutGuide) }
         contentView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        overallSV.snp.makeConstraints {
+        mainVStack.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 15, bottom: 50, right: 15))
         }
     }
@@ -118,7 +117,7 @@ final class HomeVC: UIViewController {
             tappedGoSettingsButton: goSettingsBarButton.rx.tap.asObservable(),
             startRefreshing: startRefreshing,
             goAddSymptom: symptomView.goAddSymptom.asObservable(),
-            presentRemoveAlert: symptomView.presentRemoveAlert.asObservable(),
+            presentRemoveSymptomAlert: symptomView.presentRemoveSymptomAlert.asObservable(),
             goAddMedicine: medicineView.goAddMedicine.asObservable(),
             presentRemoveMedicineAlert: medicineView.presentRemoveMedicineAlert.asObservable())
         

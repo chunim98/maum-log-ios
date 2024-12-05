@@ -14,7 +14,7 @@ final class HomeVM {
         let tappedGoSettingsButton: Observable<Void>
         let startRefreshing: Observable<Void>
         let goAddSymptom: Observable<Void>
-        let presentRemoveAlert: Observable<EditButtonCellModel>
+        let presentRemoveSymptomAlert: Observable<EditButtonCellModel>
         let goAddMedicine: Observable<Void>
         let presentRemoveMedicineAlert: Observable<EditButtonCellModel>
     }
@@ -23,8 +23,8 @@ final class HomeVM {
         let goSettings: Observable<Void>
         let endRefreshing: Observable<Void>
         let goAddSymptom: Observable<Void>
-        let presentRemoveAlert: Observable<EditButtonCellModel>
         let goAddMedicine: Observable<Void>
+        let presentRemoveAlert: Observable<EditButtonCellModel>
     }
         
     private let bag = DisposeBag()
@@ -45,13 +45,13 @@ final class HomeVM {
         
         // 삭제 얼럿 띄우기
         let presentRemoveAlert = Observable
-            .merge(input.presentRemoveAlert, input.presentRemoveMedicineAlert)
+            .merge(input.presentRemoveSymptomAlert, input.presentRemoveMedicineAlert)
         
         return Output(
             goSettings: goSettings,
             endRefreshing: endRefreshing,
             goAddSymptom: goAddSymptom,
-            presentRemoveAlert: presentRemoveAlert,
-            goAddMedicine: goAddMedicine)
+            goAddMedicine: goAddMedicine,
+            presentRemoveAlert: presentRemoveAlert)
     }
 }
