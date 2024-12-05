@@ -14,7 +14,10 @@ final class AddSymptomVC: UIViewController {
     
     private let addSymptomVM = AddSymptomVM()
     private let bag = DisposeBag()
+    private let once = OnlyOnce()
     var dismissTask: (() -> Void)?
+    
+    private let selectedColorFromPalette = PublishSubject<UIColor>()
     
     // MARK: - Components
     let titleBackground = {
@@ -54,9 +57,8 @@ final class AddSymptomVC: UIViewController {
         return sv
     }()
     
-    lazy var colorPickerButton = {
+    let colorPickerButton = {
         let button = UIColorWell()
-        button.addTarget(self, action: #selector(colorValueChanged), for: .valueChanged) // 이 구문 때문에 lazy 선언
         button.supportsAlpha = false // 색상피커에서 불투명도 옵션을 제거
         button.title = String(localized: "색상 지정")
         button.selectedColor = .chuColorPalette[1]
@@ -73,11 +75,11 @@ final class AddSymptomVC: UIViewController {
     
     let textField = {
         let tf = UITextField()
-//        tf.attributedPlaceholder = NSAttributedString(
-//            string: String(localized: "증상명 입력(6글자 제한)"),
-//            attributes: [ // 플레이스 홀더 색상 커스텀
-//                NSAttributedString.Key.foregroundColor : UIColor.chuHalfBlack,
-//                NSAttributedString.Key.backgroundColor : UIColor.chuIvory ] )
+        // tf.attributedPlaceholder = NSAttributedString(
+        //     string: String(localized: "증상명 입력(6글자 제한)"),
+        //     attributes: [ // 플레이스 홀더 색상 커스텀
+        //         NSAttributedString.Key.foregroundColor : UIColor.chuHalfBlack,
+        //         NSAttributedString.Key.backgroundColor : UIColor.chuIvory ] )
         tf.placeholder = String(localized: "증상 입력 (최대 8자)")
         tf.font = .boldSystemFont(ofSize: 20)
         tf.textColor = .chuBlack
@@ -148,9 +150,10 @@ final class AddSymptomVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        // 프레임 사이즈 확정이 좀 느린건지 모르겠지만 layoutIfNeeded()해줘야함
-        colorPaletteCV.layoutIfNeeded()
-        setColorPaletteCVLayout()
+        once.excute {
+            colorPaletteCV.layoutIfNeeded()
+            setColorPaletteCVLayout()
+        }
     }
     
     // MARK: - Layout
@@ -194,118 +197,77 @@ final class AddSymptomVC: UIViewController {
     
     // MARK: - Binding
     func setBinding() {
-        // input
-        textField
-            .rx.text.orEmpty
-            .bind(to: addSymptomVM.input.textOfTextField)
-            .disposed(by: bag)
+        let selectedColorFromPicker = colorPickerButton
+            .rx.controlEvent(.valueChanged)
+            .map { [weak self] _ in self?.colorPickerButton.selectedColor }
+            .compactMap { $0 }
+                
+        let input = AddSymptomVM.Input(
+            tappedNegativeConfirmButton: negativeConfirmButton.rx.tap.asObservable(),
+            tappedOtherConfirmButton: otherConfirmButton.rx.tap.asObservable(),
+            textOfTextField: textField.rx.text.orEmpty.asObservable(),
+            tappedCloseButton: closeButton.rx.tap.asObservable(),
+            selectedColorFromPalette: selectedColorFromPalette.asObservable(),
+            selectedColorFromPicker: selectedColorFromPicker)
         
-        textField
-            .rx.controlEvent(.editingDidEndOnExit) // 키보드의 done버튼에 대응하는 이벤트
-            .subscribe() // 그냥 키보드만 닫으려고..ㅎ
-            .disposed(by: bag)
+        let output = addSymptomVM.transform(input)
         
-        negativeConfirmButton
-            .rx.tap
-            .bind(to: addSymptomVM.input.tappedNegativeConfirmButton)
-            .disposed(by: bag)
-        
-        otherConfirmButton
-            .rx.tap
-            .bind(to: addSymptomVM.input.tappedOtherConfirmButton)
-            .disposed(by: bag)
-        
-        closeButton
-            .rx.tap
-            .bind(to: addSymptomVM.input.tappedCloseButton)
-            .disposed(by: bag)
-        
-        //output
-        addSymptomVM.output.colorPaletteData
+        // 컬러 팔레트 컬렉션 뷰 데이터 소스
+        output.colorPaletteData
             .bind(to: colorPaletteCV.rx.items(cellIdentifier: ColorPaletteCell.identifier, cellType: ColorPaletteCell.self)) { index, item, cell in
                 cell.configure(hex: item)
-                cell.colorButtonTask = { [weak self] in
-                    self?.capsuleView.backgroundColor = item.toUIColor
-                    self?.colorPickerButton.selectedColor = item.toUIColor
-                }
+                cell.colorButtonTask = { [weak self] in self?.selectedColorFromPalette.onNext(item.toUIColor) }
             }
             .disposed(by: bag)
         
-        
-        addSymptomVM.output.clippedText
+        // 텍스트 필드에 공백을 제외한 텍스트 바인딩
+        output.clippedText
             .bind(to: textField.rx.text)
             .disposed(by: bag)
         
-        
-        addSymptomVM.output.isEnabledConfirmButton
+        // 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
+        output.isEnabledConfirmButton
             .bind(to: negativeConfirmButton.rx.isEnabled, otherConfirmButton.rx.isEnabled)
             .disposed(by: bag)
         
-        
-        addSymptomVM.output.negativeConfirmWithIsDuplicated
-            .subscribe(onNext: { [weak self] in
-                guard let self else { return }
-                guard let name = textField.text else { return }
-                guard let color = colorPickerButton.selectedColor else { return }
-                
-                // 중복된 이름인지 아닌지
-                if $0 {
-                    // 얼럿 뜨기 전 키보드 닫아줘야 함
-                    textField.endEditing(true)
-                    // 얼럿 띄우기
-                    presentAcceptAlert(
-                        title: String(localized: "등록 실패"),
-                        message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
-                } else {
-                    // 증상 등록 뷰에서 저장, 셀 리프레쉬는 홈 뷰(모델)에서 구현
-                    SymptomDataManager.shared.create(from: .init(name: name, hex: color.toHexInt, isNegative: true))
-                    HapticManager.shared.occurSuccess()
-                    dismissTask?()
-                    dismiss(animated: true)
-                }
-            })
+        // 중복 얼럿 띄우기
+        output.presentDuplicateAlert
+            .bind(with: self) { owner, name in
+                // 얼럿 뜨기 전 키보드 닫아줘야 함
+                owner.textField.endEditing(true)
+                // 얼럿 띄우기
+                owner.presentAcceptAlert(
+                    title: String(localized: "등록 실패"),
+                    message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
+            }
             .disposed(by: bag)
         
-        
-        addSymptomVM.output.otherConfirmWithIsDuplicated
-            .bind(onNext: { [weak self] in
-                guard let self else { return }
-                guard let name = textField.text else { return }
-                guard let color = colorPickerButton.selectedColor else { return }
-                
-                // 중복된 이름인지 아닌지
-                if $0 {
-                    // 얼럿 뜨기 전 키보드 닫아줘야 함
-                    textField.endEditing(true)
-                    // 얼럿 띄우기
-                    presentAcceptAlert(
-                        title: String(localized: "등록 실패"),
-                        message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
-                } else {
-                    // 증상 등록 뷰에서 저장, 셀 리프레쉬는 홈 뷰(모델)에서 구현
-                    SymptomDataManager.shared.create(from: .init(name: name, hex: color.toHexInt, isNegative: false))
-                    HapticManager.shared.occurSuccess()
-                    dismissTask?()
-                    dismiss(animated: true)
-                }
-            })
+        // 저장했으니 이제 화면 닫기
+        output.saveAndDismiss
+            .bind(with: self) { owenr, _ in
+                HapticManager.shared.occurSuccess()
+                owenr.dismissTask?()
+                owenr.dismiss(animated: true)
+            }
             .disposed(by: bag)
-        
-        
-        addSymptomVM.output.justDismiss
+ 
+        // 그냥 화면 닫기
+        output.justDismiss
             .bind(onNext: { [weak self] in self?.dismiss(animated: true) })
             .disposed(by: bag)
         
-        
-        // 뷰가 띄워질 때, 매번 선택된 색이 달라지게 함
-        addSymptomVM.output.setDefaultColor
+        // 초기 색상, 업데이트 색상 바인딩
+        output.selectedColor
             .bind(to: colorPickerButton.rx.selectedColor, capsuleView.rx.backgroundColor)
             .disposed(by: bag)
+        
+        // 키보드의 done 버튼을 누르면 키보드 닫기
+        textField
+            .rx.controlEvent(.editingDidEndOnExit)
+            .subscribe()
+            .disposed(by: bag)
     }
-    
-    @objc private func colorValueChanged() {
-        capsuleView.backgroundColor = colorPickerButton.selectedColor
-    }
+
 }
 
 
