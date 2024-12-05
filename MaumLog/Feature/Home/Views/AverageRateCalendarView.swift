@@ -7,9 +7,15 @@
 
 import UIKit
 import SnapKit
-
+import RxSwift
+import RxCocoa
 
 final class AverageRateCalendarView: UIView {
+    private let calendarSubVM = CalendarSubVM()
+    private let bag = DisposeBag()
+    
+    let reloadCalender = PublishSubject<Void>()
+
     // MARK: - Components
     let mainVStack = {
         let sv = UIStackView()
@@ -32,18 +38,10 @@ final class AverageRateCalendarView: UIView {
         label.text = String(localized: "평균 부작용 척도")
         label.font = .boldSystemFont(ofSize: 18)
         label.textColor = .chuBlack
-        label.backgroundColor = .clear
         return label
     }()
     
-    let calendarView = {
-        let view = UICalendarView()
-        // 달력 커스텀을 위해 설정해 주어야 하는 속성
-        view.wantsDateDecorations = true
-        view.fontDesign = .rounded
-        view.tintColor = .chuTint
-        return view
-    }()
+    let calendarView = TrendCalendarView()
     
     let tipLabelContainer = {
         let sv = UIStackView()
@@ -61,12 +59,11 @@ final class AverageRateCalendarView: UIView {
         return label
     }()
     
-    
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setAutoLayout()
+        setBinding()
     }
     
     required init?(coder: NSCoder) {
@@ -88,6 +85,16 @@ final class AverageRateCalendarView: UIView {
         mainVStack.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
+    // MARK: - Binding
+    private func setBinding() {
+        let input = CalendarSubVM.Input(reloadCalender: reloadCalender.asObservable())
+        let output = calendarSubVM.transform(input)
+        
+        // 캘린더 업데이트
+        output.calenderData
+            .bind(to: calendarView.rx.calendarDataDic)
+            .disposed(by: bag)
+    }
 }
 
 

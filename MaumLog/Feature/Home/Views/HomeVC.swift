@@ -68,7 +68,6 @@ final class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
-        averageCalendarView.calendarView.delegate = self
         
         setNavigationBar(
             leftBarButtonItems: [UIBarButtonItem(customView: titleLabel)],
@@ -98,24 +97,24 @@ final class HomeVC: UIViewController {
         overallSV.addArrangedSubview(averageCalendarView)
         
         
-        scrollview.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+        scrollview.snp.makeConstraints { $0.edges.equalTo(view.safeAreaLayoutGuide) }
+        contentView.snp.makeConstraints {
+            $0.verticalEdges.equalToSuperview()
+            $0.width.equalToSuperview()
         }
-        contentView.snp.makeConstraints { make in
-            make.verticalEdges.equalToSuperview()
-            make.width.equalToSuperview()
-        }
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 15, bottom: 50, right: 15))
-        }
+        overallSV.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 15, bottom: 50, right: 15)) }
     }
     
     // MARK: - Binding
     func setBinding() {
-        
         // 스크롤 뷰를 잡아당겼을 때 리프레쉬가 필요하다는 메시지 전달
         let startRefreshing = scrollview.refreshControl?
-            .rx.controlEvent(.valueChanged).asObservable() ?? .empty()
+            .rx.controlEvent(.valueChanged).asObservable()
+            .do(onNext: { [weak self] _ in
+                self?.symptomView.reloadCV.onNext(())
+                self?.medicineView.reloadCV.onNext(())
+                self?.averageCalendarView.reloadCalender.onNext(())
+            }) ?? .empty() // nil이면 아무것도 방출하지 않고 스트림 종료
 
         let input = HomeVM.Input(
             tappedGoSettingsButton: goSettingsBarButton.rx.tap.asObservable(),
@@ -202,49 +201,8 @@ final class HomeVC: UIViewController {
                     })
             }
             .disposed(by: bag)
-            
-        // MARK: - Legacies
-        // 달력 업데이트, 완료 얼럿
-        homeVM.calendarSubVM.output.targetReloadDate
-            .bind(onNext: { [weak self] in
-                // 달력은 rx 바인딩이 안돼서 수동 업데이트
-                self?.averageCalendarView.calendarView.reloadDecorations(forDateComponents: $0, animated: true)
-            })
-            .disposed(by: bag)
     }
 }
-
-extension HomeVC: UICalendarViewDelegate {
-    func calendarView(_ calendarView: UICalendarView, decorationFor dateComponents: DateComponents) -> UICalendarView.Decoration? {
-        var calendarData = [DateComponents : Int]()
-        homeVM.calendarSubVM.output.calenderData
-            .bind(onNext: { calendarData = $0 })
-            .disposed(by: bag)
-        
-        // 일치하는 날짜에 value값이 있는지 확인, 없으면 nil
-        let rate = calendarData
-            .first { (key: DateComponents, _: Int) in
-                if key.year == dateComponents.year,
-                   key.month == dateComponents.month,
-                   key.day == dateComponents.day {
-                    return true
-                }else{
-                    return false
-                }
-            }
-        
-        guard let rate = rate?.value else { return nil }
-        // 커스텀 라벨 미리 구현, 나중에 디테일한 구현 필요하면 컴포넌트에 사전 선언하는걸로
-        let label = UILabel()
-        label.text = rate.toNegativeName
-        label.textColor = .chuBlack
-        label.font = .boldSystemFont(ofSize: 12)
-        return UICalendarView.Decoration.customView { return label }
-    }
-
-}
-
-
 
 #Preview {
     TabBarVC()

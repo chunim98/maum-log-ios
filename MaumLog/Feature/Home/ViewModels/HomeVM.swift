@@ -28,9 +28,7 @@ final class HomeVM {
         let presentRemoveMedicineAlert: Observable<EditButtonCellModel>
 
     }
-    
-    let calendarSubVM = CalendarSubVM()
-    
+        
     private let bag = DisposeBag()
 
     func transform(_ input: Input) -> Output {
