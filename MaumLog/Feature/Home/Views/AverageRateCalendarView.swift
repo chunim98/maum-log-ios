@@ -8,31 +8,25 @@
 import UIKit
 import SnapKit
 
+
 final class AverageRateCalendarView: UIView {
-    //MARK: - 컴포넌트
-    let overallSV = {
+    // MARK: - Components
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = .zero
-        sv.distribution = .fill
         sv.backgroundColor = .chuWhite
         sv.clipsToBounds = true
         sv.layer.cornerRadius = 15
         return sv
     }()
     
-    let titleSV = {
+    let titleHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.distribution = .fill
-        sv.spacing = .zero
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
         return sv
     }()
-    
-    let divider0 = DividerView(lineWidth: 1, lineColor: .chuIvory)
-    
+        
     let titleLabel = {
         let label = UILabel()
         label.text = String(localized: "평균 부작용 척도")
@@ -51,10 +45,8 @@ final class AverageRateCalendarView: UIView {
         return view
     }()
     
-    let tipLabelSV = {
+    let tipLabelContainer = {
         let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.distribution = .fill
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 10, leading: 7.5, bottom: 7.5, trailing: 10)
         return sv
@@ -70,7 +62,7 @@ final class AverageRateCalendarView: UIView {
     }()
     
     
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -81,22 +73,19 @@ final class AverageRateCalendarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout() {
-        self.addSubview(overallSV)
+        self.addSubview(mainVStack)
 
-        overallSV.addArrangedSubview(titleSV)
-        overallSV.addArrangedSubview(divider0)
-        overallSV.addArrangedSubview(calendarView)
-        overallSV.addArrangedSubview(tipLabelSV)
+        mainVStack.addArrangedSubview(titleHStack)
+        mainVStack.addArrangedSubview(DividerView(lineWidth: 1, lineColor: .chuIvory))
+        mainVStack.addArrangedSubview(calendarView)
+        mainVStack.addArrangedSubview(tipLabelContainer)
         
-        titleSV.addArrangedSubview(titleLabel)
-        tipLabelSV.addArrangedSubview(tipLabel)
-
+        titleHStack.addArrangedSubview(titleLabel)
+        tipLabelContainer.addArrangedSubview(tipLabel)
         
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
 }
