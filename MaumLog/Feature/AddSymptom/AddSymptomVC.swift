@@ -16,7 +16,7 @@ final class AddSymptomVC: UIViewController {
     private let bag = DisposeBag()
     var dismissTask: (() -> Void)?
     
-    //MARK: - 컴포넌트
+    // MARK: - Components
     let titleBackground = {
         let view = UIView()
         view.backgroundColor = .chuIvory
@@ -41,18 +41,15 @@ final class AddSymptomVC: UIViewController {
         return UIButton(configuration: config)
     }()
     
-    let overallSV = {
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
         sv.spacing = .chuSpace
         return sv
     }()
     
-    let textFieldSV = {
+    let textFieldHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.distribution = .fill
         sv.spacing = .chuSpace
         return sv
     }()
@@ -110,9 +107,8 @@ final class AddSymptomVC: UIViewController {
         return cv
     }()
     
-    let confirmButtonSV = {
+    let confirmButtonHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.spacing = .chuSpace
         sv.distribution = .fillEqually
         sv.layer.cornerRadius = 25
@@ -142,7 +138,7 @@ final class AddSymptomVC: UIViewController {
         return button
     }()
 
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
@@ -157,56 +153,46 @@ final class AddSymptomVC: UIViewController {
         setColorPaletteCVLayout()
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     func setAutoLayout() {
-        view.addSubview(overallSV)
+        view.addSubview(mainVStack)
         view.addSubview(titleBackground)
+        mainVStack.addArrangedSubview(textFieldHStack)
+        mainVStack.addArrangedSubview(colorPaletteCVBackgroundView)
+        mainVStack.addArrangedSubview(confirmButtonHStack)
+        textFieldHStack.addArrangedSubview(colorPickerButton)
+        textFieldHStack.addArrangedSubview(capsuleView)
+        colorPaletteCVBackgroundView.addSubview(colorPaletteCV)
+        confirmButtonHStack.addArrangedSubview(negativeConfirmButton)
+        confirmButtonHStack.addArrangedSubview(otherConfirmButton)
+        capsuleView.addSubview(textField)
         titleBackground.addSubview(titleLabel)
         titleBackground.addSubview(closeButton)
         
-        overallSV.addArrangedSubview(textFieldSV)
-        textFieldSV.addArrangedSubview(colorPickerButton)
-        textFieldSV.addArrangedSubview(capsuleView)
-        capsuleView.addSubview(textField)
-        overallSV.addArrangedSubview(colorPaletteCVBackgroundView)
-        colorPaletteCVBackgroundView.addSubview(colorPaletteCV)
-        overallSV.addArrangedSubview(confirmButtonSV)
-        confirmButtonSV.addArrangedSubview(negativeConfirmButton)
-        confirmButtonSV.addArrangedSubview(otherConfirmButton)
-
-        
-        titleBackground.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+        titleBackground.snp.makeConstraints { $0.top.leading.trailing.equalToSuperview() }
+        titleLabel.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: .chuSpace, bottom: 10, right: .chuSpace))
         }
-        titleLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: .chuSpace, bottom: 10, right: .chuSpace))
+        closeButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
         }
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
-            make.centerY.equalToSuperview()
+        mainVStack.snp.makeConstraints {
+            $0.top.equalTo(titleBackground.snp.bottom).inset(CGFloat.chuSpace.reverse)
+            $0.horizontalEdges.equalToSuperview().inset(CGFloat.chuSpace)
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).inset(CGFloat.chuSpace.reverse) // 키보드 올라왔을 때 레이아웃 동적 변환
         }
-        overallSV.snp.makeConstraints { make in
-            make.top.equalTo(titleBackground.snp.bottom).inset(CGFloat.chuSpace.reverse)
-            make.horizontalEdges.equalToSuperview().inset(CGFloat.chuSpace)
-            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).inset(CGFloat.chuSpace.reverse) // 키보드 올라왔을 때 레이아웃 동적 변환
-        }
-
-        textField.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-        }
-        colorPickerButton.snp.makeConstraints { make in
-            make.width.height.equalTo(CGFloat.chuHeight)
-        }
-        colorPaletteCV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(10)
-        }
-        confirmButtonSV.snp.makeConstraints { make in
-            make.height.equalTo(CGFloat.chuHeight)
-        }
-        
+        textField.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
+        colorPickerButton.snp.makeConstraints { $0.width.height.equalTo(CGFloat.chuHeight) }
+        colorPaletteCV.snp.makeConstraints { $0.edges.equalToSuperview().inset(10) }
+        confirmButtonHStack.snp.makeConstraints { $0.height.equalTo(CGFloat.chuHeight) }
     }
     
-    //MARK: - 바인딩
+    private func setColorPaletteCVLayout() {
+        colorPaletteCV.setMultilineLayout(spacing: .chuSpace, itemCount: 6)
+    }
+    
+    // MARK: - Binding
     func setBinding() {
         // input
         textField
@@ -237,7 +223,7 @@ final class AddSymptomVC: UIViewController {
         //output
         addSymptomVM.output.colorPaletteData
             .bind(to: colorPaletteCV.rx.items(cellIdentifier: ColorPaletteCell.identifier, cellType: ColorPaletteCell.self)) { index, item, cell in
-                cell.setColorButton(hex: item)
+                cell.configure(hex: item)
                 cell.colorButtonTask = { [weak self] in
                     self?.capsuleView.backgroundColor = item.toUIColor
                     self?.colorPickerButton.selectedColor = item.toUIColor
@@ -270,7 +256,7 @@ final class AddSymptomVC: UIViewController {
                     presentAcceptAlert(
                         title: String(localized: "등록 실패"),
                         message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
-                }else{
+                } else {
                     // 증상 등록 뷰에서 저장, 셀 리프레쉬는 홈 뷰(모델)에서 구현
                     SymptomDataManager.shared.create(from: .init(name: name, hex: color.toHexInt, isNegative: true))
                     HapticManager.shared.occurSuccess()
@@ -295,7 +281,7 @@ final class AddSymptomVC: UIViewController {
                     presentAcceptAlert(
                         title: String(localized: "등록 실패"),
                         message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
-                }else{
+                } else {
                     // 증상 등록 뷰에서 저장, 셀 리프레쉬는 홈 뷰(모델)에서 구현
                     SymptomDataManager.shared.create(from: .init(name: name, hex: color.toHexInt, isNegative: false))
                     HapticManager.shared.occurSuccess()
@@ -316,15 +302,9 @@ final class AddSymptomVC: UIViewController {
             .bind(to: colorPickerButton.rx.selectedColor, capsuleView.rx.backgroundColor)
             .disposed(by: bag)
     }
-
     
     @objc private func colorValueChanged() {
         capsuleView.backgroundColor = colorPickerButton.selectedColor
-    }
-    
-    
-    private func setColorPaletteCVLayout() {
-        colorPaletteCV.setMultilineLayout(spacing: .chuSpace, itemCount: 6)
     }
 }
 
