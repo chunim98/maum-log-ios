@@ -58,11 +58,11 @@ final class HomeVC: UIViewController {
         return sv
     }()
     
-    let symptomView = RegisteredSymptomView()
+    let symptomView = SymptomSectionView()
     
-    let medicineView = RegisteredMedicineView()
+    let medicineView = MedicineSectionView()
 
-    let averageCalendarView = AverageRateCalendarView()
+    let averageCalendarView = CalendarSectionView()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {

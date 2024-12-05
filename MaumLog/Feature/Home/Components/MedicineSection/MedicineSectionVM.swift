@@ -1,5 +1,5 @@
 //
-//  AddedMedicineSubVM.swift
+//  MedicineSectionVM.swift
 //  MaumLog
 //
 //  Created by 신정욱 on 8/26/24.
@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class AddedMedicineSubVM {
+final class MedicineSectionVM {
 
     struct Input {
         let tappedAddButton: Observable<Void>

@@ -1,5 +1,5 @@
 //
-//  RegisteredMedicineView.swift
+//  MedicineSectionView.swift
 //  MaumLog
 //
 //  Created by 신정욱 on 8/26/24.
@@ -11,10 +11,10 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-final class RegisteredMedicineView: UIView {
+final class MedicineSectionView: UIView {
     typealias SectionDataSource = RxCollectionViewSectionedAnimatedDataSource
     
-    private let medicineSubVM = AddedMedicineSubVM()
+    private let medicineSubVM = MedicineSectionVM()
     private let bag = DisposeBag()
     
     private let itemToRemove = PublishSubject<EditButtonCellModel>()
@@ -142,7 +142,7 @@ final class RegisteredMedicineView: UIView {
     
     // MARK: - Binding
     private func setBinding() {
-        let input = AddedMedicineSubVM.Input(
+        let input = MedicineSectionVM.Input(
             tappedAddButton: addButton.rx.tap.asObservable(),
             tappedEditButton: editButton.rx.tap.asObservable(),
             reloadCV: reloadCV.asObservable(),
@@ -255,5 +255,5 @@ final class RegisteredMedicineView: UIView {
 }
 
 #Preview(traits: .fixedLayout(width: 400, height: 600)) {
-    RegisteredMedicineView()
+    MedicineSectionView()
 }

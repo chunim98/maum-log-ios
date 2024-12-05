@@ -1,5 +1,5 @@
 //
-//  RegisteredSymptomView.swift
+//  SymptomSectionView.swift
 //  MaumLog
 //
 //  Created by 신정욱 on 8/18/24.
@@ -11,10 +11,10 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-final class RegisteredSymptomView: UIView {
+final class SymptomSectionView: UIView {
     typealias SectionDataSource = RxCollectionViewSectionedAnimatedDataSource
 
-    private let addedSymptomSubVM = AddedSymptomSubVM()
+    private let addedSymptomSubVM = SymptomSectionVM()
     private let bag = DisposeBag()
     
     private let itemToRemove = PublishSubject<EditButtonCellModel>()
@@ -210,7 +210,7 @@ final class RegisteredSymptomView: UIView {
     
     // MARK: - Binding
     private func setBinding() {
-        let input = AddedSymptomSubVM.Input(
+        let input = SymptomSectionVM.Input(
             tappedAddButton: addButton.rx.tap.asObservable(),
             tappedEditButton: editButton.rx.tap.asObservable(),
             reloadCV: reloadCV.asObservable(),
@@ -344,5 +344,5 @@ final class RegisteredSymptomView: UIView {
 }
 
 #Preview(traits: .fixedLayout(width: 400, height: 600)) {
-    RegisteredSymptomView()
+    SymptomSectionView()
 }

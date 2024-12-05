@@ -1,5 +1,5 @@
 //
-//  AverageRateCalendarView.swift
+//  CalendarSectionView.swift
 //  MaumLog
 //
 //  Created by 신정욱 on 8/19/24.
@@ -10,8 +10,8 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class AverageRateCalendarView: UIView {
-    private let calendarSubVM = CalendarSubVM()
+final class CalendarSectionView: UIView {
+    private let calendarSubVM = CalendarSectionVM()
     private let bag = DisposeBag()
     
     let reloadCalender = PublishSubject<Void>()
@@ -87,7 +87,7 @@ final class AverageRateCalendarView: UIView {
     
     // MARK: - Binding
     private func setBinding() {
-        let input = CalendarSubVM.Input(reloadCalender: reloadCalender.asObservable())
+        let input = CalendarSectionVM.Input(reloadCalender: reloadCalender.asObservable())
         let output = calendarSubVM.transform(input)
         
         // 캘린더 업데이트
@@ -99,5 +99,5 @@ final class AverageRateCalendarView: UIView {
 
 
 #Preview(traits: .fixedLayout(width: 400, height: 600)) {
-    AverageRateCalendarView()
+    CalendarSectionView()
 }

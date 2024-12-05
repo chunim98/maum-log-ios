@@ -1,5 +1,5 @@
 //
-//  CalendarSubVM.swift
+//  CalendarSectionVM.swift
 //  MaumLog
 //
 //  Created by 신정욱 on 8/20/24.
@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-final class CalendarSubVM {
+final class CalendarSectionVM {
 
     struct Input {
         let reloadCalender: Observable<Void>
