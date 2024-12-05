@@ -14,7 +14,7 @@ import RxDataSources
 final class MedicineSectionView: UIView {
     typealias SectionDataSource = RxCollectionViewSectionedAnimatedDataSource
     
-    private let medicineSubVM = MedicineSectionVM()
+    private let medicineSectionVM = MedicineSectionVM()
     private let bag = DisposeBag()
     
     private let itemToRemove = PublishSubject<EditButtonCellModel>()
@@ -131,11 +131,11 @@ final class MedicineSectionView: UIView {
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
         
         // 레이아웃 설정
-        collectionView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints {
             if height <= 30 {
-                make.height.equalTo(30)
-            }else{
-                make.height.equalTo(height)
+                $0.height.equalTo(30)
+            } else {
+                $0.height.equalTo(height)
             }
         }
     }
@@ -148,7 +148,7 @@ final class MedicineSectionView: UIView {
             reloadCV: reloadCV.asObservable(),
             itemToRemove: itemToRemove.asObservable())
         
-        let output = medicineSubVM.transform(input)
+        let output = medicineSectionVM.transform(input)
         
         // 컬렉션 뷰 바인딩, 복용중인 약
         output.cellData
@@ -196,11 +196,11 @@ final class MedicineSectionView: UIView {
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
         
         // 레이아웃 업데이트
-        collectionView.snp.updateConstraints { make in
+        collectionView.snp.updateConstraints {
             if height <= 30 {
-                make.height.equalTo(30)
+                $0.height.equalTo(30)
             } else {
-                make.height.equalTo(height)
+                $0.height.equalTo(height)
             }
         }
     }
@@ -239,7 +239,7 @@ final class MedicineSectionView: UIView {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CapsuleCell.identifier, for: indexPath) as? CapsuleCell
             else { return UICollectionViewCell() }
             
-            cell.setAttributes(item: item)
+            cell.configure(item: item)
             
             cell.itemToRemove
                 .bind(to: self.itemToRemove)

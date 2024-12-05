@@ -15,12 +15,12 @@ final class CapsuleCell: UICollectionViewCell, EditButtonCellType {
     static let identifier = "CapsuleCell"
     private let bag = DisposeBag()
     
-    var delegate: (any EditButtonCellDelegate)?
+    var delegate: (any EditButtonCellDelegate)? // 사용되지는 않음
     var item: (any EditButtonCellModel)?
     
     let itemToRemove = PublishSubject<EditButtonCellModel>()
 
-    //MARK: - 컴포넌트
+    // MARK: - Components
     let button = {
         var config = UIButton.Configuration.filled()
         config.attributedTitle = AttributedString("버튼", attributes: .chuBoldTitle(ofSize: 18)) // 임시
@@ -56,7 +56,7 @@ final class CapsuleCell: UICollectionViewCell, EditButtonCellType {
         return button
     }()
         
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
@@ -67,33 +67,27 @@ final class CapsuleCell: UICollectionViewCell, EditButtonCellType {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout() {
         contentView.addSubview(button)
         contentView.addSubview(editButton)
         
-        button.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        editButton.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        button.snp.makeConstraints { $0.edges.equalToSuperview() }
+        editButton.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
-    //MARK: - 바인딩
+    // MARK: - Binding
     private func setBinding() {
         editButton
             .rx.tap
-            .bind(onNext: { [weak self] in
-                guard let self, let item else { return }
-                self.delegate?.removeTask(item: item)
-                self.itemToRemove.onNext(item)
-            })
+            .bind(with: self) { owner, _ in
+                guard let item = owner.item else { return }
+                owner.itemToRemove.onNext(item)
+            }
             .disposed(by: bag)
     }
     
-    
-    func setAttributes(item: CapsuleCellModel) {
+    func configure(item: CapsuleCellModel) {
         self.item = item
         button.configuration?.attributedTitle = AttributedString(item.name, attributes: .chuBoldTitle(ofSize: 18))
         button.configuration?.baseBackgroundColor = item.hex.toUIColor

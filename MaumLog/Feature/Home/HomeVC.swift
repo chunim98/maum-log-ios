@@ -6,12 +6,12 @@
 //
 
 import UIKit
+import SnapKit
 import RxSwift
 import RxCocoa
 import RxDataSources
 
 final class HomeVC: UIViewController {
-    
     private let homeVM = HomeVM()
     private let bag = DisposeBag()
     private let once = OnlyOnce()
@@ -62,7 +62,7 @@ final class HomeVC: UIViewController {
     
     let medicineView = MedicineSectionView()
 
-    let averageCalendarView = CalendarSectionView()
+    let calendarView = CalendarSectionView()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -87,22 +87,20 @@ final class HomeVC: UIViewController {
     // MARK: - Layout
     func setAutoLayout() {
         view.addSubview(scrollview)
-        
         scrollview.addSubview(contentView)
-        
         contentView.addSubview(overallSV)
-        
         overallSV.addArrangedSubview(symptomView)
         overallSV.addArrangedSubview(medicineView)
-        overallSV.addArrangedSubview(averageCalendarView)
-        
+        overallSV.addArrangedSubview(calendarView)
         
         scrollview.snp.makeConstraints { $0.edges.equalTo(view.safeAreaLayoutGuide) }
         contentView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        overallSV.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 15, bottom: 50, right: 15)) }
+        overallSV.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 15, bottom: 50, right: 15))
+        }
     }
     
     // MARK: - Binding
@@ -113,7 +111,7 @@ final class HomeVC: UIViewController {
             .do(onNext: { [weak self] _ in
                 self?.symptomView.reloadCV.onNext(())
                 self?.medicineView.reloadCV.onNext(())
-                self?.averageCalendarView.reloadCalender.onNext(())
+                self?.calendarView.reloadCalender.onNext(())
             }) ?? .empty() // nil이면 아무것도 방출하지 않고 스트림 종료
 
         let input = HomeVM.Input(
@@ -159,21 +157,14 @@ final class HomeVC: UIViewController {
             }
             .disposed(by: bag)
         
-        
+        // 증상, 약물 삭제 확인 얼럿 띄우기
         output.presentRemoveAlert
             .bind(with: self) { owner, item in
-                guard let item = item as? SymptomData else { return }
-                owner.presentAlert(
-                    title: String(localized: "알림"),
-                    message: String(localized: "\"\(item.name)\" 증상을 목록에서 삭제할까요?"),
-                    acceptTitle: String(localized: "삭제"),
-                    acceptTask: {
-                        SymptomDataManager.shared.delete(target: item) // 등록한 증상 삭제
-                        owner.symptomView.reloadCV.onNext(()) // 리로드 메시지 전송
-                    })
+                owner.presentRemoveAlert(item: item)
             }
             .disposed(by: bag)
         
+        // 약물 추가 모달 띄우기
         output.goAddMedicine
             .bind(with: self) { owner, _ in
                 let vc = AddMedicineVC()
@@ -185,20 +176,6 @@ final class HomeVC: UIViewController {
                 // 창을 닫을 때 리로드 메시지 전송
                 vc.dismissTask = { owner.medicineView.reloadCV.onNext(()) }
                 owner.present(vc, animated: true)
-            }
-            .disposed(by: bag)
-        
-        output.presentRemoveMedicineAlert
-            .bind(with: self) { owner, item in
-                guard let item = item as? MedicineData else { return }
-                owner.presentAlert(
-                    title: String(localized: "알림"),
-                    message: String(localized: "\"\(item.name)\" 을 목록에서 삭제할까요?"),
-                    acceptTitle: String(localized: "삭제"),
-                    acceptTask: {
-                        MedicineDataManager.shared.delete(target: item) // 등록한 약물 삭제
-                        owner.medicineView.reloadCV.onNext(()) // 리로드 이벤트 전송
-                    })
             }
             .disposed(by: bag)
     }

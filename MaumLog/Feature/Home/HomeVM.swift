@@ -25,8 +25,6 @@ final class HomeVM {
         let goAddSymptom: Observable<Void>
         let presentRemoveAlert: Observable<EditButtonCellModel>
         let goAddMedicine: Observable<Void>
-        let presentRemoveMedicineAlert: Observable<EditButtonCellModel>
-
     }
         
     private let bag = DisposeBag()
@@ -38,26 +36,22 @@ final class HomeVM {
         // 스크롤 뷰 리프레쉬
         let endRefreshing = input.startRefreshing
             .delay(.milliseconds(750), scheduler: MainScheduler.instance) // 리프레시 기분을 내는 0.75초 지연
-            // 리프레쉬 로직 추가해야함
         
         // 증상 추가 모달 띄우기
         let goAddSymptom = input.goAddSymptom
-        
-        // 증상 삭제 얼럿 띄우기
-        let presentRemoveAlert = input.presentRemoveAlert
-        
+
         // 약물 추가 모달 띄우기
         let goAddMedicine = input.goAddMedicine
         
-        // 약물 삭제 얼럿 띄우기
-        let presentRemoveMedicineAlert = input.presentRemoveMedicineAlert
+        // 삭제 얼럿 띄우기
+        let presentRemoveAlert = Observable
+            .merge(input.presentRemoveAlert, input.presentRemoveMedicineAlert)
         
         return Output(
             goSettings: goSettings,
             endRefreshing: endRefreshing,
             goAddSymptom: goAddSymptom,
             presentRemoveAlert: presentRemoveAlert,
-            goAddMedicine: goAddMedicine,
-            presentRemoveMedicineAlert: presentRemoveMedicineAlert)
+            goAddMedicine: goAddMedicine)
     }
 }

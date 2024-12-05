@@ -74,8 +74,10 @@ final class MedicineSectionVM {
             .map { $0.isEmpty }
             .share(replay: 1)
         
+        // 컬렉션 뷰를 업데이트 해야한다는 메시지 전송
         let needUpdateCV = input.reloadCV
         
+        // 제거 얼럿 띄우는 메시지 전송
         let presentRemoveMedicineAlert = input.itemToRemove
         
         return Output(

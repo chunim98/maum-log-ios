@@ -14,7 +14,7 @@ import RxDataSources
 final class SymptomSectionView: UIView {
     typealias SectionDataSource = RxCollectionViewSectionedAnimatedDataSource
 
-    private let addedSymptomSubVM = SymptomSectionVM()
+    private let symptomSectionVM = SymptomSectionVM()
     private let bag = DisposeBag()
     
     private let itemToRemove = PublishSubject<EditButtonCellModel>()
@@ -192,18 +192,18 @@ final class SymptomSectionView: UIView {
         let otherHeight = otherCV.collectionViewLayout.collectionViewContentSize.height
 
         // 레이아웃 설정
-        negativeCV.snp.makeConstraints { make in
+        negativeCV.snp.makeConstraints {
             if negativeHeight <= 50 {
-                make.height.equalTo(50)
+                $0.height.equalTo(50)
             } else {
-                make.height.equalTo(negativeHeight)
+                $0.height.equalTo(negativeHeight)
             }
         }
-        otherCV.snp.makeConstraints { make in
+        otherCV.snp.makeConstraints {
             if otherHeight <= 50 {
-                make.height.equalTo(50)
+                $0.height.equalTo(50)
             } else {
-                make.height.equalTo(otherHeight)
+                $0.height.equalTo(otherHeight)
             }
         }
     }
@@ -216,7 +216,7 @@ final class SymptomSectionView: UIView {
             reloadCV: reloadCV.asObservable(),
             itemToRemove: itemToRemove)
         
-        let output = addedSymptomSubVM.transform(input: input)
+        let output = symptomSectionVM.transform(input: input)
         
         // 컬렉션 뷰 바인딩, 부작용
         output.negativeCellDataArr
@@ -254,37 +254,39 @@ final class SymptomSectionView: UIView {
             })
             .disposed(by: bag)
         
+        // 삭제 얼럿을 띄우기
         output.presentRemoveAlert
             .bind(to: presentRemoveAlert)
             .disposed(by: bag)
         
+        // 증상 추가 모달 띄우기
         output.goAddSymptom
             .bind(to: goAddSymptom)
             .disposed(by: bag)
-        
     }
 
     // MARK: - Methods
     private func updateCVHeight() {
         // 최신 콘텐츠 높이 가져오기
         layoutIfNeeded()
+        
         // 현재 컬렉션 뷰 안에 있는 열 높이 가져오기
         let negativeHeight = negativeCV.collectionViewLayout.collectionViewContentSize.height
         let otherHeight = otherCV.collectionViewLayout.collectionViewContentSize.height
         
         // 레이아웃 업데이트
-        negativeCV.snp.updateConstraints { make in
+        negativeCV.snp.updateConstraints {
             if negativeHeight <= 50 {
-                make.height.equalTo(50)
+                $0.height.equalTo(50)
             } else {
-                make.height.equalTo(negativeHeight)
+                $0.height.equalTo(negativeHeight)
             }
         }
-        otherCV.snp.updateConstraints { make in
+        otherCV.snp.updateConstraints {
             if otherHeight <= 50 {
-                make.height.equalTo(50)
+                $0.height.equalTo(50)
             } else {
-                make.height.equalTo(otherHeight)
+                $0.height.equalTo(otherHeight)
             }
         }
     }
@@ -300,8 +302,7 @@ final class SymptomSectionView: UIView {
             editButton.configuration?.baseBackgroundColor = .clear
         }
     }
-    
-    
+
     private func setCVBackground(_ isNegativeEmpty: Bool, _ isOtherEmpty: Bool) {
         if isNegativeEmpty {
             negativeCV.backgroundView = negativeEmptyView
@@ -328,7 +329,7 @@ final class SymptomSectionView: UIView {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CapsuleCell.identifier, for: indexPath) as? CapsuleCell
             else { return UICollectionViewCell() }
             
-            cell.setAttributes(item: item)
+            cell.configure(item: item)
             
             cell.itemToRemove
                 .bind(to: self.itemToRemove)

@@ -100,12 +100,12 @@ final class SymptomSectionVM {
             }
             .share(replay: 1)
         
+        // 삭제 얼럿을 띄우는 메시지 전송
         let presentRemoveAlert = input.itemToRemove
         
+        // 컬렉션 뷰들을 업데이트 해야 한다는 메시지 전송
         let needUpdateCV = input.reloadCV
 
-        
-        
         return Output(
             negativeCellDataArr: negativeCellDataArr,
             otherCellDataArr: otherCellDataArr,

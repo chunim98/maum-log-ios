@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 final class CalendarSectionView: UIView {
-    private let calendarSubVM = CalendarSectionVM()
+    private let calendarSectionVM = CalendarSectionVM()
     private let bag = DisposeBag()
     
     let reloadCalender = PublishSubject<Void>()
@@ -88,7 +88,7 @@ final class CalendarSectionView: UIView {
     // MARK: - Binding
     private func setBinding() {
         let input = CalendarSectionVM.Input(reloadCalender: reloadCalender.asObservable())
-        let output = calendarSubVM.transform(input)
+        let output = calendarSectionVM.transform(input)
         
         // 캘린더 업데이트
         output.calenderData
