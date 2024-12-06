@@ -121,65 +121,56 @@ final class AddMedicineVC: UIViewController {
     
     // MARK: - Binding
     func setBinding() {
-        // input ========================================
-        textField
-            .rx.text.orEmpty
-            .bind(to: addMedicineVM.input.textOfTextField)
-            .disposed(by: bag)
+        let input = AddMedicineVM.Input(
+            tappedConfirmButton: confirmButton.rx.tap.asObservable(),
+            textOfTextField: textField.rx.text.orEmpty.asObservable(),
+            tappedCloseButton: closeButton.rx.tap.asObservable())
         
-        textField
-            .rx.controlEvent(.editingDidEndOnExit) // 키보드의 done버튼에 대응하는 이벤트
-            .subscribe() // 그냥 키보드만 닫으려고..ㅎ
-            .disposed(by: bag)
+        let output = addMedicineVM.transform(input)
         
-         confirmButton
-            .rx.tap
-            .bind(to: addMedicineVM.input.tappedConfirmButton)
-            .disposed(by: bag)
-        
-        closeButton
-            .rx.tap
-            .bind(to: addMedicineVM.input.tappedCloseButton)
-            .disposed(by: bag)
-        
-        //output ========================================
-        addMedicineVM.output.clippedText
+        // 텍스트 필드에 공백을 제외한 텍스트 바인딩
+        output.clippedText
             .bind(to: textField.rx.text)
             .disposed(by: bag)
         
-        
-        addMedicineVM.output.isEnabledConfirmButton
+        // 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
+        output.isEnabledConfirmButton
             .bind(to: confirmButton.rx.isEnabled)
             .disposed(by: bag)
         
-        
-        addMedicineVM.output.confirmWithIsDuplicated
-            .subscribe(onNext: { [weak self] in
-                guard let self else { return }
-                guard let name = textField.text else { return }
-                
-                // 중복된 이름인지 아닌지
-                if $0 {
-                    // 얼럿 뜨기 전 키보드 닫아줘야 함
-                    textField.endEditing(true)
-                    // 얼럿 띄우기
-                    presentAcceptAlert(
-                        title: String(localized: "등록 실패"),
-                        message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
-                } else {
-                    // 복용중인 약 뷰에서 저장, 셀 리프레쉬는 홈 뷰(모델)에서 구현
-                    MedicineDataManager.shared.create(from: .init(name: name))
-                    HapticManager.shared.occurSuccess()
-                    dismissTask?()
-                    dismiss(animated: true)
-                }
-            })
+        // 중복 얼럿 띄우기
+        output.presentDuplicateAlert
+            .bind(with: self) { owner, name in
+                // 얼럿 뜨기 전 키보드 닫아줘야 함
+                owner.textField.endEditing(true)
+                // 얼럿 띄우기
+                owner.presentAcceptAlert(
+                    title: String(localized: "등록 실패"),
+                    message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
+            }
             .disposed(by: bag)
         
-        addMedicineVM.output.justDismiss
-            .bind(onNext: { [weak self] in self?.dismiss(animated: true) })
+        // 저장했으니 이제 화면 닫기
+        output.saveAndDismiss
+            .bind(with: self) { owenr, _ in
+                HapticManager.shared.occurSuccess()
+                owenr.dismissTask?()
+                owenr.dismiss(animated: true)
+            }
             .disposed(by: bag)
-
+        
+        // 그냥 화면 닫기
+        output.justDismiss
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: bag)
+        
+        // 키보드의 done 버튼을 누르면 키보드 닫기
+        textField
+            .rx.controlEvent(.editingDidEndOnExit)
+            .subscribe()
+            .disposed(by: bag)
     }
 }
 
