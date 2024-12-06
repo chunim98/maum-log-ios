@@ -212,6 +212,7 @@
 		511601772D03322900F19A36 /* Archive */ = {
 			isa = PBXGroup;
 			children = (
+				515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */,
 			);
 			path = Archive;
 			sourceTree = "<group>";
@@ -328,7 +329,6 @@
 				51412A112C5EB7CB00381B7C /* LogVM.swift */,
 				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
 				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
-				515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */,
 				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
 				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
 			);
