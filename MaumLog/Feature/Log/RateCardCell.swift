@@ -13,19 +13,16 @@ final class RateCardCell: UICollectionViewCell {
     static let identifier = "RateCardCell"
     var isNegative = false
     
-    //MARK: - 컴포넌트
-    let overallSV = {
+    // MARK: - Components
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
         sv.spacing = 2
         return sv
     }()
     
     let nameLabelBackground = {
         let sv = UIStackView()
-        sv.axis = .vertical
-        sv.distribution = .fill
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
         sv.backgroundColor = .chuColorPalette[6] // 임시
@@ -46,8 +43,6 @@ final class RateCardCell: UICollectionViewCell {
     
     let rateViewsOutline = {
         let sv  = UIStackView()
-        sv.axis = .vertical
-        sv.distribution = .fill
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
         sv.backgroundColor = .chuColorPalette[6] // 임시
@@ -58,8 +53,6 @@ final class RateCardCell: UICollectionViewCell {
     
     let rateViewsBackground = {
         let sv = UIStackView()
-        sv.axis = .vertical
-        sv.distribution = .fill
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 1, leading: 1, bottom: 1, trailing: 1)
         sv.backgroundColor = .chuWhite
@@ -68,9 +61,8 @@ final class RateCardCell: UICollectionViewCell {
         return sv
     }()
     
-    let rateViewsSV = {
+    let rateViewsHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.distribution = .fillEqually
         sv.spacing = 1
         sv.clipsToBounds = true
@@ -85,46 +77,38 @@ final class RateCardCell: UICollectionViewCell {
         }
         views.forEach {
             $0.backgroundColor = .chuWhite // 임시
-
         }
         return views
     }()
     
-    // MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-//        nameLabel.layer.cornerRadius = nameLabel.bounds.height / 2
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout(){
-        contentView.addSubview(overallSV)
-        overallSV.addArrangedSubview(nameLabelBackground)
+        contentView.addSubview(mainVStack)
+        mainVStack.addArrangedSubview(nameLabelBackground)
         nameLabelBackground.addArrangedSubview(nameLabel)
-        overallSV.addArrangedSubview(rateViewsOutline)
+        mainVStack.addArrangedSubview(rateViewsOutline)
         rateViewsOutline.addArrangedSubview(rateViewsBackground)
-        rateViewsBackground.addArrangedSubview(rateViewsSV)
-        rateViews.forEach { rateViewsSV.addArrangedSubview($0) } // 뷰 5개 모두 저장
+        rateViewsBackground.addArrangedSubview(rateViewsHStack)
+        rateViews.forEach { rateViewsHStack.addArrangedSubview($0) } // 뷰 5개 모두 저장
 
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(2)
-        }
-        rateViewsOutline.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(14)
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(2) }
+        rateViewsOutline.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(14)
         }
     }
     
-    func setAttributes(item: SymptomCardData){
+    func configure(item: SymptomCardData){
         nameLabelBackground.backgroundColor = item.hex.toUIColor
         rateViewsOutline.backgroundColor = item.hex.toUIColor
         nameLabel.text = item.name

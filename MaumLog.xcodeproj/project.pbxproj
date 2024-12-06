@@ -209,6 +209,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		511601772D03322900F19A36 /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Archive;
+			sourceTree = "<group>";
+		};
 		5126AC7C2D018EBF001625DB /* TrendCalendarView */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,8 +328,8 @@
 				51412A112C5EB7CB00381B7C /* LogVM.swift */,
 				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
 				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
-				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
 				515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */,
+				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
 				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
 			);
 			path = Log;
@@ -363,7 +370,7 @@
 				518E5F052CFDFA030067DF38 /* Extensions */,
 				518386E82C6408C100437696 /* Utils */,
 				518E5EE82CFDF5550067DF38 /* Localization */,
-				518E5F0F2CFE265B0067DF38 /* Archive */,
+				511601772D03322900F19A36 /* Archive */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -438,13 +445,6 @@
 				5103A2472C554F75008F8218 /* CapsuleCell.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		518E5F0F2CFE265B0067DF38 /* Archive */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Archive;
 			sourceTree = "<group>";
 		};
 		51E4904A2C7DDA0C00F0150A /* LogData */ = {

@@ -16,7 +16,7 @@ final class LogVC: UIViewController {
     private let logVM = LogVM()
     private let bag = DisposeBag()
     
-    // MARK: - 컴포넌트
+    // MARK: - Components
     let titleLabel = {
         let label = UILabel()
         label.text = String(localized: "기록")
@@ -96,40 +96,38 @@ final class LogVC: UIViewController {
     
 
 
-    // MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
-        
-        setAutoLayout()
-        setBinding()
         setNavigationBar(
             leftBarButtonItems: [UIBarButtonItem(customView: titleLabel)],
             rightBarButtonItems: [optionBarButton, addBarButton])
+
+        setAutoLayout()
+        setBinding()
         setPullDownButton()
     }
     
-    // MARK: - 오토레이아웃
+    // MARK: - Layout
     func setAutoLayout() {
         view.addSubview(logTV)
         view.addSubview(addFloatingButton)
         view.addSubview(takeMedicineButton)
         
-        logTV.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+        logTV.snp.makeConstraints { $0.edges.equalTo(view.safeAreaLayoutGuide) }
+        addFloatingButton.snp.makeConstraints {
+            $0.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
+            $0.size.equalTo(50)
         }
-        addFloatingButton.snp.makeConstraints { make in
-            make.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
-            make.size.equalTo(50)
-        }
-        takeMedicineButton.snp.makeConstraints { make in
-            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
-            make.bottom.equalTo(addFloatingButton.snp.top).inset(-15)
-            make.size.equalTo(35)
+        takeMedicineButton.snp.makeConstraints {
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
+            $0.bottom.equalTo(addFloatingButton.snp.top).inset(-15)
+            $0.size.equalTo(35)
         }
     }
     
-    // MARK: - 바인딩
+    // MARK: - Binding
     func setBinding() {
         // input
         addFloatingButton
@@ -203,7 +201,7 @@ final class LogVC: UIViewController {
             .bind(onNext: { [weak self] in
                 if $0 {
                     self?.navigationItem.rightBarButtonItem = self?.editDoneBarButton
-                }else{
+                } else {
                     self?.navigationItem.rightBarButtonItem = self?.optionBarButton
                 }
             })
@@ -215,7 +213,7 @@ final class LogVC: UIViewController {
             .bind(onNext: { [weak self] in
                 if $0 {
                     self?.logTV.backgroundView = self?.logEmptyView
-                }else{
+                } else {
                     self?.logTV.backgroundView = .none
                 }
             })
@@ -257,7 +255,7 @@ final class LogVC: UIViewController {
 
     }
     
-    // MARK: - 컴포넌트 구성
+    // MARK: - Configure Components
     private func setPullDownButton() {
         let edit = UIAction(
             title: String(localized: "편집"),
@@ -277,7 +275,7 @@ final class LogVC: UIViewController {
             .bind(onNext: {
                 if $0 {
                     descendingOrder.state = .on
-                }else{
+                } else {
                     ascendingOrder.state = .on
                 }
             })
@@ -322,7 +320,7 @@ extension LogVC: EditButtonCellDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: MedicineLogCell.identifier, for: indexPath) as? MedicineLogCell
                 guard let cell else { return UITableViewCell() }
 
-                cell.setAttributes(item: item)
+                cell.configure(item: item)
                 cell.delegate = self
                 return cell
             }

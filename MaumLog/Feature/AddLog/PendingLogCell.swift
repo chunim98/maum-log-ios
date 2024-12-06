@@ -142,7 +142,7 @@ final class PendingLogCell: UITableViewCell {
 
     
     func setAtrributes(item: SymptomCardData) {
-        infoCard.setAttributes(item: item)
+        infoCard.configure(item: item)
 
         
         slider.value = Float(item.rate)

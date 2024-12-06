@@ -13,12 +13,10 @@ final class MedicineCardCell: UICollectionViewCell {
     static let identifier = "MedicineCardCell"
     var isNegative = false
     
-    //MARK: - 컴포넌트
-    let overallSV = {
+    // MARK: - Components
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
-        sv.spacing = 0
         sv.backgroundColor = .chuBlack
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 5, leading: 5, bottom: 5, trailing: 5)
@@ -37,7 +35,7 @@ final class MedicineCardCell: UICollectionViewCell {
          return label
     }()
     
-    // MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
@@ -47,20 +45,17 @@ final class MedicineCardCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout(){
-        contentView.addSubview(overallSV)
-        overallSV.addArrangedSubview(nameLabel)
+        contentView.addSubview(mainVStack)
+        mainVStack.addArrangedSubview(nameLabel)
         
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(2)
-        }
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(2) }
     }
     
-    func setAttributes(item: MedicineCardData){
+    func configure(item: MedicineCardData){
         nameLabel.text = item.name
     }
-    
 }
 
 #Preview(traits: .fixedLayout(width: 150, height: 30)) {

@@ -13,12 +13,10 @@ final class NamedRateCardCell: UICollectionViewCell {
     static let identifier = "NamedRateCardCell"
     var isNegative = false
     
-    //MARK: - 컴포넌트
-    let overallSV = {
+    // MARK: - Components
+    let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
-        sv.spacing = 0
         sv.backgroundColor = .chuColorPalette[6] // 임시
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 0, leading: 5, bottom: 5, trailing: 5)
@@ -50,7 +48,7 @@ final class NamedRateCardCell: UICollectionViewCell {
          return label
     }()
     
-    // MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
@@ -60,22 +58,19 @@ final class NamedRateCardCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout(){
-        contentView.addSubview(overallSV)
-        overallSV.addArrangedSubview(nameLabel)
-        overallSV.addArrangedSubview(rateLabel)
+        contentView.addSubview(mainVStack)
+        mainVStack.addArrangedSubview(nameLabel)
+        mainVStack.addArrangedSubview(rateLabel)
 
         rateLabel.setContentHuggingPriority(.init(260), for: .vertical)
 
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(2)
-        }
-
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(2) }
     }
     
-    func setAttributes(item: SymptomCardData){
-        overallSV.backgroundColor = item.hex.toUIColor
+    func configure(item: SymptomCardData){
+        mainVStack.backgroundColor = item.hex.toUIColor
         nameLabel.text = item.name
         isNegative = item.isNegative
         
@@ -86,13 +81,11 @@ final class NamedRateCardCell: UICollectionViewCell {
         if isNegative {
             rateLabel.text = rate.toNegativeName
             rateLabel.textColor = .chuBadRate.withAlphaComponent(rate.toRateAlpha)
-        }else{
+        } else {
             rateLabel.text = rate.toOtherName
-            rateLabel.textColor = overallSV.backgroundColor
+            rateLabel.textColor = mainVStack.backgroundColor
         }
-        
     }
-    
 }
 
 #Preview(traits: .fixedLayout(width: 100, height: 60)) {

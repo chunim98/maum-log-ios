@@ -24,12 +24,10 @@ final class MedicineLogCell: UITableViewCell, EditButtonCellType {
         return formatter
     }()
     
-    //MARK: - 컴포넌트
-    let overallSV = {
+    // MARK: - Components
+    let mainHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.spacing = 10
-        sv.distribution = .fill
         sv.alignment = .center
         return sv
     }()
@@ -43,11 +41,9 @@ final class MedicineLogCell: UITableViewCell, EditButtonCellType {
         return label
     }()
     
-    let takeMedicineSV = {
+    let takeMedicineVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
-        sv.spacing = .zero
         sv.backgroundColor = .chuBlack
         sv.isLayoutMarginsRelativeArrangement = true
         sv.directionalLayoutMargins = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
@@ -84,7 +80,7 @@ final class MedicineLogCell: UITableViewCell, EditButtonCellType {
         return cv
     }()
     
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         setAutoLayout()
@@ -104,36 +100,26 @@ final class MedicineLogCell: UITableViewCell, EditButtonCellType {
         self.backgroundColor = .clear
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout(){
-        contentView.addSubview(overallSV)
-        overallSV.addArrangedSubview(dateLabel)
-        overallSV.addArrangedSubview(takeMedicineSV)
-        overallSV.addArrangedSubview(infoCardCV)
-        overallSV.addArrangedSubview(deleteButton)
-        
-        takeMedicineSV.addArrangedSubview(takeMedicineLabel)
+        contentView.addSubview(mainHStack)
+        mainHStack.addArrangedSubview(dateLabel)
+        mainHStack.addArrangedSubview(takeMedicineVStack)
+        mainHStack.addArrangedSubview(infoCardCV)
+        mainHStack.addArrangedSubview(deleteButton)
+        takeMedicineVStack.addArrangedSubview(takeMedicineLabel)
 
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10))
-        }
-        
-        dateLabel.snp.makeConstraints { make in
-            make.width.equalTo(65)
-        }
-        infoCardCV.snp.makeConstraints { make in
-            make.height.equalTo(30)
-        }
-        takeMedicineSV.snp.makeConstraints { make in
-            make.height.equalTo(26)
-        }
+        mainHStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)) }
+        dateLabel.snp.makeConstraints { $0.width.equalTo(65) }
+        infoCardCV.snp.makeConstraints { $0.height.equalTo(30) }
+        takeMedicineVStack.snp.makeConstraints { $0.height.equalTo(26) }
     }
     
-    //MARK: - 바인드
+    // MARK: - Binding
     private func setBinding() {
         CVCellData
             .bind(to: infoCardCV.rx.items(cellIdentifier: MedicineCardCell.identifier, cellType: MedicineCardCell.self)) { index, item, cell in
-                cell.setAttributes(item: item)
+                cell.configure(item: item)
             }
             .disposed(by: bag)
         
@@ -146,7 +132,7 @@ final class MedicineLogCell: UITableViewCell, EditButtonCellType {
             .disposed(by: bag)
     }
     
-    func setAttributes(item: EditButtonCellModel) {
+    func configure(item: EditButtonCellModel) {
         guard let item = item as? LogData else { return }
         guard !(item.medicineCards.isEmpty) else { return }
         self.item = item

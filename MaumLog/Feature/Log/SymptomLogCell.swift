@@ -25,12 +25,10 @@ final class SymptomLogCell: UITableViewCell, EditButtonCellType {
         return formatter
     }()
     
-    //MARK: - 컴포넌트
-    let overallSV = {
+    // MARK: - Components
+    let mainHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.spacing = 10
-        sv.distribution = .fill
         sv.alignment = .center
         return sv
     }()
@@ -63,7 +61,7 @@ final class SymptomLogCell: UITableViewCell, EditButtonCellType {
         return cv
     }()
     
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         
@@ -84,30 +82,23 @@ final class SymptomLogCell: UITableViewCell, EditButtonCellType {
         self.backgroundColor = .clear
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout(){
-        contentView.addSubview(overallSV)
-        overallSV.addArrangedSubview(dateLabel)
-        overallSV.addArrangedSubview(infoCardCV)
-        overallSV.addArrangedSubview(deleteButton)
+        contentView.addSubview(mainHStack)
+        mainHStack.addArrangedSubview(dateLabel)
+        mainHStack.addArrangedSubview(infoCardCV)
+        mainHStack.addArrangedSubview(deleteButton)
 
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10))
-        }
-        
-        dateLabel.snp.makeConstraints { make in
-            make.width.equalTo(65)
-        }
-        infoCardCV.snp.makeConstraints { make in
-            make.height.equalTo(60)
-        }
+        mainHStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)) }
+        dateLabel.snp.makeConstraints { $0.width.equalTo(65) }
+        infoCardCV.snp.makeConstraints { $0.height.equalTo(60) }
     }
     
-    //MARK: - 바인드
+    // MARK: - Binding
     private func setBinding() {
         CVCellData
             .bind(to: infoCardCV.rx.items(cellIdentifier: RateCardCell.identifier, cellType: RateCardCell.self)) { index, item, cell in
-                cell.setAttributes(item: item)
+                cell.configure(item: item)
             }
             .disposed(by: bag)
         
