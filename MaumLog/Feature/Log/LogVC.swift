@@ -18,7 +18,6 @@ final class LogVC: UIViewController {
     private let bag = DisposeBag()
     
     private let reloadSectionData = PublishSubject<Void>()
-    private let takeMedicine = PublishSubject<Void>()
     private let tappedEditButton = PublishSubject<Void>()
     private let changeSorting = PublishSubject<Bool>()
     private let isAscendingOrder = PublishSubject<Bool>()
@@ -146,8 +145,7 @@ final class LogVC: UIViewController {
             tappedEditButton: tappedEditButton.asObservable(),
             tappedEditDoneButton: editDoneBarButton.rx.tap.asObservable(),
             changeSorting: changeSorting.asObservable(),
-            tappedTakeMedicineButton: takeMedicineButton.rx.tap.asObservable(),
-            takeMedicine: takeMedicine.asObservable())
+            tappedTakeMedicineButton: takeMedicineButton.rx.tap.asObservable())
         
         let output = logVM.transform(input)
 
@@ -177,28 +175,13 @@ final class LogVC: UIViewController {
             .disposed(by: bag)
         
         // 등록한 증상이 없다면 증상 추가 모달 띄우기
-        output.shouldAddSymptom
+        output.presentShouldAddSymptomAlert
             .bind(with: self, onNext: { owner, _ in
-                owner.presentAlert(
-                    title: String(localized: "알림"),
-                    message: String(localized: "부작용, 기타 증상을 기록하려면\n먼저 증상을 등록해야 해요."),
-                    acceptTitle: String(localized: "등록"),
-                    acceptTask: {
-                        // 모달 높이 조정
-                        let fraction = UISheetPresentationController.Detent.custom { _ in owner.view.frame.height * 0.6 }
-
-                        let vc = AddSymptomVC()
-                        if let sheet = vc.sheetPresentationController {
-                            sheet.detents = [fraction]
-                            sheet.preferredCornerRadius = .chuRadius
-                        }
-                        
-                        owner.present(vc, animated: true)
-                    })
+                owner.presentShouldAddSymptomAlert()
             })
             .disposed(by: bag)
         
-        
+        // 편집 모드에 따른 바 버튼 상태 변경
         output.isEditMode
             .bind(with: self) { owner, isEditMode in
                 if isEditMode {
@@ -208,7 +191,6 @@ final class LogVC: UIViewController {
                 }
             }
             .disposed(by: bag)
-        
         
         // 기록이 없으면 이미지 표시
         output.logDataIsEmpty
@@ -221,36 +203,22 @@ final class LogVC: UIViewController {
             }
             .disposed(by: bag)
         
-        // 복용중인 약이 없으면 등록 유도
-        output.shouldAddMedicine
-            .bind(with: self) { owner, isMedicineDataEmpty in
-                if isMedicineDataEmpty {
-                    // 등록을 선택하면 모달 띄우기
-                    owner.presentAlert(
-                        title: String(localized: "알림"),
-                        message: String(localized: "복약한 시간을 기록하려면\n먼저 복용 중인 약을 등록해야 해요."),
-                        acceptTitle: String(localized: "등록"),
-                        acceptTask: {
-                            // 모달 높이 조정
-                            let fraction = UISheetPresentationController.Detent.custom { _ in owner.view.frame.height * 0.3 }
-
-                            let vc = AddMedicineVC()
-                            if let sheet = vc.sheetPresentationController {
-                                sheet.detents = [fraction]
-                                sheet.preferredCornerRadius = .chuRadius
-                            }
-                            
-                            owner.present(vc, animated: true)
-                        })
-                } else {
-                    owner.presentAcceptAlert(
-                        title: String(localized: "기록 완료"),
-                        message: String(localized: "복약한 시간을 기록했어요."),
-                        acceptTask: { owner.takeMedicine.onNext(()) })
-                }
+        // 등록한 약이 없다면 먼저 등록부터 하라는 얼럿 띄우기
+        output.presentShouldAddMedicineAlert
+            .bind(with: self) { owner, _ in
+                owner.presentShouldAddMedicineAlert()
             }
             .disposed(by: bag)
         
+        // 약 먹었다는 얼럿 띄우기
+        output.presentTakeMedicineAlert
+            .bind(with: self) { owner, _ in
+                owner.presentAcceptAlert(
+                    title: String(localized: "기록 완료"),
+                    message: String(localized: "복약한 시간을 기록했어요."))
+            }
+            .disposed(by: bag)
+
         // 정렬 변경
         output.isAscendingOrder
             .bind(to: isAscendingOrder)

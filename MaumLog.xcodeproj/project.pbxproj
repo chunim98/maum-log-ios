@@ -10,6 +10,7 @@
 		510282B02C5D69C6008B8F15 /* RateCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510282AF2C5D69C6008B8F15 /* RateCardCell.swift */; };
 		5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103A2472C554F75008F8218 /* CapsuleCell.swift */; };
 		5103A24A2C555643008F8218 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103A2492C555643008F8218 /* HomeVM.swift */; };
+		5116017A2D035EC300F19A36 /* LogVC+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511601792D035EB900F19A36 /* LogVC+Alert.swift */; };
 		511831792C6C96D600B25184 /* LogSectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511831782C6C96D600B25184 /* LogSectionData.swift */; };
 		5122F4692C6B76CA0080A2D2 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 5122F4682C6B76CA0080A2D2 /* RxDataSources */; };
 		512445512C58C8910044B8A4 /* SymptomLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512445502C58C8910044B8A4 /* SymptomLogCell.swift */; };
@@ -99,6 +100,7 @@
 		510282AF2C5D69C6008B8F15 /* RateCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateCardCell.swift; sourceTree = "<group>"; };
 		5103A2472C554F75008F8218 /* CapsuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleCell.swift; sourceTree = "<group>"; };
 		5103A2492C555643008F8218 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
+		511601792D035EB900F19A36 /* LogVC+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogVC+Alert.swift"; sourceTree = "<group>"; };
 		511831782C6C96D600B25184 /* LogSectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSectionData.swift; sourceTree = "<group>"; };
 		512445502C58C8910044B8A4 /* SymptomLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomLogCell.swift; sourceTree = "<group>"; };
 		5126AC812D019108001625DB /* TrendCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCalendarView.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 			children = (
 				511601782D03375200F19A36 /* Components */,
 				51412A0F2C5EB2D900381B7C /* LogVC.swift */,
+				511601792D035EB900F19A36 /* LogVC+Alert.swift */,
 				51412A112C5EB7CB00381B7C /* LogVM.swift */,
 			);
 			path = Log;
@@ -665,6 +668,7 @@
 				518E5EFE2CFDF9D30067DF38 /* Array+Int32.swift in Sources */,
 				51FE749C2C7CA29400EDA685 /* MedicineCoreData+CoreDataProperties.swift in Sources */,
 				51FE749D2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataClass.swift in Sources */,
+				5116017A2D035EC300F19A36 /* LogVC+Alert.swift in Sources */,
 				51FE749E2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataProperties.swift in Sources */,
 				51FE749F2C7CA29400EDA685 /* SymptomCardCoreData+CoreDataClass.swift in Sources */,
 				51FE74A02C7CA29400EDA685 /* SymptomCardCoreData+CoreDataProperties.swift in Sources */,

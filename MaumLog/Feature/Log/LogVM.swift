@@ -18,17 +18,17 @@ final class LogVM {
         let tappedEditDoneButton: Observable<Void>
         let changeSorting: Observable<Bool>
         let tappedTakeMedicineButton: Observable<Void>
-        let takeMedicine: Observable<Void>
     }
     
     struct Output {
         let goAddLog: Observable<Void>
-        let shouldAddSymptom: Observable<Void>
+        let presentShouldAddSymptomAlert: Observable<Void>
         let sectionData: Observable<[LogSectionData]>
         let isEditMode: Observable<Bool>
         let isAscendingOrder: Observable<Bool>
         let logDataIsEmpty: Observable<Bool>
-        let shouldAddMedicine: Observable<Bool>
+        let presentShouldAddMedicineAlert: Observable<Void>
+        let presentTakeMedicineAlert: Observable<Void>
     }
     
     private let bag = DisposeBag()
@@ -38,7 +38,8 @@ final class LogVM {
         let logData = BehaviorSubject<[LogData]>(value: LogDataManager.shared.read())
         // 정렬 설정 값
         let isAscendingOrder = BehaviorSubject<Bool>(value: SettingValuesStorage.shared.isAscendingOrder)
-        
+
+        // MARK: - Observables
         // 로그 테이블 뷰 리로드
         input.reloadSectionData
             .map { LogDataManager.shared.read() }
@@ -105,10 +106,16 @@ final class LogVM {
             .filter { !(SymptomDataManager.shared.read().isEmpty) }
         
         // 등록한 증상이 없다면 증상 부터 등록하라는 얼럿 띄우기
-        let shouldAddSymptom = input.tappedAddButton
+        let presentShouldAddSymptomAlert = input.tappedAddButton
             .filter { SymptomDataManager.shared.read().isEmpty }
         
-        input.takeMedicine
+        // 등록한 약이 없다면 먼저 등록부터 하라는 얼럿 띄우기
+        let presentShouldAddMedicineAlert = input.tappedTakeMedicineButton
+            .filter { MedicineDataManager.shared.read().isEmpty }
+        
+        // 약물 섭취 기록 추가 (등록된 약이 있을 경우에만)
+        input.tappedTakeMedicineButton
+            .filter { !(MedicineDataManager.shared.read().isEmpty) }
             .map {
                 let data = MedicineDataManager.shared.read()
                 let mediCardData = data.map { MedicineCardData(name: $0.name) }
@@ -119,18 +126,19 @@ final class LogVM {
             .bind(to: logData)
             .disposed(by: bag)
         
-        // 등록한 약이 없다면 먼저 등록부터
-        let shouldAddMedicine = input.tappedTakeMedicineButton
-            .map { MedicineDataManager.shared.read().isEmpty }
+        // 약 먹었다는 얼럿 띄우기 (등록된 약이 있을 경우에만)
+        let presentTakeMedicineAlert = input.tappedTakeMedicineButton
+            .filter { !(MedicineDataManager.shared.read().isEmpty) }
 
         
         return Output(
             goAddLog: goAddLog,
-            shouldAddSymptom: shouldAddSymptom,
+            presentShouldAddSymptomAlert: presentShouldAddSymptomAlert,
             sectionData: sectionData,
             isEditMode: isEditMode,
             isAscendingOrder: isAscendingOrder.asObservable(),
             logDataIsEmpty: logDataIsEmpty,
-            shouldAddMedicine: shouldAddMedicine)
+            presentShouldAddMedicineAlert: presentShouldAddMedicineAlert,
+            presentTakeMedicineAlert: presentTakeMedicineAlert)
     }
 }
