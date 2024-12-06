@@ -12,9 +12,16 @@ import RxCocoa
 import RxDataSources
 
 final class LogVC: UIViewController {
-    
+    typealias SectionDataSource = RxTableViewSectionedAnimatedDataSource
+
     private let logVM = LogVM()
     private let bag = DisposeBag()
+    
+    private let reloadSectionData = PublishSubject<Void>()
+    private let takeMedicine = PublishSubject<Void>()
+    private let tappedEditButton = PublishSubject<Void>()
+    private let changeSorting = PublishSubject<Bool>()
+    private let isAscendingOrder = PublishSubject<Bool>()
     
     // MARK: - Components
     let titleLabel = {
@@ -129,128 +136,124 @@ final class LogVC: UIViewController {
     
     // MARK: - Binding
     func setBinding() {
-        // input
-        addFloatingButton
-            .rx.tap
-            .bind(to: logVM.input.tappedAddButton)
-            .disposed(by: bag)
+        let tappedAddButton = Observable.merge(
+            addFloatingButton.rx.tap.asObservable(),
+            addBarButton.rx.tap.asObservable())
         
-        addBarButton
-            .rx.tap
-            .bind(to: logVM.input.tappedAddButton)
-            .disposed(by: bag)
+        let input = LogVM.Input(
+            tappedAddButton: tappedAddButton,
+            reloadSectionData: reloadSectionData.asObservable(),
+            tappedEditButton: tappedEditButton.asObservable(),
+            tappedEditDoneButton: editDoneBarButton.rx.tap.asObservable(),
+            changeSorting: changeSorting.asObservable(),
+            tappedTakeMedicineButton: takeMedicineButton.rx.tap.asObservable(),
+            takeMedicine: takeMedicine.asObservable())
         
-        editDoneBarButton
-            .rx.tap
-            .bind(to: logVM.input.tappedEditDoneButton)
-            .disposed(by: bag)
-        
-        takeMedicineButton
-            .rx.tap
-            .bind(to: logVM.input.tappedTakeMedicineButton)
-            .disposed(by: bag)
-        
-        
-        // output
-        logVM.output.sectionData
+        let output = logVM.transform(input)
+
+        // 로그 테이블 뷰 데이터 바인딩
+        output.sectionData
             .bind(to: logTV.rx.items(dataSource: bindingTableView()))
             .disposed(by: bag)
         
-        
-        logVM.output.goAddLog
-            .bind(onNext: { [weak self] in
-                // 등록된 증상이 있어야 기록 추가 가능
-                guard let self, $0 else { return }
-                
+        // 기록 모달 띄우기
+        output.goAddLog
+            .bind(with: self, onNext: { owner, _ in
+                // 모달 높이 조정
+                let fraction = UISheetPresentationController.Detent.custom { _ in
+                    owner.view.frame.height * 0.8
+                }
+
                 let vc = AddLogVC()
-                let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.8 }
                 if let sheet = vc.sheetPresentationController {
                     sheet.detents = [fraction, .large()]
                     sheet.preferredCornerRadius = .chuRadius
                     sheet.prefersGrabberVisible = true
                 }
-                vc.dismissTask = { self.logVM.input.reloadSectionData.onNext(()) }
-                self.present(vc, animated: true)
+                
+                vc.dismissTask = { owner.reloadSectionData.onNext(()) }
+                owner.present(vc, animated: true)
             })
             .disposed(by: bag)
         
-        
-        logVM.output.shouldAddSymptom
-            .bind(onNext: { [weak self] in
-                // 등록된 증상이 있다면 실행조차 안됨
-                guard let self, $0 else { return }
-                
-                presentAlert(
+        // 등록한 증상이 없다면 증상 추가 모달 띄우기
+        output.shouldAddSymptom
+            .bind(with: self, onNext: { owner, _ in
+                owner.presentAlert(
                     title: String(localized: "알림"),
                     message: String(localized: "부작용, 기타 증상을 기록하려면\n먼저 증상을 등록해야 해요."),
                     acceptTitle: String(localized: "등록"),
                     acceptTask: {
+                        // 모달 높이 조정
+                        let fraction = UISheetPresentationController.Detent.custom { _ in owner.view.frame.height * 0.6 }
+
                         let vc = AddSymptomVC()
-                        let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.6 }
                         if let sheet = vc.sheetPresentationController {
                             sheet.detents = [fraction]
-                            sheet.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
+                            sheet.preferredCornerRadius = .chuRadius
                         }
-                        self.present(vc, animated: true)
+                        
+                        owner.present(vc, animated: true)
                     })
             })
             .disposed(by: bag)
         
         
-        logVM.output.isEditMode
-            .bind(onNext: { [weak self] in
-                if $0 {
-                    self?.navigationItem.rightBarButtonItem = self?.editDoneBarButton
+        output.isEditMode
+            .bind(with: self) { owner, isEditMode in
+                if isEditMode {
+                    owner.navigationItem.rightBarButtonItem = owner.editDoneBarButton
                 } else {
-                    self?.navigationItem.rightBarButtonItem = self?.optionBarButton
+                    owner.navigationItem.rightBarButtonItem = owner.optionBarButton
                 }
-            })
+            }
             .disposed(by: bag)
         
         
         // 기록이 없으면 이미지 표시
-        logVM.output.logDataIsEmpty
-            .bind(onNext: { [weak self] in
-                if $0 {
-                    self?.logTV.backgroundView = self?.logEmptyView
+        output.logDataIsEmpty
+            .bind(with: self) { owner, isLogDataEmpty in
+                if isLogDataEmpty {
+                    owner.logTV.backgroundView = owner.logEmptyView
                 } else {
-                    self?.logTV.backgroundView = .none
+                    owner.logTV.backgroundView = .none
                 }
-            })
+            }
             .disposed(by: bag)
         
-        
         // 복용중인 약이 없으면 등록 유도
-        logVM.output.shouldAddMedicine
-            .bind(onNext: { [weak self] in
-                guard let self else { return }
-                
-                if $0 {
+        output.shouldAddMedicine
+            .bind(with: self) { owner, isMedicineDataEmpty in
+                if isMedicineDataEmpty {
                     // 등록을 선택하면 모달 띄우기
-                    presentAlert(
+                    owner.presentAlert(
                         title: String(localized: "알림"),
                         message: String(localized: "복약한 시간을 기록하려면\n먼저 복용 중인 약을 등록해야 해요."),
                         acceptTitle: String(localized: "등록"),
                         acceptTask: {
+                            // 모달 높이 조정
+                            let fraction = UISheetPresentationController.Detent.custom { _ in owner.view.frame.height * 0.3 }
+
                             let vc = AddMedicineVC()
-                            let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.3 }
                             if let sheet = vc.sheetPresentationController {
                                 sheet.detents = [fraction]
-                                sheet.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
+                                sheet.preferredCornerRadius = .chuRadius
                             }
-                            self.present(vc, animated: true)
+                            
+                            owner.present(vc, animated: true)
                         })
-                    
                 } else {
-                    presentAcceptAlert(
+                    owner.presentAcceptAlert(
                         title: String(localized: "기록 완료"),
                         message: String(localized: "복약한 시간을 기록했어요."),
-                        acceptTask: {
-                            self.logVM.input.takeMedicine.onNext(())
-                        })
+                        acceptTask: { owner.takeMedicine.onNext(()) })
                 }
-                
-            })
+            }
+            .disposed(by: bag)
+        
+        // 정렬 변경
+        output.isAscendingOrder
+            .bind(to: isAscendingOrder)
             .disposed(by: bag)
 
     }
@@ -260,18 +263,18 @@ final class LogVC: UIViewController {
         let edit = UIAction(
             title: String(localized: "편집"),
             image: UIImage(systemName: "square.and.pencil"),
-            handler: { [weak self] _ in self?.logVM.input.tappedEditButton.onNext(()) })
+            handler: { [weak self] _ in self?.tappedEditButton.onNext(()) })
 
         let ascendingOrder = UIAction(
             title: String(localized: "최신 항목 순으로"),
-            handler: { [weak self] _ in self?.logVM.input.changeSorting.onNext(false) })
+            handler: { [weak self] _ in self?.changeSorting.onNext(false) })
         
         let descendingOrder = UIAction(
             title: String(localized: "오래된 항목 순으로"),
-            handler: { [weak self] _ in self?.logVM.input.changeSorting.onNext(true) })
+            handler: { [weak self] _ in self?.changeSorting.onNext(true) })
         
-        //output
-        logVM.output.isAscendingOrder
+        // 정렬 변경
+        isAscendingOrder
             .bind(onNext: {
                 if $0 {
                     descendingOrder.state = .on
@@ -282,17 +285,13 @@ final class LogVC: UIViewController {
             .disposed(by: bag)
         
         // 팝업버튼 설정
-        let sortByMenu: UIMenu = {
-            return UIMenu(
-                title: String(localized: "다음으로 정렬"),
-                image: UIImage(systemName: "arrow.up.arrow.down"),
-                options: .singleSelection ,
-                children: [ascendingOrder, descendingOrder])
-        }()
+        let sortByMenu = UIMenu(
+            title: String(localized: "다음으로 정렬"),
+            image: UIImage(systemName: "arrow.up.arrow.down"),
+            options: .singleSelection ,
+            children: [ascendingOrder, descendingOrder])
         
-        let menu: UIMenu = {
-            return UIMenu(title: String(localized: "옵션"), children: [edit, sortByMenu])
-        }()
+        let menu = UIMenu(title: String(localized: "옵션"), children: [edit, sortByMenu])
         
         optionBarButton.menu = menu
     }
@@ -302,10 +301,9 @@ final class LogVC: UIViewController {
 
 extension LogVC: EditButtonCellDelegate {
     // 테이블 뷰 바인딩
-    private func bindingTableView() -> RxTableViewSectionedAnimatedDataSource<LogSectionData> {
+    private func bindingTableView() -> SectionDataSource<LogSectionData> {
         
-        let animatedDataSource = RxTableViewSectionedAnimatedDataSource<LogSectionData> { 
-            [weak self] animatedDataSource, tableView, indexPath, item in
+        let animatedDataSource = SectionDataSource<LogSectionData> { [weak self] animatedDataSource, tableView, indexPath, item in
             guard let self else { return UITableViewCell() }
             
             if item.medicineCards.isEmpty {
@@ -336,9 +334,11 @@ extension LogVC: EditButtonCellDelegate {
         animatedDataSource.titleForHeaderInSection = { dataSource, index in
             return dataSource.sectionModels[index].header // LogSectionData 의 header
         }
+        
         // 추가로 요렇게 설정 가능
         // animatedDataSource.canEditRowAtIndexPath = {dataSource, indexPath in true}
         // animatedDataSource.canMoveRowAtIndexPath = {dataSource, indexPath in true}
+        
         return animatedDataSource
     }
     
@@ -352,7 +352,7 @@ extension LogVC: EditButtonCellDelegate {
                 acceptTitle: String(localized: "삭제"),
                 acceptTask: { [weak self] in
                     LogDataManager.shared.delete(target: item)
-                    self?.logVM.input.reloadSectionData.onNext(())
+                    self?.reloadSectionData.onNext(())
                 })
             
         default:
