@@ -43,7 +43,7 @@ final class AddMedicineVM {
                 if text.count > 12 { // 텍스트 12글자 제한
                     let index = text.index(text.startIndex, offsetBy: 12)
                     return String(text[..<index])
-                }else{
+                } else {
                     return text
                 }
             }
