@@ -20,7 +20,6 @@ final class LogVC: UIViewController {
     private let reloadSectionData = PublishSubject<Void>()
     private let tappedEditButton = PublishSubject<Void>()
     private let changeSorting = PublishSubject<Bool>()
-    private let isAscendingOrder = PublishSubject<Bool>()
     
     // MARK: - Components
     let titleLabel = {
@@ -100,7 +99,11 @@ final class LogVC: UIViewController {
         return button
     }()
     
-
+    // 풀다운 버튼의 오름차순 정렬 옵션
+    var ascendingOrder: UIAction!
+    
+    // 풀다운 버튼의 내림차순 정렬 옵션
+    var descendingOrder: UIAction!
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -109,10 +112,9 @@ final class LogVC: UIViewController {
         setNavigationBar(
             leftBarButtonItems: [UIBarButtonItem(customView: titleLabel)],
             rightBarButtonItems: [optionBarButton, addBarButton])
-
+        setPullDownButton()
         setAutoLayout()
         setBinding()
-        setPullDownButton()
     }
     
     // MARK: - Layout
@@ -221,9 +223,14 @@ final class LogVC: UIViewController {
 
         // 정렬 변경
         output.isAscendingOrder
-            .bind(to: isAscendingOrder)
+            .bind(with: self) { owenr, isAscendingOrder in
+                if isAscendingOrder {
+                    owenr.descendingOrder.state = .on
+                } else {
+                    owenr.ascendingOrder.state = .on
+                }
+            }
             .disposed(by: bag)
-
     }
     
     // MARK: - Configure Components
@@ -233,24 +240,13 @@ final class LogVC: UIViewController {
             image: UIImage(systemName: "square.and.pencil"),
             handler: { [weak self] _ in self?.tappedEditButton.onNext(()) })
 
-        let ascendingOrder = UIAction(
+        ascendingOrder = UIAction(
             title: String(localized: "최신 항목 순으로"),
             handler: { [weak self] _ in self?.changeSorting.onNext(false) })
         
-        let descendingOrder = UIAction(
+        descendingOrder = UIAction(
             title: String(localized: "오래된 항목 순으로"),
             handler: { [weak self] _ in self?.changeSorting.onNext(true) })
-        
-        // 정렬 변경
-        isAscendingOrder
-            .bind(onNext: {
-                if $0 {
-                    descendingOrder.state = .on
-                } else {
-                    ascendingOrder.state = .on
-                }
-            })
-            .disposed(by: bag)
         
         // 팝업버튼 설정
         let sortByMenu = UIMenu(
@@ -263,7 +259,6 @@ final class LogVC: UIViewController {
         
         optionBarButton.menu = menu
     }
-
 }
 
 
