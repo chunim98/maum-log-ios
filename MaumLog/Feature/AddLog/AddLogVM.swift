@@ -100,7 +100,7 @@ final class AddLogVM {
 
                 if data.isNegative {
                     negatives.append(data)
-                }else{
+                } else {
                     others.append(data)
                 }
                 return negatives + others

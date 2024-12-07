@@ -16,7 +16,7 @@ final class AddLogVC: UIViewController {
     private let bag = DisposeBag()
     var dismissTask: (() -> Void)?
     
-    //MARK: - 컴포넌트
+    // MARK: - Components
     let titleBackground = {
         let view = UIView()
         view.backgroundColor = .chuIvory
@@ -64,18 +64,16 @@ final class AddLogVC: UIViewController {
     
     let bottomSVBackground = OutlinedView(strokeWidth: .chuStrokeWidth)
     
-    let bottomSV = {
+    let bottomVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
         sv.spacing = 15
         return sv
     }()
     
-    let negativeSV = {
+    let negativeVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
         sv.spacing = 5
         return sv
     }()
@@ -115,10 +113,9 @@ final class AddLogVC: UIViewController {
     
     let negativeEmptyView = EmptyView(text: String(localized: "아직 등록된 부작용이 없는 것 같아요."), textSize: 14)
     
-    let otherSV = {
+    let otherVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fill
         sv.spacing = 5
         return sv
     }()
@@ -171,7 +168,7 @@ final class AddLogVC: UIViewController {
     
 
     
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
@@ -180,58 +177,48 @@ final class AddLogVC: UIViewController {
         setBinding()
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     func setAutoLayout() {
         view.addSubview(pendingLogTV)
         view.addSubview(titleBackground)
         view.addSubview(bottomSVBackground)
         titleBackground.addSubview(titleLabel)
         titleBackground.addSubview(closeButton)
-        bottomSVBackground.addSubview(bottomSV)
-        bottomSV.addArrangedSubview(negativeSV)
-        bottomSV.addArrangedSubview(otherSV)
-        bottomSV.addArrangedSubview(confirmButton)
+        bottomSVBackground.addSubview(bottomVStack)
+        bottomVStack.addArrangedSubview(negativeVStack)
+        bottomVStack.addArrangedSubview(otherVStack)
+        bottomVStack.addArrangedSubview(confirmButton)
+        negativeVStack.addArrangedSubview(negativeTitleLabel)
+        negativeVStack.addArrangedSubview(negativeCV)
+        otherVStack.addArrangedSubview(otherTitleLabel)
+        otherVStack.addArrangedSubview(otherCV)
 
-        negativeSV.addArrangedSubview(negativeTitleLabel)
-        negativeSV.addArrangedSubview(negativeCV)
-        
-        otherSV.addArrangedSubview(otherTitleLabel)
-        otherSV.addArrangedSubview(otherCV)
-
-        pendingLogTV.snp.makeConstraints { make in
-            make.top.equalTo(titleBackground.snp.bottom)
-            make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(bottomSVBackground.snp.top)
+        pendingLogTV.snp.makeConstraints {
+            $0.top.equalTo(titleBackground.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(bottomSVBackground.snp.top)
         }
-        titleBackground.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+        titleBackground.snp.makeConstraints { $0.top.leading.trailing.equalToSuperview() }
+        titleLabel.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: .chuSpace, bottom: 10, right: .chuSpace)) }
+        closeButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
         }
-        titleLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: .chuSpace, bottom: 10, right: .chuSpace))
+        bottomSVBackground.snp.makeConstraints {
+            // 배경은 세이프 에어리어 밑까지 채워야 함
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
-        closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
-            make.centerY.equalToSuperview()
+        bottomVStack.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview().inset(15)
+            // 스택뷰는 세이프 에어리어까지만
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
         }
-        bottomSVBackground.snp.makeConstraints { make in
-            make.horizontalEdges.bottom.equalToSuperview() // 배경은 세이프 에어리어 밑까지 채워야 함
-        }
-        bottomSV.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalToSuperview().inset(15)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(15) // 스택뷰는 세이프 에어리어까지만
-        }
-        negativeCV.snp.makeConstraints { make in
-            make.height.equalTo(50)
-        }
-        otherCV.snp.makeConstraints { make in
-            make.height.equalTo(50)
-        }
-        confirmButton.snp.makeConstraints { make in
-            make.height.equalTo(50)
-        }
+        negativeCV.snp.makeConstraints { $0.height.equalTo(50) }
+        otherCV.snp.makeConstraints { $0.height.equalTo(50) }
+        confirmButton.snp.makeConstraints { $0.height.equalTo(50) }
     }
     
-    //MARK: - 바인딩
+    // MARK: - Binding
     func setBinding() {
         // input
         confirmButton
@@ -248,7 +235,7 @@ final class AddLogVC: UIViewController {
         // output
         addLogVM.output.negativeData
             .bind(to: negativeCV.rx.items(cellIdentifier: LoggableCapsuleCell.identifier, cellType: LoggableCapsuleCell.self)){ index, item, cell in
-                cell.setAttributes(item: item)
+                cell.configure(item: item)
                 cell.addTask = { [weak self] in self?.addLogVM.input.addPendingLog.onNext(.init(name: item.name, hex: item.hex, isNegative: item.isNegative, rate: 3)) } // input
             }
             .disposed(by: bag)
@@ -256,7 +243,7 @@ final class AddLogVC: UIViewController {
         
         addLogVM.output.otherData
             .bind(to: otherCV.rx.items(cellIdentifier: LoggableCapsuleCell.identifier, cellType: LoggableCapsuleCell.self)){ index, item, cell in
-                cell.setAttributes(item: item)
+                cell.configure(item: item)
                 cell.addTask = { [weak self] in self?.addLogVM.input.addPendingLog.onNext(.init(name: item.name, hex: item.hex, isNegative: item.isNegative, rate: 3)) } // input
             }
             .disposed(by: bag)
@@ -267,13 +254,13 @@ final class AddLogVC: UIViewController {
             .bind(onNext: { [weak self] in
                 if $0 {
                     self?.negativeCV.backgroundView = self?.negativeEmptyView
-                }else{
+                } else {
                     self?.negativeCV.backgroundView = .none
                 }
                 
                 if $1 {
                     self?.otherCV.backgroundView = self?.otherEmptyView
-                }else{
+                } else {
                     self?.otherCV.backgroundView = .none
                 }
             })
@@ -307,7 +294,7 @@ final class AddLogVC: UIViewController {
             .bind(onNext: { [weak self] in
                 if $0 {
                     self?.pendingLogTV.backgroundView = self?.pendingLogEmptyView
-                }else{
+                } else {
                     self?.pendingLogTV.backgroundView = .none
                 }
             })

@@ -15,7 +15,7 @@ final class LoggableCapsuleCell: UICollectionViewCell {
     private let bag = DisposeBag()
     var addTask: (() -> Void)?
     
-    //MARK: - 컴포넌트
+    // MARK: - Components
     let button = {
         var config = UIButton.Configuration.filled()
         config.attributedTitle = AttributedString("버튼", attributes: .chuBoldTitle(ofSize: 18)) // 임시
@@ -31,7 +31,7 @@ final class LoggableCapsuleCell: UICollectionViewCell {
         return button
     }()
     
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
@@ -42,16 +42,13 @@ final class LoggableCapsuleCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout() {
         contentView.addSubview(button)
-        
-        button.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        button.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 
-    //MARK: - 바인딩
+    // MARK: - Binding
     private func setBinding() {
         button
             .rx.tap
@@ -62,7 +59,7 @@ final class LoggableCapsuleCell: UICollectionViewCell {
             .disposed(by: bag)
     }
     
-    func setAttributes(item: SymptomData) {
+    func configure(item: SymptomData) {
         button.configuration?.attributedTitle = AttributedString(item.name, attributes: .chuBoldTitle(ofSize: 18))
         button.configuration?.baseBackgroundColor = item.hex.toUIColor
     }

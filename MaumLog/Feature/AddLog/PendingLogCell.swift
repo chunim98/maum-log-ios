@@ -17,12 +17,10 @@ final class PendingLogCell: UITableViewCell {
     var removeCellTask: (() -> Void)?
     var sliderValueChangedTask: (() -> Void)?
     
-    //MARK: - 메모리 올리기
-    let overallSV = {
+    // MARK: - Components
+    let mainHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.spacing = 10
-        sv.distribution = .fill
         return sv
     }()
     
@@ -37,11 +35,9 @@ final class PendingLogCell: UITableViewCell {
         return slider
     }()
     
-    let sliderSV = {
+    let sliderHStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
         sv.spacing = 5
-        sv.distribution = .fill
         return sv
     }()
     
@@ -71,7 +67,7 @@ final class PendingLogCell: UITableViewCell {
         return button
     }()
     
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         setAutoLayout()
@@ -90,28 +86,26 @@ final class PendingLogCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     private func setAutoLayout() {
-        contentView.addSubview(overallSV)
+        contentView.addSubview(mainHStack)
 
-        overallSV.addArrangedSubview(infoCard)
-        overallSV.addArrangedSubview(sliderSV)
-        overallSV.addArrangedSubview(removeButton)
+        mainHStack.addArrangedSubview(infoCard)
+        mainHStack.addArrangedSubview(sliderHStack)
+        mainHStack.addArrangedSubview(removeButton)
 
-        sliderSV.addArrangedSubview(sliderMinLabel)
-        sliderSV.addArrangedSubview(slider)
-        sliderSV.addArrangedSubview(sliderMaxLabel)
+        sliderHStack.addArrangedSubview(sliderMinLabel)
+        sliderHStack.addArrangedSubview(slider)
+        sliderHStack.addArrangedSubview(sliderMaxLabel)
         
-        overallSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 7))
-        }
-        infoCard.snp.makeConstraints { make in
-            make.width.equalTo(100)
-            make.height.equalTo(60)
+        mainHStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 7)) }
+        infoCard.snp.makeConstraints {
+            $0.width.equalTo(100)
+            $0.height.equalTo(60)
         }
     }
     
-    //MARK: - 바인딩
+    // MARK: - Binding
     private func setBinding() {
         slider
             .rx.value
@@ -150,7 +144,7 @@ final class PendingLogCell: UITableViewCell {
         if item.isNegative {
             sliderMaxLabel.text = String(localized: "심함")
             slider.tintColor = .chuBadRate // 슬라이더 틴트 색
-        }else{
+        } else {
             sliderMaxLabel.text = String(localized: "강함")
             slider.tintColor = .chuOtherRate // 슬라이더 틴트 색
         }
