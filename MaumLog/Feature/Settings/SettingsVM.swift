@@ -29,7 +29,7 @@ final class SettingsVM {
                             title: String(localized: "초기화 완료"),
                             message: String(localized: "모든 기록이 삭제되었습니다.\n앱을 다시 실행해주세요."))
                     }
-                }else{
+                } else {
                     view.presentAcceptAlert(
                         title: String(localized: "초기화 실패"),
                         message: String(localized: "잘못된 입력입니다.\n처음부터 다시 시도해주세요."))
@@ -53,7 +53,5 @@ final class SettingsVM {
             message: String(localized: "모든 기록이 삭제됩니다.\n정말로 계속할까요?"),
             acceptTitle: String(localized: "초기화"),
             acceptTask: textFieldAlert)
-
     }
-
 }

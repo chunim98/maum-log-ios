@@ -16,24 +16,21 @@ final class ToggleTypeCell: UITableViewCell {
     private let bag = DisposeBag()
     var toggleTask: ((Bool) -> Void)?
     
-    //MARK: - 컴포넌트
-    let horizontalSV = {
+    // MARK: - Components
+    let mainVStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.distribution = .fill
+        sv.axis = .vertical
+        sv.spacing = 10
+        return sv
+    }()
+    
+    let titleAndActionHStack = {
+        let sv = UIStackView()
         sv.spacing = 10
         sv.alignment = .center
         return sv
     }()
-    
-    let verticalSV = {
-        let sv = UIStackView()
-        sv.axis = .vertical
-        sv.distribution = .fill
-        sv.spacing = 10
-        return sv
-    }()
-    
+        
     let titleLabel = {
         let label = UILabel()
         label.text = "설정에 관한 내용"
@@ -63,8 +60,7 @@ final class ToggleTypeCell: UITableViewCell {
         return toggle
     }()
     
-
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -78,31 +74,29 @@ final class ToggleTypeCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     func setAutoLayout() {
-        contentView.addSubview(verticalSV)
-        verticalSV.addArrangedSubview(horizontalSV)
-        horizontalSV.addArrangedSubview(titleLabel)
-        horizontalSV.addArrangedSubview(toggle)
-        verticalSV.addArrangedSubview(captionLabel)
+        contentView.addSubview(mainVStack)
+        mainVStack.addArrangedSubview(titleAndActionHStack)
+        titleAndActionHStack.addArrangedSubview(titleLabel)
+        titleAndActionHStack.addArrangedSubview(toggle)
+        mainVStack.addArrangedSubview(captionLabel)
         
-        verticalSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(10)
-        }
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(10) }
     }
     
-    //MARK: - 바인딩
+    // MARK: - Binding
     func setBinding() {
         toggle
             .rx.controlEvent(.valueChanged)
             .withLatestFrom(toggle.rx.value)
-            .bind(onNext : { [weak self] bool in
-                self?.toggleTask?(bool)
+            .bind(with: self, onNext: { owner, bool in
+                owner.toggleTask?(bool)
             })
             .disposed(by: bag)
     }
     
-    func setAttributes(title: String, caption: String, isOn: Bool) {
+    func configure(title: String, caption: String, isOn: Bool) {
         titleLabel.text = title
         captionLabel.text = caption
         toggle.isOn = isOn

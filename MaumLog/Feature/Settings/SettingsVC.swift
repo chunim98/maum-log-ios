@@ -15,7 +15,7 @@ final class SettingsVC: UIViewController {
     private let settingsVM = SettingsVM()
     private let bag = DisposeBag()
     
-    // MARK: - 컴포넌트
+    // MARK: - Components
     let settingsTV: UITableView = {
         let tv = UITableView(frame: .zero, style: .insetGrouped)
         tv.register(ButtonTypeCell.self, forCellReuseIdentifier: ButtonTypeCell.identifier)
@@ -26,7 +26,7 @@ final class SettingsVC: UIViewController {
         return tv
     }()
 
-    // MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
@@ -36,7 +36,7 @@ final class SettingsVC: UIViewController {
         setNavigationBar(title: String(localized: "설정"))
     }
     
-    // MARK: - 오토레이아웃
+    // MARK: - Layout
     func setAutoLayout() {
         view.addSubview(settingsTV)
         settingsTV.snp.makeConstraints { $0.edges.equalTo(view.safeAreaLayoutGuide) }
@@ -71,7 +71,7 @@ extension SettingsVC: UITableViewDataSource {
         case 0: // 기록
             if indexPath.row == 0 {
                 let cell = ButtonTypeCell()
-                cell.setAttributes(
+                cell.configure(
                     title: String(localized: "기록 초기화"),
                     caption: String(localized: "지금까지의 모든 기록을 삭제합니다.\n이 작업은 취소할 수 없으니 주의하세요!"),
                     buttonTitle: String(localized: "초기화"), 
@@ -81,20 +81,20 @@ extension SettingsVC: UITableViewDataSource {
                     settingsVM.deleteAllLog(view: self)
                 }
                 return cell
-            }else{
+            } else {
                 return UITableViewCell()
             }
             
         case 1: // 기타
             if indexPath.row == 0 {
                 let cell = ToggleTypeCell()
-                cell.setAttributes(
+                cell.configure(
                     title: String(localized: "실행 시 기록 탭 보기"),
                     caption: String(localized: "실행 시 기본 화면을 기록 탭으로 변경합니다."),
                     isOn: SettingValuesStorage.shared.showLogVCAtStart)
                 cell.toggleTask = { SettingValuesStorage.shared.showLogVCAtStart = $0 }
                 return cell
-            }else{
+            } else {
                 return UITableViewCell()
             }
             
@@ -102,7 +102,6 @@ extension SettingsVC: UITableViewDataSource {
             return UITableViewCell()
         }
     }
-
 }
 
 

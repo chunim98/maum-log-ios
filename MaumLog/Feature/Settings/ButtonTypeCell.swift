@@ -16,21 +16,18 @@ final class ButtonTypeCell: UITableViewCell {
     private let bag = DisposeBag()
     var buttonTask: (() -> Void)?
     
-    //MARK: - 컴포넌트
-    let horizontalSV = {
+    // MARK: - Components
+    let mainVStack = {
         let sv = UIStackView()
-        sv.axis = .horizontal
-        sv.distribution = .fill
+        sv.axis = .vertical
         sv.spacing = 10
-        sv.alignment = .center
         return sv
     }()
     
-    let verticalSV = {
+    let titleAndActionHStack = {
         let sv = UIStackView()
-        sv.axis = .vertical
-        sv.distribution = .fill
         sv.spacing = 10
+        sv.alignment = .center
         return sv
     }()
     
@@ -38,6 +35,15 @@ final class ButtonTypeCell: UITableViewCell {
         let label = UILabel()
         label.text = "설정에 관한 내용"
         return label
+    }()
+
+    let button = {
+        var config = UIButton.Configuration.tinted()
+        config.baseForegroundColor = .chuWhite
+        config.title = "버튼"
+        config.titleAlignment = .center
+        config.cornerStyle = .capsule
+        return UIButton(configuration: config)
     }()
     
     let captionLabel = {
@@ -48,18 +54,8 @@ final class ButtonTypeCell: UITableViewCell {
         label.numberOfLines = .max
         return label
     }()
-    
-    let button = {
-        var config = UIButton.Configuration.tinted()
-        config.baseForegroundColor = .chuWhite
-        config.title = "버튼"
-        config.titleAlignment = .center
-        config.cornerStyle = .capsule
-        return UIButton(configuration: config)
-    }()
-    
 
-    //MARK: - 라이프 사이클
+    // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -73,23 +69,20 @@ final class ButtonTypeCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - 오토레이아웃
+    // MARK: - Layout
     func setAutoLayout() {
-        contentView.addSubview(verticalSV)
-        verticalSV.addArrangedSubview(horizontalSV)
-        horizontalSV.addArrangedSubview(titleLabel)
-        horizontalSV.addArrangedSubview(button)
-        verticalSV.addArrangedSubview(captionLabel)
+        contentView.addSubview(mainVStack)
+        mainVStack.addArrangedSubview(titleAndActionHStack)
+        titleAndActionHStack.addArrangedSubview(titleLabel)
+        titleAndActionHStack.addArrangedSubview(button)
+        mainVStack.addArrangedSubview(captionLabel)
         
         button.setContentHuggingPriority(.init(900), for: .horizontal)
         
-        verticalSV.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(10)
-        }
-
+        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(10) }
     }
     
-    //MARK: - 바인딩
+    // MARK: - Binding
     func setBinding() {
         button
             .rx.tap
@@ -99,7 +92,7 @@ final class ButtonTypeCell: UITableViewCell {
             .disposed(by: bag)
     }
     
-    func setAttributes(title: String, caption: String, buttonTitle: String, buttonColor: UIColor) {
+    func configure(title: String, caption: String, buttonTitle: String, buttonColor: UIColor) {
         titleLabel.text = title
         captionLabel.text = caption
         
@@ -111,7 +104,6 @@ final class ButtonTypeCell: UITableViewCell {
         config.cornerStyle = .capsule
         button.configuration = config
     }
-
 }
 
 #Preview(traits: .fixedLayout(width: 400, height: 100)) {
