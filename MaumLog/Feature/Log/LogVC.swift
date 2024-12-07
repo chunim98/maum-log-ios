@@ -241,7 +241,7 @@ final class LogVC: UIViewController {
             .disposed(by: bag)
     }
     
-    // MARK: - Configure Components
+    // MARK: - Components Configure Methods
     private func setPullDownButton() {
         let edit = UIAction(
             title: String(localized: "편집"),
