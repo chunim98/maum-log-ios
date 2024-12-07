@@ -18,6 +18,7 @@ final class LogVM {
         let tappedEditDoneButton: Observable<Void>
         let changeSorting: Observable<Bool>
         let tappedTakeMedicineButton: Observable<Void>
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     struct Output {
@@ -29,6 +30,7 @@ final class LogVM {
         let logDataIsEmpty: Observable<Bool>
         let presentShouldAddMedicineAlert: Observable<Void>
         let presentTakeMedicineAlert: Observable<Void>
+        let presentRemoveAlert: Observable<EditButtonCellModel>
     }
     
     private let bag = DisposeBag()
@@ -129,6 +131,9 @@ final class LogVM {
         // 약 먹었다는 얼럿 띄우기 (등록된 약이 있을 경우에만)
         let presentTakeMedicineAlert = input.tappedTakeMedicineButton
             .filter { !(MedicineDataManager.shared.read().isEmpty) }
+        
+        // 삭제 얼럿을 띄우는 메시지 전송
+        let presentRemoveAlert = input.itemToRemove
 
         
         return Output(
@@ -139,6 +144,7 @@ final class LogVM {
             isAscendingOrder: isAscendingOrder.asObservable(),
             logDataIsEmpty: logDataIsEmpty,
             presentShouldAddMedicineAlert: presentShouldAddMedicineAlert,
-            presentTakeMedicineAlert: presentTakeMedicineAlert)
+            presentTakeMedicineAlert: presentTakeMedicineAlert,
+            presentRemoveAlert: presentRemoveAlert)
     }
 }

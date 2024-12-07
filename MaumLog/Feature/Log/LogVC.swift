@@ -17,9 +17,10 @@ final class LogVC: UIViewController {
     private let logVM = LogVM()
     private let bag = DisposeBag()
     
-    private let reloadSectionData = PublishSubject<Void>()
+    let reloadSectionData = PublishSubject<Void>()
     private let tappedEditButton = PublishSubject<Void>()
     private let changeSorting = PublishSubject<Bool>()
+    private let itemToRemove = PublishSubject<EditButtonCellModel>()
     
     // MARK: - Components
     let titleLabel = {
@@ -147,7 +148,8 @@ final class LogVC: UIViewController {
             tappedEditButton: tappedEditButton.asObservable(),
             tappedEditDoneButton: editDoneBarButton.rx.tap.asObservable(),
             changeSorting: changeSorting.asObservable(),
-            tappedTakeMedicineButton: takeMedicineButton.rx.tap.asObservable())
+            tappedTakeMedicineButton: takeMedicineButton.rx.tap.asObservable(),
+            itemToRemove: itemToRemove.asObservable())
         
         let output = logVM.transform(input)
 
@@ -231,6 +233,12 @@ final class LogVC: UIViewController {
                 }
             }
             .disposed(by: bag)
+        
+        output.presentRemoveAlert
+            .bind(with: self) { owner, item in
+                owner.presentRemoveAlert(item: item)
+            }
+            .disposed(by: bag)
     }
     
     // MARK: - Configure Components
@@ -259,10 +267,7 @@ final class LogVC: UIViewController {
         
         optionBarButton.menu = menu
     }
-}
-
-
-extension LogVC: EditButtonCellDelegate {
+    
     // 테이블 뷰 바인딩
     private func bindingTableView() -> SectionDataSource<LogSectionData> {
         
@@ -273,8 +278,11 @@ extension LogVC: EditButtonCellDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SymptomLogCell.identifier, for: indexPath) as? SymptomLogCell
                 guard let cell else { return UITableViewCell() }
 
-                cell.setAttributes(item: item)
-                cell.delegate = self
+                cell.configure(item: item)
+                cell.itemToRemove
+                    .bind(to: self.itemToRemove)
+                    .disposed(by: bag)
+                
                 return cell
                 
             } else {
@@ -282,7 +290,10 @@ extension LogVC: EditButtonCellDelegate {
                 guard let cell else { return UITableViewCell() }
 
                 cell.configure(item: item)
-                cell.delegate = self
+                cell.itemToRemove
+                    .bind(to: self.itemToRemove)
+                    .disposed(by: bag)
+                
                 return cell
             }
         }
@@ -304,28 +315,7 @@ extension LogVC: EditButtonCellDelegate {
         
         return animatedDataSource
     }
-    
-    
-    func removeTask(item: any EditButtonCellModel) {
-        switch item {
-        case let item as LogData:
-            presentAlert(
-                title: String(localized: "알림"),
-                message: String(localized: "기록을 삭제할까요?"),
-                acceptTitle: String(localized: "삭제"),
-                acceptTask: { [weak self] in
-                    LogDataManager.shared.delete(target: item)
-                    self?.reloadSectionData.onNext(())
-                })
-            
-        default:
-            print("오류발생", #function)
-            return
-        }
-    }
 }
-
-
 
 #Preview {
     TabBarVC()

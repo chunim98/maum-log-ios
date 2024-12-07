@@ -10,20 +10,21 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class MedicineLogCell: UITableViewCell, EditButtonCellType {
+final class MedicineLogCell: UITableViewCell {
     
     static let identifier = "MedicineLogCell"
     private let bag = DisposeBag()
-    var delegate: (any EditButtonCellDelegate)?
     var item: (any EditButtonCellModel)?
     
-    private let CVCellData = BehaviorSubject<[MedicineCardData]>(value: [])
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "a h:mm"
         return formatter
     }()
     
+    private let cardData = BehaviorSubject<[MedicineCardData]>(value: [])
+    let itemToRemove = PublishSubject<EditButtonCellModel>()
+
     // MARK: - Components
     let mainHStack = {
         let sv = UIStackView()
@@ -117,18 +118,20 @@ final class MedicineLogCell: UITableViewCell, EditButtonCellType {
     
     // MARK: - Binding
     private func setBinding() {
-        CVCellData
+        // 약 카드 데이터 바인딩
+        cardData
             .bind(to: infoCardCV.rx.items(cellIdentifier: MedicineCardCell.identifier, cellType: MedicineCardCell.self)) { index, item, cell in
                 cell.configure(item: item)
             }
             .disposed(by: bag)
-        
+
+        // 삭제 요청과 함께 아이템 전송
         deleteButton
             .rx.tap
-            .bind(onNext: { [weak self] in
-                guard let self, let item else { return }
-                delegate?.removeTask(item: item)
-            })
+            .bind(with: self) { owner, _ in
+                guard let item = owner.item else { return }
+                owner.itemToRemove.onNext(item)
+            }
             .disposed(by: bag)
     }
     
@@ -137,7 +140,7 @@ final class MedicineLogCell: UITableViewCell, EditButtonCellType {
         guard !(item.medicineCards.isEmpty) else { return }
         self.item = item
 
-        CVCellData.onNext(item.medicineCards)
+        cardData.onNext(item.medicineCards)
         
         dateLabel.text = formatter.string(from: item.date)
         deleteButton.isHidden = !(item.isEditMode)

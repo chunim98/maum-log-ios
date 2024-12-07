@@ -50,4 +50,17 @@ extension LogVC {
                 present(vc, animated: true)
             })
     }
+    
+    func presentRemoveAlert(item: any EditButtonCellModel) {
+        guard let item = item as? LogData else { return }
+        
+        presentAlert(
+            title: String(localized: "알림"),
+            message: String(localized: "기록을 삭제할까요?"),
+            acceptTitle: String(localized: "삭제"),
+            acceptTask: { [weak self] in
+                LogDataManager.shared.delete(target: item)
+                self?.reloadSectionData.onNext(())
+            })
+    }
 }

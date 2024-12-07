@@ -10,21 +10,21 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class SymptomLogCell: UITableViewCell, EditButtonCellType {
+final class SymptomLogCell: UITableViewCell {
     
     static let identifier = "SymptomLogCell"
     private let bag = DisposeBag()
-
-    var delegate: (any EditButtonCellDelegate)?
     var item: (any EditButtonCellModel)?
     
-    private let CVCellData = BehaviorSubject<[SymptomCardData]>(value: [])
     private var formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "a h:mm"
         return formatter
     }()
     
+    private let cardData = BehaviorSubject<[SymptomCardData]>(value: [])
+    let itemToRemove = PublishSubject<EditButtonCellModel>()
+
     // MARK: - Components
     let mainHStack = {
         let sv = UIStackView()
@@ -96,27 +96,29 @@ final class SymptomLogCell: UITableViewCell, EditButtonCellType {
     
     // MARK: - Binding
     private func setBinding() {
-        CVCellData
+        // 증상 카드 데이터 바인딩
+        cardData
             .bind(to: infoCardCV.rx.items(cellIdentifier: RateCardCell.identifier, cellType: RateCardCell.self)) { index, item, cell in
                 cell.configure(item: item)
             }
             .disposed(by: bag)
         
+        // 삭제 요청과 함께 아이템 전송
         deleteButton
             .rx.tap
-            .bind(onNext: { [weak self] in
-                guard let self, let item else { return }
-                delegate?.removeTask(item: item)
-            })
+            .bind(with: self) { owner, _ in
+                guard let item = owner.item else { return }
+                owner.itemToRemove.onNext(item)
+            }
             .disposed(by: bag)
     }
     
-    func setAttributes(item: EditButtonCellModel) {
+    func configure(item: EditButtonCellModel) {
         guard let item = item as? LogData else { return }
         guard !(item.symptomCards.isEmpty) else { return }
         self.item = item
         
-        CVCellData.onNext(item.symptomCards)
+        cardData.onNext(item.symptomCards)
         
         dateLabel.text = formatter.string(from: item.date)
         deleteButton.isHidden = !(item.isEditMode)

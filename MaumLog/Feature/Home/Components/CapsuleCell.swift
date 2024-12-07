@@ -10,12 +10,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class CapsuleCell: UICollectionViewCell, EditButtonCellType {
+final class CapsuleCell: UICollectionViewCell {
 
     static let identifier = "CapsuleCell"
     private let bag = DisposeBag()
     
-    var delegate: (any EditButtonCellDelegate)? // 사용되지는 않음
     var item: (any EditButtonCellModel)?
     
     let itemToRemove = PublishSubject<EditButtonCellModel>()
