@@ -52,10 +52,10 @@ final class LoggableCapsuleCell: UICollectionViewCell {
     private func setBinding() {
         button
             .rx.tap
-            .bind(onNext: { [weak self] in
-                self?.addTask?()
+            .bind(with: self) { owner, _ in
+                owner.addTask?()
                 HapticManager.shared.occurSelect()
-            })
+            }
             .disposed(by: bag)
     }
     

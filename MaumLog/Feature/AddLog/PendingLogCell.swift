@@ -109,35 +109,29 @@ final class PendingLogCell: UITableViewCell {
     private func setBinding() {
         slider
             .rx.value
-            .bind(onNext: { [weak self] value in
-                guard let self else { return }
-                
-                slider.setValue(floorf(value), animated: false) //툭툭 끊기는 효과 주기
-                infoCard.setRate(rate: Int(slider.value)) //소수점 절사
-            })
+            .bind(with: self) { owner, value in
+                owner.slider.setValue(floorf(value), animated: false) //툭툭 끊기는 효과 주기
+                owner.infoCard.setRate(rate: Int(owner.slider.value)) //소수점 절사
+            }
             .disposed(by: bag)
-        
         
         slider
             .rx.controlEvent([.touchUpInside, .touchUpOutside])
-            .bind(onNext: { [weak self] value in
-                self?.sliderValueChangedTask?()
-            })
+            .bind(with: self) { owner, _ in
+                owner.sliderValueChangedTask?()
+            }
             .disposed(by: bag)
-        
         
         removeButton
             .rx.tap
-            .bind(onNext: { [weak self] in
-                self?.removeCellTask?()
-            })
+            .bind(with: self) { owner, _ in
+                owner.removeCellTask?()
+            }
             .disposed(by: bag)
     }
-
     
-    func setAtrributes(item: SymptomCardData) {
+    func configure(item: SymptomCardData) {
         infoCard.configure(item: item)
-
         
         slider.value = Float(item.rate)
         
@@ -149,7 +143,6 @@ final class PendingLogCell: UITableViewCell {
             slider.tintColor = .chuOtherRate // 슬라이더 틴트 색
         }
     }
-    
 }
 
 #Preview(traits: .fixedLayout(width: 400, height: 75)) {

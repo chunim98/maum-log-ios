@@ -16,6 +16,10 @@ final class AddLogVC: UIViewController {
     private let bag = DisposeBag()
     var dismissTask: (() -> Void)?
     
+    private let addPendingLog = PublishSubject<SymptomCardData>()
+    private let removePendingLogByIndex = PublishSubject<Int>()
+    private let updateRate = PublishSubject<(index: Int, rate: Int)>()
+    
     // MARK: - Components
     let titleBackground = {
         let view = UIView()
@@ -199,7 +203,9 @@ final class AddLogVC: UIViewController {
             $0.bottom.equalTo(bottomSVBackground.snp.top)
         }
         titleBackground.snp.makeConstraints { $0.top.leading.trailing.equalToSuperview() }
-        titleLabel.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: .chuSpace, bottom: 10, right: .chuSpace)) }
+        titleLabel.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: .chuSpace, bottom: 10, right: .chuSpace))
+        }
         closeButton.snp.makeConstraints {
             $0.trailing.equalToSuperview()
             $0.centerY.equalToSuperview()
@@ -220,101 +226,103 @@ final class AddLogVC: UIViewController {
     
     // MARK: - Binding
     func setBinding() {
-        // input
-        confirmButton
-            .rx.tap
-            .bind(to: addLogVM.input.tappedConfirmButton)
-            .disposed(by: bag)
+        let input = AddLogVM.Input(
+            addPendingLog: addPendingLog.asObservable(),
+            removePendingLogByIndex: removePendingLogByIndex.asObservable(),
+            updateRate: updateRate.asObservable(),
+            tappedConfirmButton: confirmButton.rx.tap.asObservable(),
+            tappedCloseButton: closeButton.rx.tap.asObservable())
+
+        let output = addLogVM.transform(input)
         
-        closeButton
-            .rx.tap
-            .bind(to: addLogVM.input.tappedCloseButton)
-            .disposed(by: bag)
-        
-        
-        // output
-        addLogVM.output.negativeData
-            .bind(to: negativeCV.rx.items(cellIdentifier: LoggableCapsuleCell.identifier, cellType: LoggableCapsuleCell.self)){ index, item, cell in
+        output.negativeData
+            .bind(to: negativeCV.rx.items(cellIdentifier: LoggableCapsuleCell.identifier, cellType: LoggableCapsuleCell.self)) { index, item, cell in
                 cell.configure(item: item)
-                cell.addTask = { [weak self] in self?.addLogVM.input.addPendingLog.onNext(.init(name: item.name, hex: item.hex, isNegative: item.isNegative, rate: 3)) } // input
+                cell.addTask = { [weak self] in
+                    let cardData = SymptomCardData(name: item.name, hex: item.hex, isNegative: item.isNegative, rate: 3)
+                    self?.addPendingLog.onNext(cardData)
+                }
             }
             .disposed(by: bag)
         
-        
-        addLogVM.output.otherData
-            .bind(to: otherCV.rx.items(cellIdentifier: LoggableCapsuleCell.identifier, cellType: LoggableCapsuleCell.self)){ index, item, cell in
+        output.otherData
+            .bind(to: otherCV.rx.items(cellIdentifier: LoggableCapsuleCell.identifier, cellType: LoggableCapsuleCell.self)) { index, item, cell in
                 cell.configure(item: item)
-                cell.addTask = { [weak self] in self?.addLogVM.input.addPendingLog.onNext(.init(name: item.name, hex: item.hex, isNegative: item.isNegative, rate: 3)) } // input
+                cell.addTask = { [weak self] in
+                    let cardData = SymptomCardData(name: item.name, hex: item.hex, isNegative: item.isNegative, rate: 3)
+                    self?.addPendingLog.onNext(cardData)
+                }
             }
             .disposed(by: bag)
-        
-        
+
         // 증상 테이블에 아직 등록된 증상이 없다면 표시
-        addLogVM.output.isSymptomDataEmpty
-            .bind(onNext: { [weak self] in
-                if $0 {
-                    self?.negativeCV.backgroundView = self?.negativeEmptyView
+        output.isSymptomDataEmpty
+            .bind(with: self) { owner, isSymptomDataEmpty in
+                let (isNegativeEmpty, isOtherEmpty) = isSymptomDataEmpty
+                
+                if isNegativeEmpty {
+                    owner.negativeCV.backgroundView = owner.negativeEmptyView
                 } else {
-                    self?.negativeCV.backgroundView = .none
+                    owner.negativeCV.backgroundView = .none
                 }
                 
-                if $1 {
-                    self?.otherCV.backgroundView = self?.otherEmptyView
+                if isOtherEmpty {
+                    owner.otherCV.backgroundView = owner.otherEmptyView
                 } else {
-                    self?.otherCV.backgroundView = .none
+                    owner.otherCV.backgroundView = .none
                 }
-            })
+            }
             .disposed(by: bag)
         
         
-        addLogVM.output.pendingLogData
-            .bind(to: pendingLogTV.rx.items(cellIdentifier: PendingLogCell.identifier, cellType: PendingLogCell.self)){ [weak self] index, item, cell in
+        output.pendingLogData
+            .bind(to: pendingLogTV.rx.items(cellIdentifier: PendingLogCell.identifier, cellType: PendingLogCell.self)) { [weak self] index, item, cell in
                 guard let self else { return }
-                cell.setAtrributes(item: item)
-                cell.removeCellTask = { self.addLogVM.input.removePendingLogByIndex.onNext(index) } // input
-                cell.sliderValueChangedTask = { self.addLogVM.input.updateRate.onNext( (index: index, rate: Int(cell.slider.value)) ) } // input
+                cell.configure(item: item)
+                cell.removeCellTask = { self.removePendingLogByIndex.onNext(index) }
+                cell.sliderValueChangedTask = { self.updateRate.onNext( (index: index, rate: Int(cell.slider.value)) ) }
             }
             .disposed(by: bag)
         
         
         // 테이블에 아무것도 없을 때 추가버튼 비활성화
-        addLogVM.output.isEnabledConfirmButton
+        output.isEnabledConfirmButton
             .bind(to: confirmButton.rx.isEnabled)
             .disposed(by: bag)
         
         
         // 테이블에 뭐라도 있다면 모달 제스처로 닫기 비활성화
-        addLogVM.output.isEnabledModalGesture
-            .bind(onNext: { [weak self] in self?.isModalInPresentation = $0 })
+        output.isEnabledModalGesture
+            .bind(with: self) { owner, isEnabledModalGesture in
+                owner.isModalInPresentation = isEnabledModalGesture
+            }
             .disposed(by: bag)
         
         
         // 추가된 임시 기록이 없으면 안내문구 표시
-        addLogVM.output.isPendingLogEmpty
-            .bind(onNext: { [weak self] in
-                if $0 {
-                    self?.pendingLogTV.backgroundView = self?.pendingLogEmptyView
+        output.isPendingLogEmpty
+            .bind(with: self) { owner, isPendingLogEmpty in
+                if isPendingLogEmpty {
+                    owner.pendingLogTV.backgroundView = owner.pendingLogEmptyView
                 } else {
-                    self?.pendingLogTV.backgroundView = .none
+                    owner.pendingLogTV.backgroundView = .none
                 }
-            })
+            }
             .disposed(by: bag)
         
-        
-        addLogVM.output.confirmWithDismiss
-            .bind(onNext: { [weak self] in
-                self?.addLogVM.input.saveByLogData.onNext(()) // input, 리스트 저장 이벤트 전송
-                self?.dismissTask?()
-                self?.dismiss(animated: true)
-            })
+        // 리스트의 계류 로그 메인 저장소에 저장하고 화면 닫기
+        output.confirmWithDismiss
+            .bind(with: self) { owner, _ in
+                owner.dismissTask?()
+                owner.dismiss(animated: true)
+            }
             .disposed(by: bag)
         
-        
-        addLogVM.output.justDismiss
-            .bind(onNext: { [weak self] in self?.dismiss(animated: true) })
+        // 그냥 화면 닫기
+        output.justDismiss
+            .bind(with: self) { owner, _ in owner.dismiss(animated: true) }
             .disposed(by: bag)
     }
-
 }
 
 
