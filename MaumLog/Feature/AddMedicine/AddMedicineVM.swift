@@ -6,136 +6,117 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
+import Combine
 
 final class AddMedicineVM {
     
-    struct Input {
-        let tappedConfirmButton: Observable<Void>
-        let textOfTextField: Observable<String>
-        let tappedCloseButton: Observable<Void>
+    /// 컴바인 퍼스트 파티라서 기대했는데, 오퍼레이터도 적고, RxCocoa같이 UIControl 래핑한 퍼블리셔 제공도 안해줌.
+    ///
+    /// RxCocoa의 부재 때문인지, eraseToAnyPublisher() 메서드를 일일이 뒤에 붙이는 게 번거로운 건지,
+    /// 대부분 enum으로 이벤트 전달하는 in-out 패턴을 채용하고 있음. (UIKit + Combine 한정이지만)
+    ///
+    /// 이러면 스트림 병합을 못해서 외부에 상태 저장용, 중개용 서브젝트를 만들 수 밖에 없게 되고,
+    /// 데이터 흐름을 파악하기가 힘들어짐.
+    ///
+    /// in-out 패턴이 아닌, 그저 @Published 래퍼를 써서 반응형으로 구현한다 하더라도
+    /// 데이터 흐름 파악하기 힘든 건 마찬가지.
+    ///
+    /// 유킷에서 Combine을 쓰려고 하니까 이렇게 짜치는건가....?
+    /// 스유 가져가도 크게 다를 것 같지는 않은데...
+    
+    enum Input {
+        case tappedConfirmButton
+        case textOfTextField(String)
+        case tappedCloseButton
     }
     
-    struct Output {
-        let clippedText: Observable<String>
-        let isEnabledConfirmButton: Observable<Bool>
-        let justDismiss: Observable<Void>
-        let presentDuplicateAlert: Observable<String>
-        let saveAndDismiss: Observable<Void>
+    enum Output {
+        case clippedText(String)
+        case isEnabledConfirmButton(Bool)
+        case justDismiss
+        case presentDuplicateAlert(String)
+        case saveAndDismiss
     }
     
-    private let bag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
-//    // in out 처리하는 서브젝트
-//    private let confirmButtonSubject = PublishSubject<Void>()
-//    private let textFieldSubject = PublishSubject<String>()
-//    private let isEnabledConfirmButtonSubject = PublishSubject<Bool>()
-//    private let closeButtonSubject = PublishSubject<Void>()
-    
-    func transform(_ input: Input) -> Output {
-        // 중복 얼럿 메시지 전송
-        let presentDuplicateAlert = PublishSubject<String>()
-        // 저장 후 화면 닫기 메시지 전송
-        let saveAndDismiss = PublishSubject<Void>()
-        
-        // MARK: - Observables
-        // 텍스트 필드 12글자 제한
-        let clippedText = input.textOfTextField
-            .map {
-                // 공백은 제거
-                let text = $0.trimmingCharacters(in: .whitespaces)
+    func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+        let output = PassthroughSubject<Output, Never>()
+
+        // tappedConfirmButton 이벤트 중개
+        let tappedConfirmButton = PassthroughSubject<Void, Never>()
+        // 12자로 클리핑된 텍스트 중개
+        let clippedText = PassthroughSubject<String, Never>()
+
+        // input 이벤트 처리
+        input.sink { [weak self] event in
+            guard let self else { return }
+            
+            switch event {
+            case .tappedConfirmButton:
+                tappedConfirmButton.send()
                 
-                // 텍스트 8글자 제한
-                if text.count > 12 {
-                    let index = text.index(text.startIndex, offsetBy: 12)
-                    return String(text[..<index])
-                } else {
-                    return text
-                }
+            case .textOfTextField(let text):
+                clippedText.send(clip(this: text))
+                
+            case .tappedCloseButton:
+                output.send(.justDismiss)
             }
-            .share(replay: 1)
+        }
+        .store(in: &cancellables)
+        
+        // 텍스트 필드에 공백을 제외한 텍스트 전달
+        clippedText
+            .sink { text in
+                output.send(.clippedText(text))
+            }
+            .store(in: &cancellables)
         
         // 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
-        let isEnabledConfirmButton = clippedText
+        clippedText
             .map { !($0.isEmpty) }
+            .sink { bool in
+                output.send(.isEnabledConfirmButton(bool))
+            }
+            .store(in: &cancellables)
         
         // 저장 버튼 눌렀을 때의 저장 로직
-        input.tappedConfirmButton
-            .withLatestFrom(clippedText)
-            .bind(with: self) { owner, name in
-                let isDuplicated = owner.checkDuplicate(text: name)
+        // saveAndDismiss이 한 번은 방출 될 때까지 실행 안 될 것으로 예상
+        tappedConfirmButton
+            .combineLatest(clippedText)
+            .sink { [weak self] _, name in
+                guard let isDuplicated = self?.checkDuplicate(text: name) else { return }
                 
                 // 중복 체크 후 저장 or 중복 얼럿 띄우기
                 if !isDuplicated {
                     MedicineDataManager.shared.create(from: MedicineData(name: name))
-                    saveAndDismiss.onNext(())
+                    // 중복 얼럿 메시지 전송
+                    output.send(.saveAndDismiss)
                 } else {
-                    presentDuplicateAlert.onNext(name)
+                    // 저장 후 화면 닫기 메시지 전송
+                    output.send(.presentDuplicateAlert(name))
                 }
             }
-            .disposed(by: bag)
+            .store(in: &cancellables)
         
-        let justDismiss = input.tappedCloseButton
-        
-        
-        return Output(
-            clippedText: clippedText,
-            isEnabledConfirmButton: isEnabledConfirmButton,
-            justDismiss: justDismiss,
-            presentDuplicateAlert: presentDuplicateAlert.asObservable(),
-            saveAndDismiss: saveAndDismiss.asObservable())
+        return output.eraseToAnyPublisher()
     }
     
     // MARK: - Methods
+    private func clip(this text: String) -> String {
+        // 공백은 제거
+        let text = text.trimmingCharacters(in: .whitespaces)
+        
+        // 텍스트 12글자 제한
+        if text.count > 12 {
+            let index = text.index(text.startIndex, offsetBy: 12)
+            return String(text[..<index])
+        } else {
+            return text
+        }
+    }
+    
     private func checkDuplicate(text: String) -> Bool {
         MedicineDataManager.shared.read().contains { $0.name == text }
     }
-    
-//    init() {
-//
-//        // 12글자 제한해서 방출하는 observable
-//        let clippedTextofTextField = textFieldSubject
-//            .map {
-//                let text = $0.trimmingCharacters(in: .whitespaces)
-//                
-//                if text.count > 12 { // 텍스트 12글자 제한
-//                    let index = text.index(text.startIndex, offsetBy: 12)
-//                    return String(text[..<index])
-//                } else {
-//                    return text
-//                }
-//            }
-//            // self 호출을 피하기 위해 값 복사 캡쳐 (짜피 참조타입이라 값 복사해도 괜춘)
-//            .do(onNext: { [isEnabledConfirmButtonSubject] in isEnabledConfirmButtonSubject.onNext( !($0.isEmpty) ) }) // 추가버튼 활성화 여부 방출
-//            .share(replay: 1)
-//        
-//        
-//        // 중복된 이름인지 체크
-//        let isDuplicated = textFieldSubject
-//            .map { text in
-//                MedicineDataManager.shared.read().contains { $0.name == text }
-//            }
-//            .share(replay: 1)
-//        
-//        
-//        // 중복인지 같이 담아서 전송
-//        let confirmWithIsDuplicated = confirmButtonSubject
-//            .withLatestFrom(isDuplicated)
-//            .map { $0 }
-//            .share(replay: 1)
-//
-//        
-//
-//        input = .init(
-//            tappedConfirmButton: confirmButtonSubject.asObserver(),
-//            textOfTextField: textFieldSubject.asObserver(),
-//            tappedCloseButton: closeButtonSubject.asObserver())
-//        
-//        output = .init(
-//            confirmWithIsDuplicated: confirmWithIsDuplicated,
-//            clippedText: clippedTextofTextField,
-//            isEnabledConfirmButton: isEnabledConfirmButtonSubject.asObservable(),
-//            justDismiss: closeButtonSubject.asObservable())
-//    }
 }

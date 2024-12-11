@@ -22,6 +22,7 @@
 		513F6A422D04398500C5F071 /* CapsuleCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513F6A412D04398500C5F071 /* CapsuleCellModel.swift */; };
 		51412A102C5EB2D900381B7C /* LogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51412A0F2C5EB2D900381B7C /* LogVC.swift */; };
 		51412A122C5EB7CB00381B7C /* LogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51412A112C5EB7CB00381B7C /* LogVM.swift */; };
+		5143DD2A2D05F66400335F36 /* UIControl+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5143DD292D05F66200335F36 /* UIControl+Combine.swift */; };
 		51563D5A2C52DFFF005BBCC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51563D592C52DFFF005BBCC2 /* AppDelegate.swift */; };
 		51563D5C2C52DFFF005BBCC2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51563D5B2C52DFFF005BBCC2 /* SceneDelegate.swift */; };
 		51563D5E2C52DFFF005BBCC2 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51563D5D2C52DFFF005BBCC2 /* HomeVC.swift */; };
@@ -112,6 +113,7 @@
 		513F6A412D04398500C5F071 /* CapsuleCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleCellModel.swift; sourceTree = "<group>"; };
 		51412A0F2C5EB2D900381B7C /* LogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogVC.swift; sourceTree = "<group>"; };
 		51412A112C5EB7CB00381B7C /* LogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogVM.swift; sourceTree = "<group>"; };
+		5143DD292D05F66200335F36 /* UIControl+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Combine.swift"; sourceTree = "<group>"; };
 		51563D562C52DFFF005BBCC2 /* MaumLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaumLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51563D592C52DFFF005BBCC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		51563D5B2C52DFFF005BBCC2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 			children = (
 				51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */,
 				51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */,
+				5143DD292D05F66200335F36 /* UIControl+Combine.swift */,
 			);
 			path = AddMedicine;
 			sourceTree = "<group>";
@@ -682,6 +685,7 @@
 				51FE749C2C7CA29400EDA685 /* MedicineCoreData+CoreDataProperties.swift in Sources */,
 				51FE749D2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataClass.swift in Sources */,
 				5116017A2D035EC300F19A36 /* LogVC+Alert.swift in Sources */,
+				5143DD2A2D05F66400335F36 /* UIControl+Combine.swift in Sources */,
 				51FE749E2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataProperties.swift in Sources */,
 				51FE749F2C7CA29400EDA685 /* SymptomCardCoreData+CoreDataClass.swift in Sources */,
 				51FE74A02C7CA29400EDA685 /* SymptomCardCoreData+CoreDataProperties.swift in Sources */,

@@ -7,14 +7,15 @@
 
 import UIKit
 import SnapKit
-import RxSwift
-import RxCocoa
+import Combine
 
 final class AddMedicineVC: UIViewController {
     
     private let addMedicineVM = AddMedicineVM()
-    private let bag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     var dismissTask: (() -> Void)?
+    
+    private let input = PassthroughSubject<AddMedicineVM.Input, Never>()
     
     // MARK: - Components
     let titleBackground = {
@@ -86,6 +87,10 @@ final class AddMedicineVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
+        closeButton.addTarget(self, action: #selector(handleCloseButtonEvent), for: .touchUpInside)
+        confirmButton.addTarget(self, action: #selector(handleConfirmButtonEvent), for: .touchUpInside)
+        textField.delegate = self
+        
         setAutoLayout()
         setBinding()
     }
@@ -121,56 +126,71 @@ final class AddMedicineVC: UIViewController {
     
     // MARK: - Binding
     func setBinding() {
-        let input = AddMedicineVM.Input(
-            tappedConfirmButton: confirmButton.rx.tap.asObservable(),
-            textOfTextField: textField.rx.text.orEmpty.asObservable(),
-            tappedCloseButton: closeButton.rx.tap.asObservable())
+        // Input
+        NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification, object: self.textField)
+            .compactMap{ $0.object as? UITextField}
+            .map{ $0.text ?? "" }
+            .sink { [weak self] text in
+                self?.input.send(.textOfTextField(text))
+            }
+            .store(in: &cancellables)
         
-        let output = addMedicineVM.transform(input)
         
-        // 텍스트 필드에 공백을 제외한 텍스트 바인딩
-        output.clippedText
-            .bind(to: textField.rx.text)
-            .disposed(by: bag)
+        let output = addMedicineVM.transform(input.eraseToAnyPublisher())
         
-        // 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
-        output.isEnabledConfirmButton
-            .bind(to: confirmButton.rx.isEnabled)
-            .disposed(by: bag)
-        
-        // 중복 얼럿 띄우기
-        output.presentDuplicateAlert
-            .bind(with: self) { owner, name in
+        output.sink { [weak self] event in
+            guard let self else { return }
+            
+            switch event {
+            case .clippedText(let text):
+                /// 텍스트 필드에 공백을 제외한 텍스트 바인딩
+                textField.text = text
+                
+            case .isEnabledConfirmButton(let bool):
+                /// 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
+                confirmButton.isEnabled = bool
+                
+            case .justDismiss:
+                /// 그냥 화면 닫기
+                dismiss(animated: true)
+                
+            case .presentDuplicateAlert(let name):
+                /// 중복 얼럿 띄우기
+                
                 // 얼럿 뜨기 전 키보드 닫아줘야 함
-                owner.textField.endEditing(true)
+                textField.endEditing(true)
                 // 얼럿 띄우기
-                owner.presentAcceptAlert(
+                presentAcceptAlert(
                     title: String(localized: "등록 실패"),
                     message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
-            }
-            .disposed(by: bag)
-        
-        // 저장했으니 이제 화면 닫기
-        output.saveAndDismiss
-            .bind(with: self) { owenr, _ in
+                
+            case .saveAndDismiss:
+                /// 저장했으니 이제 화면 닫기
                 HapticManager.shared.occurSuccess()
-                owenr.dismissTask?()
-                owenr.dismiss(animated: true)
+                dismissTask?()
+                dismiss(animated: true)
             }
-            .disposed(by: bag)
+        }
+        .store(in: &cancellables)
+    }
+    
+    @objc private func handleConfirmButtonEvent() {
+        input.send(.tappedConfirmButton)
+    }
+    
+    @objc private func handleCloseButtonEvent() {
+        input.send(.tappedCloseButton)
+    }
+}
+
+extension AddMedicineVC: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        // 그냥 화면 닫기
-        output.justDismiss
-            .bind(with: self) { owner, _ in
-                owner.dismiss(animated: true)
-            }
-            .disposed(by: bag)
+        /// 키보드의 done 버튼을 누르면 키보드 닫기
+        /// input으로 이벤트 안보내는 이유는 비효율적이라?
         
-        // 키보드의 done 버튼을 누르면 키보드 닫기
-        textField
-            .rx.controlEvent(.editingDidEndOnExit)
-            .subscribe()
-            .disposed(by: bag)
+        textField.endEditing(true)
+        return true
     }
 }
 
