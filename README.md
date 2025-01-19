@@ -1,7 +1,7 @@
 ![header](https://github.com/user-attachments/assets/dad0d43a-d66d-410c-827d-c149e596c8a3)
 
 ## 다운로드
-[![AppStore](https://apps.apple.com/kr/app/%EB%A7%88%EC%9D%8C%EB%A1%9D-%EB%AA%A8%EB%91%90%EC%9D%98-%EB%A7%88%EC%9D%8C%EC%9D%84-%EC%9C%84%ED%95%9C-%EB%B3%B5%EC%95%BD-%EA%B8%B0%EB%A1%9D-%EC%95%B1/id6661016604)
+[![AppStore](https://img.shields.io/badge/App_Store-0D96F6?style=for-the-badge&logo=app-store&logoColor=white)](https://apps.apple.com/kr/app/%EB%A7%88%EC%9D%8C%EB%A1%9D-%EB%AA%A8%EB%91%90%EC%9D%98-%EB%A7%88%EC%9D%8C%EC%9D%84-%EC%9C%84%ED%95%9C-%EB%B3%B5%EC%95%BD-%EA%B8%B0%EB%A1%9D-%EC%95%B1/id6661016604)
 
 <br/>
 
