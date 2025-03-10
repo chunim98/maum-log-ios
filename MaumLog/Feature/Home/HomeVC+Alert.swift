@@ -7,6 +7,8 @@
 
 import UIKit
 
+import RxSwift
+
 extension HomeVC {
     func presentRemoveAlert(item: any EditButtonCellModel) {
         switch item {
@@ -26,7 +28,7 @@ extension HomeVC {
                 acceptTitle: String(localized: "삭제"),
                 acceptTask: {
                     MedicineDataManager.shared.delete(target: item) // 등록한 약물 삭제
-                    self.medicineView.reloadCV.onNext(()) // 리로드 이벤트 전송
+                    self.medicineView.rx.reloadBinder.onNext(()) // 리로드 이벤트 전송
                 })
         default:
             print(#function, "예외 발생")

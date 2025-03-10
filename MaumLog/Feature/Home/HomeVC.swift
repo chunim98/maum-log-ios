@@ -18,7 +18,6 @@ final class HomeVC: UIViewController {
     
     private let homeVM = HomeVM()
     private let bag = DisposeBag()
-    private let once = OnlyOnce()
     
     // MARK: Components
     
@@ -63,9 +62,7 @@ final class HomeVC: UIViewController {
     }()
     
     let symptomView = SymptomSectionView()
-    
     let medicineView = MedicineSectionView()
-
     let calendarView = CalendarSectionView()
     
     // MARK: - Life Cycle
@@ -75,17 +72,10 @@ final class HomeVC: UIViewController {
         
         setNavigationBar(
             leftBarButtonItems: [UIBarButtonItem(customView: titleLabel)],
-            rightBarButtonItems: [goSettingsBarButton])
+            rightBarButtonItems: [goSettingsBarButton]
+        )
         setAutoLayout()
         setBinding()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        once.excute {
-//            symptomView.setCVLayout()
-            medicineView.setCVLayout()
-        }
     }
     
     // MARK: - Layout
@@ -114,7 +104,7 @@ final class HomeVC: UIViewController {
             .rx.controlEvent(.valueChanged).asObservable()
             .do(onNext: { [weak self] _ in
                 self?.symptomView.rx.reloadBinder.onNext(())
-                self?.medicineView.reloadCV.onNext(())
+                self?.medicineView.rx.reloadBinder.onNext(())
                 self?.calendarView.reloadCalender.onNext(())
             }) ?? .empty() // nil이면 아무것도 방출하지 않고 스트림 종료
 
@@ -123,8 +113,8 @@ final class HomeVC: UIViewController {
             startRefreshing: startRefreshing,
             goAddSymptom: symptomView.rx.addButtonTapEvent,
             presentRemoveSymptomAlert: symptomView.rx.itemToRemove,
-            goAddMedicine: medicineView.goAddMedicine.asObservable(),
-            presentRemoveMedicineAlert: medicineView.presentRemoveMedicineAlert.asObservable()
+            goAddMedicine: medicineView.rx.addButtonTapEvent,
+            presentRemoveMedicineAlert: medicineView.rx.itemToRemove
         )
         
         // MARK: - Output
@@ -179,7 +169,7 @@ final class HomeVC: UIViewController {
                     sheet.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
                 }
                 // 창을 닫을 때 리로드 메시지 전송
-                vc.dismissTask = { owner.medicineView.reloadCV.onNext(()) }
+                vc.dismissTask = { owner.medicineView.rx.reloadBinder.onNext(()) }
                 owner.present(vc, animated: true)
             }
             .disposed(by: bag)
