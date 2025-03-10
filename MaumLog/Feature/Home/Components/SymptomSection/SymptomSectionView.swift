@@ -50,12 +50,12 @@ final class SymptomSectionView: UIView {
     
     private func setBinding() {
         let input = SymptomSectionVM.Input(
-            tappedEditButton: headerView.rx.editButtonTapEvent
+            editButtonTapEvent: headerView.rx.editButtonTapEvent
         )
         let output = symptomSectionVM.transform(input: input)
         
         // 편집 상태 바인딩
-        output.isEditMode
+        output.isEditing
             .bind(to: headerView.rx.editButtonState, bodyView.rx.isEditing)
             .disposed(by: bag)
     }
