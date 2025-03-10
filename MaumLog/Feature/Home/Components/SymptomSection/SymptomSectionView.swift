@@ -21,7 +21,7 @@ final class SymptomSectionView: UIView {
     // MARK: Components
     
     private let sectionView = SectionView()
-    fileprivate let headerView = SymptomSectionHeaderView()
+    fileprivate let headerView = SectionHeaderView("등록된 증상")
     fileprivate let bodyView = SymptomSectionBodyView()
 
     // MARK: Life Cycle

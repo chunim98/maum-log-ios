@@ -66,7 +66,7 @@
 		51B923A92D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923A82D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift */; };
 		51B923AC2D7ED99A005DFB43 /* CircleAttachedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923AB2D7ED92F005DFB43 /* CircleAttachedLabel.swift */; };
 		51B923B12D7EE0FE005DFB43 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923B02D7EE0FE005DFB43 /* SectionView.swift */; };
-		51B923B32D7EE894005DFB43 /* SymptomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923B22D7EE894005DFB43 /* SymptomSectionHeaderView.swift */; };
+		51B923B32D7EE894005DFB43 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923B22D7EE894005DFB43 /* SectionHeaderView.swift */; };
 		51B923B72D7EEB11005DFB43 /* SymptomSectionBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923B62D7EEB11005DFB43 /* SymptomSectionBodyView.swift */; };
 		51B923BD2D7EF705005DFB43 /* SymptomSectionBodyVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923BC2D7EF703005DFB43 /* SymptomSectionBodyVM.swift */; };
 		51B923BF2D7EFEFC005DFB43 /* Array+SymptomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923BE2D7EFEF1005DFB43 /* Array+SymptomData.swift */; };
@@ -165,7 +165,7 @@
 		51B923A82D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDirectionalEdgeInsets+.swift"; sourceTree = "<group>"; };
 		51B923AB2D7ED92F005DFB43 /* CircleAttachedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAttachedLabel.swift; sourceTree = "<group>"; };
 		51B923B02D7EE0FE005DFB43 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
-		51B923B22D7EE894005DFB43 /* SymptomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionHeaderView.swift; sourceTree = "<group>"; };
+		51B923B22D7EE894005DFB43 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		51B923B62D7EEB11005DFB43 /* SymptomSectionBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionBodyView.swift; sourceTree = "<group>"; };
 		51B923BC2D7EF703005DFB43 /* SymptomSectionBodyVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionBodyVM.swift; sourceTree = "<group>"; };
 		51B923BE2D7EFEF1005DFB43 /* Array+SymptomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SymptomData.swift"; sourceTree = "<group>"; };
@@ -489,6 +489,7 @@
 				51F756FD2D01C7F7003FD254 /* CalendarSection */,
 				51B923AA2D7ED89E005DFB43 /* CapsuleCell */,
 				51B923AE2D7EE0D0005DFB43 /* SectionView */,
+				51B923B42D7EE96E005DFB43 /* SectionHeaderView */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -509,12 +510,12 @@
 			path = SectionView;
 			sourceTree = "<group>";
 		};
-		51B923B42D7EE96E005DFB43 /* SymptomSectionHeaderView */ = {
+		51B923B42D7EE96E005DFB43 /* SectionHeaderView */ = {
 			isa = PBXGroup;
 			children = (
-				51B923B22D7EE894005DFB43 /* SymptomSectionHeaderView.swift */,
+				51B923B22D7EE894005DFB43 /* SectionHeaderView.swift */,
 			);
-			path = SymptomSectionHeaderView;
+			path = SectionHeaderView;
 			sourceTree = "<group>";
 		};
 		51B923B52D7EEAF2005DFB43 /* SymptomSectionBodyView */ = {
@@ -558,7 +559,6 @@
 		51F756FB2D01C7B7003FD254 /* SymptomSection */ = {
 			isa = PBXGroup;
 			children = (
-				51B923B42D7EE96E005DFB43 /* SymptomSectionHeaderView */,
 				51B923B52D7EEAF2005DFB43 /* SymptomSectionBodyView */,
 				516130232C72300C0037127A /* SymptomSectionView.swift */,
 				51E7B71B2C7315FC00D6B7C4 /* SymptomSectionVM.swift */,
@@ -691,7 +691,7 @@
 				517E7F102C60FF730003AAA3 /* AddLogVC.swift in Sources */,
 				511831792C6C96D600B25184 /* LogSectionData.swift in Sources */,
 				51B923AC2D7ED99A005DFB43 /* CircleAttachedLabel.swift in Sources */,
-				51B923B32D7EE894005DFB43 /* SymptomSectionHeaderView.swift in Sources */,
+				51B923B32D7EE894005DFB43 /* SectionHeaderView.swift in Sources */,
 				517E7F162C6143BF0003AAA3 /* PendingLogCell.swift in Sources */,
 				51E4905E2C7DF15700F0150A /* EmptyView.swift in Sources */,
 				51B923BF2D7EFEFC005DFB43 /* Array+SymptomData.swift in Sources */,

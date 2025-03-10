@@ -1,5 +1,5 @@
 //
-//  SymptomSectionHeaderView.swift
+//  SectionHeaderView.swift
 //  MaumLog
 //
 //  Created by 신정욱 on 3/10/25.
@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
-final class SymptomSectionHeaderView: UIView {
+final class SectionHeaderView: UIView {
 
     // MARK: Components
     
@@ -26,7 +26,7 @@ final class SymptomSectionHeaderView: UIView {
     
     private let titleLabel = {
         let label = UILabel()
-        label.text = "등록된 증상"
+        label.text = "등록된 증상" // temp
         label.font = .boldSystemFont(ofSize: 18)
         label.textColor = .chuBlack
         return label
@@ -51,9 +51,13 @@ final class SymptomSectionHeaderView: UIView {
     }()
     
     // MARK: Life Cycle
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    
+    init(_ title: String, areButtonsHidden: Bool = false) {
+        self.titleLabel.text = title
+        self.editButton.isHidden = areButtonsHidden
+        self.addButton.isHidden = areButtonsHidden
+        super.init(frame: .zero)
+        
         setAutoLayout()
     }
     
@@ -76,7 +80,7 @@ final class SymptomSectionHeaderView: UIView {
 
 // MARK: - Reactive
 
-extension Reactive where Base: SymptomSectionHeaderView {
+extension Reactive where Base: SectionHeaderView {
     
     var editButtonState: Binder<Bool> {
         Binder(base) {
