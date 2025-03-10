@@ -17,7 +17,7 @@ extension HomeVC {
                 acceptTitle: String(localized: "삭제"),
                 acceptTask: {
                     SymptomDataManager.shared.delete(target: item) // 등록한 증상 삭제
-                    self.symptomView.reloadCV.onNext(()) // 리로드 메시지 전송
+                    self.symptomView.rx.reloadBinder.onNext(()) // 리로드 메시지 전송
                 })
         case let item as MedicineData:
             presentAlert(

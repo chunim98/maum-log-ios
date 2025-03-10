@@ -6,17 +6,22 @@
 //
 
 import UIKit
-import SnapKit
+
 import RxSwift
 import RxCocoa
 import RxDataSources
+import SnapKit
 
 final class HomeVC: UIViewController {
+    
+    // MARK: Properties
+    
     private let homeVM = HomeVM()
     private let bag = DisposeBag()
     private let once = OnlyOnce()
     
-    // MARK: - Components
+    // MARK: Components
+    
     let titleLabel = {
         let label = UILabel()
         label.text = String(localized: "대시보드")
@@ -78,7 +83,7 @@ final class HomeVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         once.excute {
-            symptomView.setCVLayout()
+//            symptomView.setCVLayout()
             medicineView.setCVLayout()
         }
     }
@@ -108,7 +113,7 @@ final class HomeVC: UIViewController {
         let startRefreshing = scrollview.refreshControl?
             .rx.controlEvent(.valueChanged).asObservable()
             .do(onNext: { [weak self] _ in
-                self?.symptomView.reloadCV.onNext(())
+                self?.symptomView.rx.reloadBinder.onNext(())
                 self?.medicineView.reloadCV.onNext(())
                 self?.calendarView.reloadCalender.onNext(())
             }) ?? .empty() // nil이면 아무것도 방출하지 않고 스트림 종료
@@ -116,10 +121,11 @@ final class HomeVC: UIViewController {
         let input = HomeVM.Input(
             tappedGoSettingsButton: goSettingsBarButton.rx.tap.asObservable(),
             startRefreshing: startRefreshing,
-            goAddSymptom: symptomView.goAddSymptom.asObservable(),
-            presentRemoveSymptomAlert: symptomView.presentRemoveSymptomAlert.asObservable(),
+            goAddSymptom: symptomView.rx.addButtonTapEvent,
+            presentRemoveSymptomAlert: symptomView.rx.itemToRemove,
             goAddMedicine: medicineView.goAddMedicine.asObservable(),
-            presentRemoveMedicineAlert: medicineView.presentRemoveMedicineAlert.asObservable())
+            presentRemoveMedicineAlert: medicineView.presentRemoveMedicineAlert.asObservable()
+        )
         
         // MARK: - Output
         let output = homeVM.transform(input)
@@ -151,7 +157,7 @@ final class HomeVC: UIViewController {
                     sheet.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
                 }
                 // 창을 닫을 때 리로드 메시지 전송
-                vc.dismissTask = { owner.symptomView.reloadCV.onNext(()) }
+                vc.dismissTask = { owner.symptomView.rx.reloadBinder.onNext(()) }
                 owner.present(vc, animated: true)
             }
             .disposed(by: bag)

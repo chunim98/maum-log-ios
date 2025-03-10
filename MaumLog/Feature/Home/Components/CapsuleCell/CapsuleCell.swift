@@ -13,7 +13,7 @@ import RxCocoa
 final class CapsuleCell: UICollectionViewCell {
 
     static let identifier = "CapsuleCell"
-    private let bag = DisposeBag()
+    let bag = DisposeBag()
     
     var item: (any EditButtonCellModel)?
     
