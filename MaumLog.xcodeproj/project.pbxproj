@@ -15,7 +15,6 @@
 		5122F4692C6B76CA0080A2D2 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 5122F4682C6B76CA0080A2D2 /* RxDataSources */; };
 		512445512C58C8910044B8A4 /* SymptomLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512445502C58C8910044B8A4 /* SymptomLogCell.swift */; };
 		5126AC822D01914B001625DB /* TrendCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5126AC812D019108001625DB /* TrendCalendarView.swift */; };
-		5126AC842D01A442001625DB /* TrendCalendarView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5126AC832D01A43E001625DB /* TrendCalendarView+Rx.swift */; };
 		512C87B72C752D5F0025A8A1 /* OutlinedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512C87B62C752D5F0025A8A1 /* OutlinedView.swift */; };
 		512C966D2C77AF4700FA1D22 /* DividerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512C966C2C77AF4700FA1D22 /* DividerView.swift */; };
 		513F6A402D04397500C5F071 /* EditButtonCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513F6A3F2D04397500C5F071 /* EditButtonCellModel.swift */; };
@@ -117,7 +116,6 @@
 		511831782C6C96D600B25184 /* LogSectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSectionData.swift; sourceTree = "<group>"; };
 		512445502C58C8910044B8A4 /* SymptomLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomLogCell.swift; sourceTree = "<group>"; };
 		5126AC812D019108001625DB /* TrendCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCalendarView.swift; sourceTree = "<group>"; };
-		5126AC832D01A43E001625DB /* TrendCalendarView+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrendCalendarView+Rx.swift"; sourceTree = "<group>"; };
 		512C87B62C752D5F0025A8A1 /* OutlinedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlinedView.swift; sourceTree = "<group>"; };
 		512C966C2C77AF4700FA1D22 /* DividerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerView.swift; sourceTree = "<group>"; };
 		513F6A3F2D04397500C5F071 /* EditButtonCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditButtonCellModel.swift; sourceTree = "<group>"; };
@@ -261,7 +259,6 @@
 			isa = PBXGroup;
 			children = (
 				5126AC812D019108001625DB /* TrendCalendarView.swift */,
-				5126AC832D01A43E001625DB /* TrendCalendarView+Rx.swift */,
 			);
 			path = TrendCalendarView;
 			sourceTree = "<group>";
@@ -724,7 +721,6 @@
 				51E490582C7DDC7100F0150A /* MedicineData.swift in Sources */,
 				5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */,
 				51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */,
-				5126AC842D01A442001625DB /* TrendCalendarView+Rx.swift in Sources */,
 				51E739AF2C6526AC00F957A3 /* AddSymptomVC.swift in Sources */,
 				518E5EF42CFDF97F0067DF38 /* DateFormatter+.swift in Sources */,
 				518E5EF22CFDF9730067DF38 /* UICollectionView+.swift in Sources */,

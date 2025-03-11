@@ -105,7 +105,7 @@ final class HomeVC: UIViewController {
             .do(onNext: { [weak self] _ in
                 self?.symptomView.rx.reloadBinder.onNext(())
                 self?.medicineView.rx.reloadBinder.onNext(())
-                self?.calendarView.reloadCalender.onNext(())
+                self?.calendarView.rx.reloadBinder.onNext(())
             }) ?? .empty() // nil이면 아무것도 방출하지 않고 스트림 종료
 
         let input = HomeVM.Input(
