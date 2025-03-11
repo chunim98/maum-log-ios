@@ -90,7 +90,8 @@ final class MedicineSectionBodyView: UIView {
     private func setBinding() {
         let input = MedicineSectionBodyVM.Input(
             isEditing: isEditing.asObservable(),
-            reloadEvent: reloadEvent.asObservable()
+            reloadEvent: reloadEvent.asObservable(),
+            itemToRemove: medicineCV.rx.modelSelected(EditButtonCellModel.self).asObservable()
         )
         let output = medicineSectionBodyVM.transform(input)
         
@@ -109,6 +110,11 @@ final class MedicineSectionBodyView: UIView {
         // 셀 데이터가 비어있으면, 대체 화면 표시
         output.isDataEmpty
             .bind(to: self.rx.cvBackgroundView)
+            .disposed(by: bag)
+        
+        // 편집 상태일 때, 삭제할 아이템 전달
+        output.itemToRemove
+            .bind(to: itemToRemove)
             .disposed(by: bag)
     }
     
@@ -136,10 +142,7 @@ final class MedicineSectionBodyView: UIView {
                 for: indexPath
             ) as? CapsuleCell
             else { return UICollectionViewCell() }
-            cell.configure(item: data)
-            cell.rx.itemToRemove
-                .bind(to: self.itemToRemove)
-                .disposed(by: cell.bag)
+            cell.configure(data)
             return cell
         }
     }
@@ -159,7 +162,7 @@ extension Reactive where Base: MedicineSectionBodyView {
             let height = base.medicineCV.collectionViewLayout.collectionViewContentSize.height
             
             UIView.animate(withDuration: 0.5) {
-                base.medicineCV.snp.updateConstraints { $0.height.equalTo(max(50, height)) }
+                base.medicineCV.snp.updateConstraints { $0.height.equalTo(max(30, height)) }
                 base.layoutIfNeeded()
             }
         }

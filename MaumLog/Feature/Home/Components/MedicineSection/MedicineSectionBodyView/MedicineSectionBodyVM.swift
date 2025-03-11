@@ -15,12 +15,14 @@ final class MedicineSectionBodyVM {
     struct Input {
         let isEditing: Observable<Bool>
         let reloadEvent: Observable<Void>
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     struct Output {
         let medicineSectionDataArr: Observable<[MedicineSectionData]>
         let reloadEvent: Observable<Void>
         let isDataEmpty: Observable<Bool>
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     private let bag = DisposeBag()
@@ -48,10 +50,16 @@ final class MedicineSectionBodyVM {
         let isDataEmpty = medicineSectionDataArr
             .map { $0.cellDataArr.isEmpty }
         
+        // 편집 상태일 때, 삭제할 아이템 전달
+        let itemToRemove = input.itemToRemove
+            .withLatestFrom(input.isEditing) { $1 ? $0 : nil }
+            .compactMap { $0 }
+        
         return Output(
             medicineSectionDataArr: medicineSectionDataArr,
             reloadEvent: input.reloadEvent,
-            isDataEmpty: isDataEmpty
+            isDataEmpty: isDataEmpty,
+            itemToRemove: itemToRemove
         )
     }
 }

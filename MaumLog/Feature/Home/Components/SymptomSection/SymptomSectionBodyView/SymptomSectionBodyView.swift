@@ -48,7 +48,7 @@ final class SymptomSectionBodyView: UIView {
         cv.register(CapsuleCell.self, forCellWithReuseIdentifier: CapsuleCell.identifier)
         cv.showsVerticalScrollIndicator = false
         cv.backgroundColor = .clear
-        cv.layer.cornerRadius = 25
+        cv.layer.cornerRadius = 15
         cv.clipsToBounds = true
         return cv
     }()
@@ -58,7 +58,7 @@ final class SymptomSectionBodyView: UIView {
         cv.register(CapsuleCell.self, forCellWithReuseIdentifier: CapsuleCell.identifier)
         cv.showsVerticalScrollIndicator = false
         cv.backgroundColor = .clear
-        cv.layer.cornerRadius = 25
+        cv.layer.cornerRadius = 15
         cv.clipsToBounds = true
         return cv
     }()
@@ -114,9 +114,15 @@ final class SymptomSectionBodyView: UIView {
     // MARK: Binding
     
     private func setBinding() {
+        let selectedModel = Observable.merge(
+            negativeCV.rx.modelSelected(EditButtonCellModel.self).asObservable(),
+            otherCV.rx.modelSelected(EditButtonCellModel.self).asObservable()
+        )
+        
         let input = SymptomSectionBodyVM.Input(
             isEditing: isEditing.asObservable(),
-            reloadEvent: reloadEvent.asObservable()
+            reloadEvent: reloadEvent.asObservable(),
+            selectedModel: selectedModel
         )
         let output = symptomSectionBodyVM.transform(input)
         
@@ -148,6 +154,11 @@ final class SymptomSectionBodyView: UIView {
         output.isOtherDataEmpty
             .bind(to: self.rx.otherCVBackgroundView)
             .disposed(by: bag)
+        
+        // 편집 상태일 때, 삭제할 아이템 전달
+        output.itemToRemove
+            .bind(to: itemToRemove)
+            .disposed(by: bag)
     }
     
     // MARK: Rx Data Sources
@@ -174,10 +185,7 @@ final class SymptomSectionBodyView: UIView {
                 for: indexPath
             ) as? CapsuleCell
             else { return UICollectionViewCell() }
-            cell.configure(item: data)
-            cell.rx.itemToRemove
-                .bind(to: self.itemToRemove)
-                .disposed(by: cell.bag)
+            cell.configure(data)
             return cell
         }
     }
@@ -221,7 +229,6 @@ extension Reactive where Base: SymptomSectionBodyView {
     fileprivate var otherCVBackgroundView: Binder<Bool> {
         Binder(base) { $0.otherCV.backgroundView = $1 ? $0.otherEmptyView : .none }
     }
-
     
     var isEditing: Binder<Bool> {
         Binder(base) { $0.isEditing.onNext($1) }

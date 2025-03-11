@@ -7,8 +7,6 @@
 
 import UIKit
 
-import RxSwift
-import RxCocoa
 import SnapKit
 
 final class CapsuleCell: UICollectionViewCell {
@@ -16,55 +14,38 @@ final class CapsuleCell: UICollectionViewCell {
     // MARK: Properties
     
     static let identifier = "CapsuleCell"
-    let bag = DisposeBag()
-    var item: (any EditButtonCellModel)?
-    
-    // MARK: Interface
-    
-    fileprivate let itemToRemove = PublishSubject<EditButtonCellModel>()
     
     // MARK: Components
     
-    let button = {
-        var config = UIButton.Configuration.filled()
-        config.attributedTitle = AttributedString(
-            "버튼",
-            attributes: .chuBoldTitle(ofSize: 18)
-        ) // temp
-        config.titleLineBreakMode = .byTruncatingTail
-        config.baseForegroundColor = .chuWhite
-        config.baseBackgroundColor = .chuColorPalette[5] // temp
-        config.cornerStyle = .capsule
-        
-        let button = UIButton(configuration: config)
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.titleLabel?.minimumScaleFactor = 0.7
-        button.clipsToBounds = true
-        button.isHidden = false // temp
-        return button
+    private let mainHStack = {
+        let sv = UIStackView()
+        sv.directionalLayoutMargins = .init(horizontal: 15)
+        sv.isLayoutMarginsRelativeArrangement = true
+        sv.backgroundColor = .chuBadRate // temp
+        sv.layer.cornerRadius = 15
+        sv.clipsToBounds = true
+        return sv
     }()
     
-    let editButton = {
-        var config = UIButton.Configuration.filled()
-        config.image = UIImage(systemName: "multiply.circle.fill")?
-            .applyingSymbolConfiguration(.init(pointSize: 15))
-        config.imagePlacement = .trailing
-        config.imagePadding = 5
-        config.attributedTitle = AttributedString(
-            "버튼",
-            attributes: .chuBoldTitle(ofSize: 18)
-        ) // temp
-        config.titleLineBreakMode = .byTruncatingTail
-        config.baseForegroundColor = .chuWhite
-        config.baseBackgroundColor = .chuColorPalette[5] // temp
-        config.cornerStyle = .capsule
-        
-        let button = UIButton(configuration: config)
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.titleLabel?.minimumScaleFactor = 0.7
-        button.clipsToBounds = true
-        button.isHidden = true // temp
-        return button
+    private let titleLabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 18)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
+        label.textAlignment = .center
+        label.textColor = .chuWhite
+        label.text = "증상명" // temp
+        return label
+    }()
+    
+    private let imageView = {
+        let iv = UIImageView()
+        iv.image = UIImage(systemName: "multiply.circle.fill")?
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(.chuWhite)
+        iv.contentMode = .scaleAspectFit
+        iv.isHidden = true // temp
+        return iv
     }()
     
     // MARK: Life Cycle
@@ -72,7 +53,6 @@ final class CapsuleCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
-        setBinding()
     }
     
     required init?(coder: NSCoder) {
@@ -82,51 +62,23 @@ final class CapsuleCell: UICollectionViewCell {
     // MARK: Layout
     
     private func setAutoLayout() {
-        contentView.addSubview(button)
-        contentView.addSubview(editButton)
-        
-        button.snp.makeConstraints { $0.edges.equalToSuperview() }
-        editButton.snp.makeConstraints { $0.edges.equalToSuperview() }
+        contentView.addSubview(mainHStack)
+        mainHStack.addArrangedSubview(titleLabel)
+        mainHStack.addArrangedSubview(imageView)
+
+        mainHStack.snp.makeConstraints { $0.edges.equalToSuperview() }
+        imageView.snp.makeConstraints { $0.size.equalTo(15) }
     }
     
-    // MARK: Binding
+    // MARK: Configure
     
-    private func setBinding() {
-        editButton
-            .rx.tap
-            .bind(with: self) { owner, _ in
-                guard let item = owner.item else { return }
-                owner.itemToRemove.onNext(item)
-            }
-            .disposed(by: bag)
-    }
-    
-    func configure(item: CapsuleCellModel) {
-        self.item = item
-        button.configuration?.attributedTitle = AttributedString(
-            item.name,
-            attributes: .chuBoldTitle(ofSize: 18)
-        )
-        button.configuration?.baseBackgroundColor = item.hex.toUIColor
-        button.isHidden = item.isEditMode
-        
-        editButton.configuration?.attributedTitle = AttributedString(
-            item.name,
-            attributes: .chuBoldTitle(ofSize: 18)
-        )
-        editButton.configuration?.baseBackgroundColor = item.hex.toUIColor
-        editButton.isHidden = !(item.isEditMode)
+    func configure(_ data: CapsuleCellModel) {
+        mainHStack.backgroundColor = data.hex.toUIColor
+        imageView.isHidden = !data.isEditMode
+        titleLabel.text = data.name
     }
 }
 
 #Preview(traits: .fixedLayout(width: 100, height: 50)) {
     CapsuleCell()
-}
-
-// MARK: - Reactive
-
-extension Reactive where Base: CapsuleCell {
-    var itemToRemove: Observable<EditButtonCellModel> {
-        base.itemToRemove.asObservable()
-    }
 }

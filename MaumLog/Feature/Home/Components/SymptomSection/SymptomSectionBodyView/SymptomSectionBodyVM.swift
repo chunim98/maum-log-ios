@@ -15,6 +15,7 @@ final class SymptomSectionBodyVM {
     struct Input {
         let isEditing: Observable<Bool>
         let reloadEvent: Observable<Void>
+        let selectedModel: Observable<EditButtonCellModel>
     }
     
     struct Output {
@@ -23,7 +24,7 @@ final class SymptomSectionBodyVM {
         let reloadEvent: Observable<Void>
         let isNegativeDataEmpty: Observable<Bool>
         let isOtherDataEmpty: Observable<Bool>
-
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     private let bag = DisposeBag()
@@ -63,12 +64,18 @@ final class SymptomSectionBodyVM {
         let isOtherDataEmpty = otherSectionDataArr
             .map { $0.cellDataArr.isEmpty }
         
+        // 편집 상태일 때, 삭제할 아이템 전달
+        let itemToRemove = input.selectedModel
+            .withLatestFrom(input.isEditing) { $1 ? $0 : nil }
+            .compactMap { $0 }
+        
         return Output(
             negativeSectionDataArr: negativeSectionDataArr,
             otherSectionDataArr: otherSectionDataArr,
             reloadEvent: input.reloadEvent,
             isNegativeDataEmpty: isNegativeDataEmpty,
-            isOtherDataEmpty: isOtherDataEmpty
+            isOtherDataEmpty: isOtherDataEmpty,
+            itemToRemove: itemToRemove
         )
     }
 }
