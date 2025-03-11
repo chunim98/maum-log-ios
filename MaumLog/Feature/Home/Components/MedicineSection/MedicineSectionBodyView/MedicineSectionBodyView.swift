@@ -137,7 +137,7 @@ final class MedicineSectionBodyView: UIView {
             ) as? CapsuleCell
             else { return UICollectionViewCell() }
             cell.configure(item: data)
-            cell.itemToRemove
+            cell.rx.itemToRemove
                 .bind(to: self.itemToRemove)
                 .disposed(by: cell.bag)
             return cell
