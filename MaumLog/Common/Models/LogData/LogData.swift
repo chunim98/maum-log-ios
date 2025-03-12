@@ -13,6 +13,20 @@ struct LogData: EditButtonCellModel {
     let symptomCards: [SymptomCardData]
     let medicineCards: [MedicineCardData]
     var isEditMode: Bool = false // 코어데이터에 저장안되는 변수
+    
+    func updated(
+        date: Date? = nil,
+        symptomCards: [SymptomCardData]? = nil,
+        medicineCards: [MedicineCardData]? = nil,
+        isEditMode: Bool? = nil
+    ) -> Self {
+        LogData(
+            date: date ?? self.date,
+            symptomCards: symptomCards ?? self.symptomCards,
+            medicineCards: medicineCards ?? self.medicineCards,
+            isEditMode: isEditMode ?? self.isEditMode
+        )
+    }
 }
 
 extension LogData: Equatable, IdentifiableType {

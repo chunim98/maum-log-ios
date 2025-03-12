@@ -70,40 +70,11 @@ final class LogVM {
             .do(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 }) // 설정값 보존
             .bind(to: isAscendingOrder)
             .disposed(by: bag)
-
         
-        // 로그데이터, 편집모드 여부, 오름차 정렬 여부 조합해서 sectionData로 내보냄 (꽤 복잡하다)
+        // 로그, 편집, 정렬 상태를 조합해서 sectionData로 만듦
         let logSectionDataArr = Observable
             .combineLatest(logDataArr, isEditing, isAscendingOrder)
-            .map { data, editMode, isAscendingOrder in
-                
-                // 편집모드인지 아닌지 수정해주는 코드(기본값 false)
-                let logData = data.map {
-                    var log = $0
-                    log.isEditMode = editMode
-                    return log
-                }
-                
-                // 포메터로 문자열화 된 날짜 기준 그루핑 (헤더로 사용할거라 DateComponant는 사용불가)
-                let grouped = Dictionary(grouping: logData) { DateFormatter.forSort.string(from: $0.date) }
-                // 딕셔너리 map돌리기
-                var sectionData = grouped.map { LogSectionData(items: $1, dateForSorting: $0) }
-                // 순서가 섞여있을테니 정렬(오름차순)
-                sectionData.sort()
-                
-                if isAscendingOrder {
-                    for i in 0..<sectionData.count {
-                        // 내림차순이었던 내부 데이터를 오름차순으로 변경
-                        sectionData[i].items.reverse()
-                    }
-                } else {
-                    // 내림차순으로 정렬 (내부 데이터 내림차순)
-                    sectionData.reverse()
-                }
-                
-                return sectionData
-            }
-            .share(replay: 1)
+            .compactMap { [weak self] in self?.getLogSectionDataArr($0, $1, $2) }
         
         // 기록 추가 모달 띄우기
         let pushAddLogEvent = input.barButtonEvent
@@ -121,14 +92,7 @@ final class LogVM {
         
         // 약물 섭취 기록 추가 (등록된 약이 있을 경우에만)
         input.takeMedicineButtonTapEvent
-            .filter { !(MedicineDataManager.shared.read().isEmpty) }
-            .map {
-                let data = MedicineDataManager.shared.read()
-                let mediCardData = data.map { MedicineCardData(name: $0.name) }
-                LogDataManager.shared.create(from: mediCardData)
-                // 업데이트가 반영된 값 불러오기
-                return LogDataManager.shared.read()
-            }
+            .compactMap { [weak self] _ in self?.appendMedicineLog() }
             .bind(to: logDataArr)
             .disposed(by: bag)
         
@@ -147,5 +111,35 @@ final class LogVM {
             presentTakeMedicineAlertEvent: presentTakeMedicineAlertEvent,
             itemToRemove: input.itemToRemove
         )
+    }
+    
+    // MARK: Methods
+    
+    private func getLogSectionDataArr(
+        _ logDataArr: [LogData],
+        _ isEditing: Bool,
+        _ isAscending: Bool
+    ) -> [LogSectionData] {
+        Dictionary(
+            grouping: logDataArr.map { $0.updated(isEditMode: isEditing) } // 편집 상태 반영
+        ) {
+            // 문자열화 된 날짜 기준 그루핑 (헤더로 사용할거라 DateComponant는 사용불가)
+            DateFormatter.forSort.string(from: $0.date)
+        }.map {
+            let items = isAscending ? $1.reversed() : $1 // 내부 데이터도 정렬
+            return LogSectionData(items: items, dateForSorting: $0)
+        }.sorted {
+            isAscending ? ($0 < $1) : ($0 > $1)
+        }
+    }
+    
+    private func appendMedicineLog() -> [LogData]? {
+        let mediData = MedicineDataManager.shared.read()
+        guard !mediData.isEmpty else { return nil }
+        
+        let mediCardData = mediData.map { MedicineCardData(name: $0.name) }
+        LogDataManager.shared.create(from: mediCardData)
+        
+        return LogDataManager.shared.read() // 업데이트가 반영된 값 불러오기
     }
 }
