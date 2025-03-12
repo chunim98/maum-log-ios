@@ -13,9 +13,8 @@ import RxCocoa
 final class LogVM {
 
     struct Input {
-        let barButtonEvent: Observable<BarButtonEvent>
+        let buttonEvent: Observable<LogVCButtonEvent>
         let reloadEvent: Observable<Void>
-        let takeMedicineButtonTapEvent: Observable<Void>
         let itemToRemove: Observable<EditButtonCellModel>
     }
     
@@ -39,6 +38,13 @@ final class LogVM {
         let isAscendingOrder = BehaviorSubject<Bool>(
             value: SettingValuesStorage.shared.isAscendingOrder
         )
+        
+        // 버튼 이벤트 분기한 프로퍼티
+        let sortByDescendingEvent = input.buttonEvent.filter { $0 == .sortByDescending }
+        let sortByAscendingEvent = input.buttonEvent.filter { $0 == .sortByAscending }
+        let pushAddLogEvent_ = input.buttonEvent.filter { $0 == .pushAddLog }
+        let intakeEvent = input.buttonEvent.filter { $0 == .intake }
+        let editEvent = input.buttonEvent.filter { $0 == .edit }
 
         // 로그 테이블 뷰 리로드
         input.reloadEvent
@@ -46,27 +52,26 @@ final class LogVM {
             .bind(to: logDataArr)
             .disposed(by: bag)
         
-        // 하나도 기록한 게 없는지
+        // 기록이 없다면 백그라운드 뷰 표시
         let isDataEmpty = logDataArr
             .map { $0.isEmpty }
         
         // 편집 모드 상태 전환
-        input.barButtonEvent
-            .filter { $0 == .edit }
+        editEvent
             .withLatestFrom(isEditing) { _, bool in !bool }
             .bind(to: isEditing)
             .disposed(by: bag)
         
         // 오름차 순 정렬
-        input.barButtonEvent
-            .compactMap { ($0 == .sortByAscending) ? false : nil }
+        sortByAscendingEvent
+            .map { _ in false }
             .do(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 }) // 설정값 보존
             .bind(to: isAscendingOrder)
             .disposed(by: bag)
         
         // 내림차 순 정렬
-        input.barButtonEvent
-            .compactMap { ($0 == .sortByDescending) ? true : nil }
+        sortByDescendingEvent
+            .map { _ in true }
             .do(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 }) // 설정값 보존
             .bind(to: isAscendingOrder)
             .disposed(by: bag)
@@ -77,29 +82,31 @@ final class LogVM {
             .compactMap { [weak self] in self?.getLogSectionDataArr($0, $1, $2) }
         
         // 기록 추가 모달 띄우기
-        let pushAddLogEvent = input.barButtonEvent
-            .filter { ($0 == .pushAddLog) && !(SymptomDataManager.shared.read().isEmpty) }
+        let pushAddLogEvent = pushAddLogEvent_
+            .filter { _ in !(SymptomDataManager.shared.read().isEmpty) }
             .map { _ in }
         
         // 등록한 증상이 없다면 증상 부터 등록하라는 얼럿 띄우기
-        let presentShouldAddSymptomAlertEvent = input.barButtonEvent
-            .filter { ($0 == .pushAddLog) && SymptomDataManager.shared.read().isEmpty }
+        let presentShouldAddSymptomAlertEvent = pushAddLogEvent_
+            .filter { _ in SymptomDataManager.shared.read().isEmpty }
             .map { _ in }
         
         // 등록한 약이 없다면 먼저 등록부터 하라는 얼럿 띄우기
-        let presentShouldAddMedicineAlertEvent = input.takeMedicineButtonTapEvent
-            .filter { MedicineDataManager.shared.read().isEmpty }
+        let presentShouldAddMedicineAlertEvent = intakeEvent
+            .filter { _ in MedicineDataManager.shared.read().isEmpty }
+            .map { _ in }
         
         // 약물 섭취 기록 추가 (등록된 약이 있을 경우에만)
-        input.takeMedicineButtonTapEvent
+        intakeEvent
             .compactMap { [weak self] _ in self?.appendMedicineLog() }
             .bind(to: logDataArr)
             .disposed(by: bag)
         
         // 약 먹었다는 얼럿 띄우기 (등록된 약이 있을 경우에만)
-        let presentTakeMedicineAlertEvent = input.takeMedicineButtonTapEvent
-            .filter { !(MedicineDataManager.shared.read().isEmpty) }
-        
+        let presentTakeMedicineAlertEvent = intakeEvent
+            .filter { _ in !(MedicineDataManager.shared.read().isEmpty) }
+            .map { _ in }
+
         return Output(
             pushAddLogEvent: pushAddLogEvent,
             presentShouldAddSymptomAlertEvent: presentShouldAddSymptomAlertEvent,

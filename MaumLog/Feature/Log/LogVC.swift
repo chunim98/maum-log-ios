@@ -42,8 +42,14 @@ final class LogVC: UIViewController {
     
     fileprivate let logTV: UITableView = {
         let tv = UITableView(frame: .zero, style: .grouped)
-        tv.register(SymptomLogCell.self, forCellReuseIdentifier: SymptomLogCell.identifier)
-        tv.register(MedicineLogCell.self, forCellReuseIdentifier: MedicineLogCell.identifier)
+        tv.register(
+            SymptomLogCell.self,
+            forCellReuseIdentifier: SymptomLogCell.identifier
+        )
+        tv.register(
+            MedicineLogCell.self,
+            forCellReuseIdentifier: MedicineLogCell.identifier
+        )
         tv.separatorStyle = .none
         tv.backgroundColor = .clear
         tv.clipsToBounds = false
@@ -57,37 +63,13 @@ final class LogVC: UIViewController {
         spacing: 30
     )
     
-    private let addLogButton: UIButton = {
-        var config = UIButton.Configuration.filled()
-        config.image = UIImage(named: "plus")?
-            .resizeImage(newWidth: 30)
-            .withRenderingMode(.alwaysTemplate)
-        config.baseForegroundColor = .chuWhite
-        config.baseBackgroundColor = .chuTint
-        config.cornerStyle = .capsule
-        let button = UIButton(configuration: config)
-        button.layer.shadowOpacity = 0.75
-        button.layer.shadowColor = UIColor.gray.cgColor
-        button.layer.shadowRadius = 5
-        button.layer.shadowOffset = CGSize(width: 0, height: 0)
-        return button
-    }()
+    private let addLogButton = CircleButton(
+        UIImage(named: "plus")?.resizeImage(newWidth: 30)
+    )
     
-    private let takeMedicineButton: UIButton = {
-        var config = UIButton.Configuration.filled()
-        config.image = UIImage(named: "takeMedicine")?
-            .resizeImage(newWidth: 25)
-            .withRenderingMode(.alwaysTemplate) // 이거 안하면 이미지 색이 안바뀜
-        config.baseForegroundColor = .chuWhite
-        config.baseBackgroundColor = .chuTint
-        config.cornerStyle = .capsule
-        let button = UIButton(configuration: config)
-        button.layer.shadowOpacity = 0.75
-        button.layer.shadowColor = UIColor.gray.cgColor
-        button.layer.shadowRadius = 5
-        button.layer.shadowOffset = CGSize(width: 0, height: 0)
-        return button
-    }()
+    private let intakeButton = CircleButton(
+        UIImage(named: "takeMedicine")?.resizeImage(newWidth: 25)
+    )
 
     // MARK: Life Cycle
     
@@ -107,7 +89,7 @@ final class LogVC: UIViewController {
     private func setAutoLayout() {
         view.addSubview(logTV)
         view.addSubview(addLogButton)
-        view.addSubview(takeMedicineButton)
+        view.addSubview(intakeButton)
         
         logTV.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
@@ -116,7 +98,7 @@ final class LogVC: UIViewController {
             $0.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
             $0.size.equalTo(50)
         }
-        takeMedicineButton.snp.makeConstraints {
+        intakeButton.snp.makeConstraints {
             $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
             $0.bottom.equalTo(addLogButton.snp.top).offset(-15)
             $0.size.equalTo(35)
@@ -126,16 +108,17 @@ final class LogVC: UIViewController {
     // MARK: Binding
     
     private func setBinding() {
-        let barButtonEvent = Observable.merge(
+        let buttonEvent = Observable.merge(
             addLogBarButton.rx.event,
             pullDownBarButton.rx.event,
-            endEditingBarButton.rx.event
+            endEditingBarButton.rx.event,
+            intakeButton.rx.tap.map { _ in LogVCButtonEvent.intake },
+            addLogButton.rx.tap.map { _ in LogVCButtonEvent.pushAddLog }
         )
         
         let input = LogVM.Input(
-            barButtonEvent: barButtonEvent,
+            buttonEvent: buttonEvent,
             reloadEvent: reloadSectionData.asObservable(),
-            takeMedicineButtonTapEvent: takeMedicineButton.rx.tap.asObservable(),
             itemToRemove: itemToRemove.asObservable()
         )
         let output = logVM.transform(input)
@@ -160,7 +143,7 @@ final class LogVC: UIViewController {
             .bind(to: self.rx.barButtonAppearance)
             .disposed(by: bag)
         
-        // 기록이 없으면 이미지 표시
+        // 기록이 없다면 백그라운드 뷰 표시
         output.isDataEmpty
             .bind(to: self.rx.logTVBackgroundView)
             .disposed(by: bag)
@@ -180,6 +163,7 @@ final class LogVC: UIViewController {
             .bind(to: pullDownBarButton.rx.sortState)
             .disposed(by: bag)
         
+        // 삭제할 기록 바인딩
         output.itemToRemove
             .bind(to: self.rx.presentRemoveAlertBinder)
             .disposed(by: bag)

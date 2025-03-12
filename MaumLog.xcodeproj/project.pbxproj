@@ -32,7 +32,7 @@
 		51563D7A2C52E509005BBCC2 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 51563D792C52E509005BBCC2 /* RxCocoa */; };
 		51563D7C2C52E509005BBCC2 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 51563D7B2C52E509005BBCC2 /* RxRelay */; };
 		515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */; };
-		515AFCF12D81A6CB0095CE93 /* BarButtonEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF02D81A6CA0095CE93 /* BarButtonEvent.swift */; };
+		515AFCF12D81A6CB0095CE93 /* LogVCButtonEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF02D81A6CA0095CE93 /* LogVCButtonEvent.swift */; };
 		515AFCF32D81A8770095CE93 /* PullDownBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */; };
 		515AFCF52D81B4190095CE93 /* EndEditingBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */; };
 		515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */; };
@@ -46,6 +46,7 @@
 		517E7F162C6143BF0003AAA3 /* PendingLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517E7F152C6143BF0003AAA3 /* PendingLogCell.swift */; };
 		517E7F192C61458A0003AAA3 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 517E7F182C61458A0003AAA3 /* SnapKit */; };
 		518386E72C64087700437696 /* PropertyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518386E62C64087700437696 /* PropertyWrapper.swift */; };
+		51869B232D81D55E008EFB7D /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51869B222D81D55D008EFB7D /* CircleButton.swift */; };
 		5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5188EC752C6696B3004873D1 /* SettingsVM.swift */; };
 		5188EC782C66979C004873D1 /* ButtonTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5188EC772C66979C004873D1 /* ButtonTypeCell.swift */; };
 		518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EEB2CFDF9380067DF38 /* UIColor+.swift */; };
@@ -137,7 +138,7 @@
 		51563D722C52E09B005BBCC2 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		51563D752C52E0E7005BBCC2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogBarButton.swift; sourceTree = "<group>"; };
-		515AFCF02D81A6CA0095CE93 /* BarButtonEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarButtonEvent.swift; sourceTree = "<group>"; };
+		515AFCF02D81A6CA0095CE93 /* LogVCButtonEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogVCButtonEvent.swift; sourceTree = "<group>"; };
 		515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullDownBarButton.swift; sourceTree = "<group>"; };
 		515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndEditingBarButton.swift; sourceTree = "<group>"; };
 		515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedRateCardCell.swift; sourceTree = "<group>"; };
@@ -150,6 +151,7 @@
 		517E7F132C6142A00003AAA3 /* AddLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogVM.swift; sourceTree = "<group>"; };
 		517E7F152C6143BF0003AAA3 /* PendingLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingLogCell.swift; sourceTree = "<group>"; };
 		518386E62C64087700437696 /* PropertyWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyWrapper.swift; sourceTree = "<group>"; };
+		51869B222D81D55D008EFB7D /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
 		5188EC752C6696B3004873D1 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
 		5188EC772C66979C004873D1 /* ButtonTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTypeCell.swift; sourceTree = "<group>"; };
 		518E5EEB2CFDF9380067DF38 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		511601782D03375200F19A36 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				51869B212D81D493008EFB7D /* CircleButton */,
 				515AFCED2D81A66A0095CE93 /* BarButtons */,
 				515AFCF72D81C3CF0095CE93 /* CardCells */,
 				515AFCF62D81C3C20095CE93 /* LogCells */,
@@ -309,7 +312,6 @@
 				515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */,
 				515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */,
 				515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */,
-				515AFCF02D81A6CA0095CE93 /* BarButtonEvent.swift */,
 			);
 			path = BarButtons;
 			sourceTree = "<group>";
@@ -357,6 +359,14 @@
 				518386E62C64087700437696 /* PropertyWrapper.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		51869B212D81D493008EFB7D /* CircleButton */ = {
+			isa = PBXGroup;
+			children = (
+				51869B222D81D55D008EFB7D /* CircleButton.swift */,
+			);
+			path = CircleButton;
 			sourceTree = "<group>";
 		};
 		518E5EDF2CFDF35C0067DF38 /* Feature */ = {
@@ -410,6 +420,7 @@
 				51412A0F2C5EB2D900381B7C /* LogVC.swift */,
 				511601792D035EB900F19A36 /* LogVC+Alert.swift */,
 				51412A112C5EB7CB00381B7C /* LogVM.swift */,
+				515AFCF02D81A6CA0095CE93 /* LogVCButtonEvent.swift */,
 			);
 			path = Log;
 			sourceTree = "<group>";
@@ -734,7 +745,7 @@
 				51FE74A62C7CB8C500EDA685 /* MedicineCardCell.swift in Sources */,
 				518386E72C64087700437696 /* PropertyWrapper.swift in Sources */,
 				5103A24A2C555643008F8218 /* HomeVM.swift in Sources */,
-				515AFCF12D81A6CB0095CE93 /* BarButtonEvent.swift in Sources */,
+				515AFCF12D81A6CB0095CE93 /* LogVCButtonEvent.swift in Sources */,
 				5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */,
 				51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */,
 				518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */,
@@ -805,6 +816,7 @@
 				51FE749E2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataProperties.swift in Sources */,
 				51FE749F2C7CA29400EDA685 /* SymptomCardCoreData+CoreDataClass.swift in Sources */,
 				51FE74A02C7CA29400EDA685 /* SymptomCardCoreData+CoreDataProperties.swift in Sources */,
+				51869B232D81D55E008EFB7D /* CircleButton.swift in Sources */,
 				518E5EFA2CFDF9AB0067DF38 /* Int32+.swift in Sources */,
 				51FE74A42C7CB7CC00EDA685 /* MedicineLogCell.swift in Sources */,
 				51FE74A12C7CA29400EDA685 /* SymptomCoreData+CoreDataClass.swift in Sources */,

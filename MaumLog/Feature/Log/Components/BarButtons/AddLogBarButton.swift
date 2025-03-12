@@ -29,5 +29,5 @@ final class AddLogBarButton: UIBarButtonItem {
 // MARK: - Reactive
 
 extension Reactive where Base: AddLogBarButton {
-    var event: Observable<BarButtonEvent> { base.rx.tap.map { _ in .pushAddLog } }
+    var event: Observable<LogVCButtonEvent> { base.rx.tap.map { _ in .pushAddLog } }
 }
