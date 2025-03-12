@@ -254,10 +254,8 @@
 			isa = PBXGroup;
 			children = (
 				515AFCED2D81A66A0095CE93 /* BarButtons */,
-				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
-				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
-				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
-				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
+				515AFCF72D81C3CF0095CE93 /* CardCells */,
+				515AFCF62D81C3C20095CE93 /* LogCells */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -314,6 +312,24 @@
 				515AFCF02D81A6CA0095CE93 /* BarButtonEvent.swift */,
 			);
 			path = BarButtons;
+			sourceTree = "<group>";
+		};
+		515AFCF62D81C3C20095CE93 /* LogCells */ = {
+			isa = PBXGroup;
+			children = (
+				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
+				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
+			);
+			path = LogCells;
+			sourceTree = "<group>";
+		};
+		515AFCF72D81C3CF0095CE93 /* CardCells */ = {
+			isa = PBXGroup;
+			children = (
+				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
+				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
+			);
+			path = CardCells;
 			sourceTree = "<group>";
 		};
 		516130222C721AC00037127A /* CoreData */ = {

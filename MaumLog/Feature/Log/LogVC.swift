@@ -36,9 +36,9 @@ final class LogVC: UIViewController {
         return UIBarButtonItem(customView: label)
     }()
     
-    fileprivate let optionBarButton = PullDownBarButton()
-    fileprivate let editDoneBarButton = EndEditingBarButton()
-    private let addBarButton = AddLogBarButton()
+    fileprivate let pullDownBarButton = PullDownBarButton()
+    fileprivate let endEditingBarButton = EndEditingBarButton()
+    private let addLogBarButton = AddLogBarButton()
     
     fileprivate let logTV: UITableView = {
         let tv = UITableView(frame: .zero, style: .grouped)
@@ -57,7 +57,7 @@ final class LogVC: UIViewController {
         spacing: 30
     )
     
-    private let addFloatingButton: UIButton = {
+    private let addLogButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.image = UIImage(named: "plus")?
             .resizeImage(newWidth: 30)
@@ -96,7 +96,7 @@ final class LogVC: UIViewController {
         view.backgroundColor = .chuIvory
         setNavigationBar(
             leftBarButtonItems: [barTitleLabel],
-            rightBarButtonItems: [optionBarButton, addBarButton]
+            rightBarButtonItems: [pullDownBarButton, addLogBarButton]
         )
         setAutoLayout()
         setBinding()
@@ -106,19 +106,19 @@ final class LogVC: UIViewController {
     
     private func setAutoLayout() {
         view.addSubview(logTV)
-        view.addSubview(addFloatingButton)
+        view.addSubview(addLogButton)
         view.addSubview(takeMedicineButton)
         
         logTV.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        addFloatingButton.snp.makeConstraints {
+        addLogButton.snp.makeConstraints {
             $0.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(15)
             $0.size.equalTo(50)
         }
         takeMedicineButton.snp.makeConstraints {
             $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
-            $0.bottom.equalTo(addFloatingButton.snp.top).offset(-15)
+            $0.bottom.equalTo(addLogButton.snp.top).offset(-15)
             $0.size.equalTo(35)
         }
     }
@@ -127,60 +127,60 @@ final class LogVC: UIViewController {
     
     private func setBinding() {
         let barButtonEvent = Observable.merge(
-            addBarButton.rx.event,
-            optionBarButton.rx.event,
-            editDoneBarButton.rx.event
+            addLogBarButton.rx.event,
+            pullDownBarButton.rx.event,
+            endEditingBarButton.rx.event
         )
         
         let input = LogVM.Input(
             barButtonEvent: barButtonEvent,
-            reloadSectionData: reloadSectionData.asObservable(),
-            tappedTakeMedicineButton: takeMedicineButton.rx.tap.asObservable(),
+            reloadEvent: reloadSectionData.asObservable(),
+            takeMedicineButtonTapEvent: takeMedicineButton.rx.tap.asObservable(),
             itemToRemove: itemToRemove.asObservable()
         )
         let output = logVM.transform(input)
 
         // 로그 테이블 뷰 데이터 바인딩
-        output.sectionData
+        output.logSectionDataArr
             .bind(to: logTV.rx.items(dataSource: getLogDataSource()))
             .disposed(by: bag)
         
         // 기록 모달 띄우기
-        output.goAddLog
+        output.pushAddLogEvent
             .bind(to: self.rx.pushAddLogBinder)
             .disposed(by: bag)
         
         // 등록한 증상이 없다면 증상 추가 모달 띄우기
-        output.presentShouldAddSymptomAlert
+        output.presentShouldAddSymptomAlertEvent
             .bind(to: self.rx.presentShouldAddSymptomAlertBinder)
             .disposed(by: bag)
         
         // 편집 모드에 따른 바 버튼 상태 변경
-        output.isEditMode
+        output.isEditing
             .bind(to: self.rx.barButtonAppearance)
             .disposed(by: bag)
         
         // 기록이 없으면 이미지 표시
-        output.logDataIsEmpty
+        output.isDataEmpty
             .bind(to: self.rx.logTVBackgroundView)
             .disposed(by: bag)
         
         // 등록한 약이 없다면 먼저 등록부터 하라는 얼럿 띄우기
-        output.presentShouldAddMedicineAlert
+        output.presentShouldAddMedicineAlertEvent
             .bind(to: self.rx.presentShouldAddMedicineAlertBinder)
             .disposed(by: bag)
         
         // 약 먹었다는 얼럿 띄우기
-        output.presentTakeMedicineAlert
+        output.presentTakeMedicineAlertEvent
             .bind(to: self.rx.presentTakeMedicineAlertBinder)
             .disposed(by: bag)
 
         // 정렬 변경
         output.isAscendingOrder
-            .bind(to: optionBarButton.rx.sortState)
+            .bind(to: pullDownBarButton.rx.sortState)
             .disposed(by: bag)
         
-        output.presentRemoveAlert
+        output.itemToRemove
             .bind(to: self.rx.presentRemoveAlertBinder)
             .disposed(by: bag)
     }
@@ -281,7 +281,7 @@ extension Reactive where Base: LogVC {
     
     fileprivate var barButtonAppearance: Binder<Bool> {
         Binder(base) {
-            let barButton = $1 ? $0.editDoneBarButton : $0.optionBarButton
+            let barButton = $1 ? $0.endEditingBarButton : $0.pullDownBarButton
             $0.navigationItem.rightBarButtonItem = barButton
         }
     }

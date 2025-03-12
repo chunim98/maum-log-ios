@@ -14,40 +14,40 @@ final class LogVM {
 
     struct Input {
         let barButtonEvent: Observable<BarButtonEvent>
-        let reloadSectionData: Observable<Void>
-        let tappedTakeMedicineButton: Observable<Void>
+        let reloadEvent: Observable<Void>
+        let takeMedicineButtonTapEvent: Observable<Void>
         let itemToRemove: Observable<EditButtonCellModel>
     }
     
     struct Output {
-        let goAddLog: Observable<Void>
-        let presentShouldAddSymptomAlert: Observable<Void>
-        let sectionData: Observable<[LogSectionData]>
-        let isEditMode: Observable<Bool>
+        let pushAddLogEvent: Observable<Void>
+        let presentShouldAddSymptomAlertEvent: Observable<Void>
+        let logSectionDataArr: Observable<[LogSectionData]>
+        let isEditing: Observable<Bool>
         let isAscendingOrder: Observable<Bool>
-        let logDataIsEmpty: Observable<Bool>
-        let presentShouldAddMedicineAlert: Observable<Void>
-        let presentTakeMedicineAlert: Observable<Void>
-        let presentRemoveAlert: Observable<EditButtonCellModel>
+        let isDataEmpty: Observable<Bool>
+        let presentShouldAddMedicineAlertEvent: Observable<Void>
+        let presentTakeMedicineAlertEvent: Observable<Void>
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     private let bag = DisposeBag()
     
     func transform (_ input: Input) -> Output {
-        // 로그 데이터
-        let logData = BehaviorSubject<[LogData]>(value: LogDataManager.shared.read())
-        // 정렬 설정 값
-        let isAscendingOrder = BehaviorSubject<Bool>(value: SettingValuesStorage.shared.isAscendingOrder)
+        let logDataArr = BehaviorSubject<[LogData]>(value: LogDataManager.shared.read())
         let isEditing = BehaviorSubject<Bool>(value: false)
+        let isAscendingOrder = BehaviorSubject<Bool>(
+            value: SettingValuesStorage.shared.isAscendingOrder
+        )
 
         // 로그 테이블 뷰 리로드
-        input.reloadSectionData
+        input.reloadEvent
             .map { LogDataManager.shared.read() }
-            .bind(to: logData)
+            .bind(to: logDataArr)
             .disposed(by: bag)
         
         // 하나도 기록한 게 없는지
-        let logDataIsEmpty = logData
+        let isDataEmpty = logDataArr
             .map { $0.isEmpty }
         
         // 편집 모드 상태 전환
@@ -73,8 +73,8 @@ final class LogVM {
 
         
         // 로그데이터, 편집모드 여부, 오름차 정렬 여부 조합해서 sectionData로 내보냄 (꽤 복잡하다)
-        let sectionData = Observable
-            .combineLatest(logData, isEditing, isAscendingOrder)
+        let logSectionDataArr = Observable
+            .combineLatest(logDataArr, isEditing, isAscendingOrder)
             .map { data, editMode, isAscendingOrder in
                 
                 // 편집모드인지 아닌지 수정해주는 코드(기본값 false)
@@ -106,21 +106,21 @@ final class LogVM {
             .share(replay: 1)
         
         // 기록 추가 모달 띄우기
-        let goAddLog = input.barButtonEvent
+        let pushAddLogEvent = input.barButtonEvent
             .filter { ($0 == .pushAddLog) && !(SymptomDataManager.shared.read().isEmpty) }
             .map { _ in }
         
         // 등록한 증상이 없다면 증상 부터 등록하라는 얼럿 띄우기
-        let presentShouldAddSymptomAlert = input.barButtonEvent
+        let presentShouldAddSymptomAlertEvent = input.barButtonEvent
             .filter { ($0 == .pushAddLog) && SymptomDataManager.shared.read().isEmpty }
             .map { _ in }
         
         // 등록한 약이 없다면 먼저 등록부터 하라는 얼럿 띄우기
-        let presentShouldAddMedicineAlert = input.tappedTakeMedicineButton
+        let presentShouldAddMedicineAlertEvent = input.takeMedicineButtonTapEvent
             .filter { MedicineDataManager.shared.read().isEmpty }
         
         // 약물 섭취 기록 추가 (등록된 약이 있을 경우에만)
-        input.tappedTakeMedicineButton
+        input.takeMedicineButtonTapEvent
             .filter { !(MedicineDataManager.shared.read().isEmpty) }
             .map {
                 let data = MedicineDataManager.shared.read()
@@ -129,26 +129,23 @@ final class LogVM {
                 // 업데이트가 반영된 값 불러오기
                 return LogDataManager.shared.read()
             }
-            .bind(to: logData)
+            .bind(to: logDataArr)
             .disposed(by: bag)
         
         // 약 먹었다는 얼럿 띄우기 (등록된 약이 있을 경우에만)
-        let presentTakeMedicineAlert = input.tappedTakeMedicineButton
+        let presentTakeMedicineAlertEvent = input.takeMedicineButtonTapEvent
             .filter { !(MedicineDataManager.shared.read().isEmpty) }
         
-        // 삭제 얼럿을 띄우는 메시지 전송
-        let presentRemoveAlert = input.itemToRemove
-
-        
         return Output(
-            goAddLog: goAddLog,
-            presentShouldAddSymptomAlert: presentShouldAddSymptomAlert,
-            sectionData: sectionData,
-            isEditMode: isEditing,
+            pushAddLogEvent: pushAddLogEvent,
+            presentShouldAddSymptomAlertEvent: presentShouldAddSymptomAlertEvent,
+            logSectionDataArr: logSectionDataArr,
+            isEditing: isEditing,
             isAscendingOrder: isAscendingOrder.asObservable(),
-            logDataIsEmpty: logDataIsEmpty,
-            presentShouldAddMedicineAlert: presentShouldAddMedicineAlert,
-            presentTakeMedicineAlert: presentTakeMedicineAlert,
-            presentRemoveAlert: presentRemoveAlert)
+            isDataEmpty: isDataEmpty,
+            presentShouldAddMedicineAlertEvent: presentShouldAddMedicineAlertEvent,
+            presentTakeMedicineAlertEvent: presentTakeMedicineAlertEvent,
+            itemToRemove: input.itemToRemove
+        )
     }
 }
