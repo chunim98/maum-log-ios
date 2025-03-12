@@ -6,17 +6,15 @@
 //
 
 import UIKit
+
 import RxSwift
 import RxCocoa
 
 final class LogVM {
 
     struct Input {
-        let tappedAddButton: Observable<Void>
+        let barButtonEvent: Observable<BarButtonEvent>
         let reloadSectionData: Observable<Void>
-        let tappedEditButton: Observable<Void>
-        let tappedEditDoneButton: Observable<Void>
-        let changeSorting: Observable<Bool>
         let tappedTakeMedicineButton: Observable<Void>
         let itemToRemove: Observable<EditButtonCellModel>
     }
@@ -40,8 +38,8 @@ final class LogVM {
         let logData = BehaviorSubject<[LogData]>(value: LogDataManager.shared.read())
         // 정렬 설정 값
         let isAscendingOrder = BehaviorSubject<Bool>(value: SettingValuesStorage.shared.isAscendingOrder)
+        let isEditing = BehaviorSubject<Bool>(value: false)
 
-        // MARK: - Observables
         // 로그 테이블 뷰 리로드
         input.reloadSectionData
             .map { LogDataManager.shared.read() }
@@ -52,27 +50,31 @@ final class LogVM {
         let logDataIsEmpty = logData
             .map { $0.isEmpty }
         
-        // 편집 모드, 초기 값이 있어야 로그 리스트 표시 가능
-        let isEditMode = Observable
-            .merge(
-                input.tappedEditButton.map { true },
-                input.tappedEditDoneButton.map { false })
-            .startWith(false)
-            .share(replay: 1)
+        // 편집 모드 상태 전환
+        input.barButtonEvent
+            .filter { $0 == .edit }
+            .withLatestFrom(isEditing) { _, bool in !bool }
+            .bind(to: isEditing)
+            .disposed(by: bag)
         
-        // 정렬 변경
-        input.changeSorting
+        // 오름차 순 정렬
+        input.barButtonEvent
+            .compactMap { ($0 == .sortByAscending) ? false : nil }
+            .do(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 }) // 설정값 보존
             .bind(to: isAscendingOrder)
             .disposed(by: bag)
         
-        // 정렬이 바뀌면 설정 값을 업데이트
-        isAscendingOrder
-            .bind(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 })
+        // 내림차 순 정렬
+        input.barButtonEvent
+            .compactMap { ($0 == .sortByDescending) ? true : nil }
+            .do(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 }) // 설정값 보존
+            .bind(to: isAscendingOrder)
             .disposed(by: bag)
+
         
         // 로그데이터, 편집모드 여부, 오름차 정렬 여부 조합해서 sectionData로 내보냄 (꽤 복잡하다)
         let sectionData = Observable
-            .combineLatest(logData, isEditMode, isAscendingOrder)
+            .combineLatest(logData, isEditing, isAscendingOrder)
             .map { data, editMode, isAscendingOrder in
                 
                 // 편집모드인지 아닌지 수정해주는 코드(기본값 false)
@@ -104,12 +106,14 @@ final class LogVM {
             .share(replay: 1)
         
         // 기록 추가 모달 띄우기
-        let goAddLog = input.tappedAddButton
-            .filter { !(SymptomDataManager.shared.read().isEmpty) }
+        let goAddLog = input.barButtonEvent
+            .filter { ($0 == .pushAddLog) && !(SymptomDataManager.shared.read().isEmpty) }
+            .map { _ in }
         
         // 등록한 증상이 없다면 증상 부터 등록하라는 얼럿 띄우기
-        let presentShouldAddSymptomAlert = input.tappedAddButton
-            .filter { SymptomDataManager.shared.read().isEmpty }
+        let presentShouldAddSymptomAlert = input.barButtonEvent
+            .filter { ($0 == .pushAddLog) && SymptomDataManager.shared.read().isEmpty }
+            .map { _ in }
         
         // 등록한 약이 없다면 먼저 등록부터 하라는 얼럿 띄우기
         let presentShouldAddMedicineAlert = input.tappedTakeMedicineButton
@@ -140,7 +144,7 @@ final class LogVM {
             goAddLog: goAddLog,
             presentShouldAddSymptomAlert: presentShouldAddSymptomAlert,
             sectionData: sectionData,
-            isEditMode: isEditMode,
+            isEditMode: isEditing,
             isAscendingOrder: isAscendingOrder.asObservable(),
             logDataIsEmpty: logDataIsEmpty,
             presentShouldAddMedicineAlert: presentShouldAddMedicineAlert,

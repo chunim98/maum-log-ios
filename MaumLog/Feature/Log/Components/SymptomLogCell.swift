@@ -13,7 +13,7 @@ import RxCocoa
 final class SymptomLogCell: UITableViewCell {
     
     static let identifier = "SymptomLogCell"
-    private let bag = DisposeBag()
+    let bag = DisposeBag()
     var item: (any EditButtonCellModel)?
     
     private var formatter: DateFormatter = {

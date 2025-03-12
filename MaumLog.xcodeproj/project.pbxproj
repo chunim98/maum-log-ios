@@ -31,6 +31,10 @@
 		51563D732C52E09B005BBCC2 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 51563D722C52E09B005BBCC2 /* InfoPlist.xcstrings */; };
 		51563D7A2C52E509005BBCC2 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 51563D792C52E509005BBCC2 /* RxCocoa */; };
 		51563D7C2C52E509005BBCC2 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 51563D7B2C52E509005BBCC2 /* RxRelay */; };
+		515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */; };
+		515AFCF12D81A6CB0095CE93 /* BarButtonEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF02D81A6CA0095CE93 /* BarButtonEvent.swift */; };
+		515AFCF32D81A8770095CE93 /* PullDownBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */; };
+		515AFCF52D81B4190095CE93 /* EndEditingBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */; };
 		515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */; };
 		515B95662C766BC100B4FE26 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B95652C766BC100B4FE26 /* HapticManager.swift */; };
 		516130242C72300C0037127A /* SymptomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516130232C72300C0037127A /* SymptomSectionView.swift */; };
@@ -132,6 +136,10 @@
 		51563D702C52E08C005BBCC2 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		51563D722C52E09B005BBCC2 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		51563D752C52E0E7005BBCC2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogBarButton.swift; sourceTree = "<group>"; };
+		515AFCF02D81A6CA0095CE93 /* BarButtonEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarButtonEvent.swift; sourceTree = "<group>"; };
+		515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullDownBarButton.swift; sourceTree = "<group>"; };
+		515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndEditingBarButton.swift; sourceTree = "<group>"; };
 		515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedRateCardCell.swift; sourceTree = "<group>"; };
 		515B95652C766BC100B4FE26 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		516130232C72300C0037127A /* SymptomSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionView.swift; sourceTree = "<group>"; };
@@ -245,6 +253,7 @@
 		511601782D03375200F19A36 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				515AFCED2D81A66A0095CE93 /* BarButtons */,
 				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
 				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
 				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
@@ -294,6 +303,17 @@
 				518E5EE62CFDF5130067DF38 /* Common */,
 			);
 			path = MaumLog;
+			sourceTree = "<group>";
+		};
+		515AFCED2D81A66A0095CE93 /* BarButtons */ = {
+			isa = PBXGroup;
+			children = (
+				515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */,
+				515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */,
+				515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */,
+				515AFCF02D81A6CA0095CE93 /* BarButtonEvent.swift */,
+			);
+			path = BarButtons;
 			sourceTree = "<group>";
 		};
 		516130222C721AC00037127A /* CoreData */ = {
@@ -689,6 +709,7 @@
 				516F59FD2C67BC5700BD640B /* SettingValuesStorage.swift in Sources */,
 				51E739A72C64969600F957A3 /* TabBarVC.swift in Sources */,
 				518E5F002CFDF9DF0067DF38 /* Array+Int.swift in Sources */,
+				515AFCF52D81B4190095CE93 /* EndEditingBarButton.swift in Sources */,
 				512C966D2C77AF4700FA1D22 /* DividerView.swift in Sources */,
 				51B923CB2D7F3EC3005DFB43 /* MedicineSectionBodyVM.swift in Sources */,
 				518E5F022CFDF9F00067DF38 /* CGFloat+.swift in Sources */,
@@ -697,6 +718,7 @@
 				51FE74A62C7CB8C500EDA685 /* MedicineCardCell.swift in Sources */,
 				518386E72C64087700437696 /* PropertyWrapper.swift in Sources */,
 				5103A24A2C555643008F8218 /* HomeVM.swift in Sources */,
+				515AFCF12D81A6CB0095CE93 /* BarButtonEvent.swift in Sources */,
 				5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */,
 				51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */,
 				518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */,
@@ -715,6 +737,7 @@
 				51B923CD2D7F3FF1005DFB43 /* Array+MedicineData.swift in Sources */,
 				51412A102C5EB2D900381B7C /* LogVC.swift in Sources */,
 				51E4904C2C7DDA5B00F0150A /* LogData.swift in Sources */,
+				515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */,
 				51E490582C7DDC7100F0150A /* MedicineData.swift in Sources */,
 				5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */,
 				51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */,
@@ -761,6 +784,7 @@
 				51FE749C2C7CA29400EDA685 /* MedicineCoreData+CoreDataProperties.swift in Sources */,
 				51FE749D2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataClass.swift in Sources */,
 				51B923C32D7F067F005DFB43 /* Comparable+.swift in Sources */,
+				515AFCF32D81A8770095CE93 /* PullDownBarButton.swift in Sources */,
 				5116017A2D035EC300F19A36 /* LogVC+Alert.swift in Sources */,
 				51FE749E2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataProperties.swift in Sources */,
 				51FE749F2C7CA29400EDA685 /* SymptomCardCoreData+CoreDataClass.swift in Sources */,
