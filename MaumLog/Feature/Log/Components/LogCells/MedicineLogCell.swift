@@ -124,9 +124,9 @@ final class MedicineLogCell: UITableViewCell {
     
     // MARK: Configure
     
-    func configure(item: EditButtonCellModel) {
+    func configure(_ data: EditButtonCellModel) {
         guard
-            let data = item as? LogData,
+            let data = data as? LogData,
             !data.medicineCards.isEmpty
         else { return }
         
@@ -134,7 +134,7 @@ final class MedicineLogCell: UITableViewCell {
         formatter.dateFormat = "a h:mm"
         
         dateLabel.text = formatter.string(from: data.date)
-        deleteImageView.isHidden = !item.isEditMode
+        deleteImageView.isHidden = !data.isEditMode
         
         // 복욕 카드 데이터 바인딩
         Observable.just(data.medicineCards)

@@ -15,7 +15,7 @@ final class RateCardCell: UICollectionViewCell {
     // MARK: Properties
     
     static let identifier = "RateCardCell"
-    var isNegative = false; #warning("상태를 셀이 들고 있는 게 맞음?")
+    private var isNegative = false
     
     // MARK: Components
     

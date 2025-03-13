@@ -13,9 +13,9 @@ import RxCocoa
 final class LogVM {
 
     struct Input {
-        let buttonEvent: Observable<LogVCButtonEvent>
+        let buttonEvent: Observable<LogButtonEvent>
         let reloadEvent: Observable<Void>
-        let itemToRemove: Observable<EditButtonCellModel>
+        let selectedModel: Observable<EditButtonCellModel>
     }
     
     struct Output {
@@ -106,6 +106,11 @@ final class LogVM {
         let presentTakeMedicineAlertEvent = intakeEvent
             .filter { _ in !(MedicineDataManager.shared.read().isEmpty) }
             .map { _ in }
+        
+        // 편집 상태일 때, 삭제할 아이템 전달
+        let itemToRemove = input.selectedModel
+            .withLatestFrom(isEditing) { $1 ? $0 : nil }
+            .compactMap { $0 }
 
         return Output(
             pushAddLogEvent: pushAddLogEvent,
@@ -116,7 +121,7 @@ final class LogVM {
             isDataEmpty: isDataEmpty,
             presentShouldAddMedicineAlertEvent: presentShouldAddMedicineAlertEvent,
             presentTakeMedicineAlertEvent: presentTakeMedicineAlertEvent,
-            itemToRemove: input.itemToRemove
+            itemToRemove: itemToRemove
         )
     }
     

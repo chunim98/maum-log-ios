@@ -23,15 +23,15 @@ final class LogVC: UIViewController {
     
     // MARK: Interface
     
-    let reloadSectionData = PublishSubject<Void>()
+    fileprivate let reloadEvent = PublishSubject<Void>()
     
     // MARK: Components
     
     private let barTitleLabel = {
         let label = UILabel()
-        label.text = String(localized: "기록")
-        label.font = .boldSystemFont(ofSize: 24)
+        label.text = "기록"
         label.textColor = .chuBlack
+        label.font = .boldSystemFont(ofSize: 24)
         return UIBarButtonItem(customView: label)
     }()
     
@@ -75,6 +75,7 @@ final class LogVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
+        
         setNavigationBar(
             leftBarButtonItems: [barTitleLabel],
             rightBarButtonItems: [pullDownBarButton, addLogBarButton]
@@ -111,14 +112,14 @@ final class LogVC: UIViewController {
             addLogBarButton.rx.event,
             pullDownBarButton.rx.event,
             endEditingBarButton.rx.event,
-            intakeButton.rx.tap.map { _ in LogVCButtonEvent.intake },
-            addLogButton.rx.tap.map { _ in LogVCButtonEvent.pushAddLog }
+            intakeButton.rx.tap.map { _ in LogButtonEvent.intake },
+            addLogButton.rx.tap.map { _ in LogButtonEvent.pushAddLog }
         )
         
         let input = LogVM.Input(
             buttonEvent: buttonEvent,
-            reloadEvent: reloadSectionData.asObservable(),
-            itemToRemove: logTV.rx.modelSelected(EditButtonCellModel.self).asObservable()
+            reloadEvent: reloadEvent.asObservable(),
+            selectedModel: logTV.rx.modelSelected(EditButtonCellModel.self).asObservable()
         )
         let output = logVM.transform(input)
 
@@ -198,7 +199,7 @@ final class LogVC: UIViewController {
                     for: indexPath
                 ) as? MedicineLogCell
                 else { return UITableViewCell() }
-                cell.configure(item: item)
+                cell.configure(item)
                 return cell
             }
         }
@@ -229,7 +230,7 @@ extension Reactive where Base: LogVC {
             vc.sheetPresentationController?.detents = [fraction, .large()]
             vc.sheetPresentationController?.preferredCornerRadius = .chuRadius
             vc.sheetPresentationController?.prefersGrabberVisible = true
-            vc.dismissTask = { base.reloadSectionData.onNext(()) }
+            vc.dismissTask = { base.reloadEvent.onNext(()) }
             base.present(vc, animated: true)
         }
     }
@@ -261,5 +262,64 @@ extension Reactive where Base: LogVC {
     
     fileprivate var logTVBackgroundView: Binder<Bool> {
         Binder(base) { $0.logTV.backgroundView = $1 ? $0.logEmptyView : .none }
+    }
+}
+
+// MARK: - Alerts
+
+extension LogVC {
+    func presentShouldAddSymptomAlert() {
+        presentAlert(
+            title: String(localized: "알림"),
+            message: String(localized: "부작용, 기타 증상을 기록하려면\n먼저 증상을 등록해야 해요."),
+            acceptTitle: String(localized: "등록"),
+            acceptTask: { [weak self] in
+                guard let self else { return }
+                
+                // 모달 높이 조정
+                let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.6 }
+
+                let vc = AddSymptomVC()
+                if let sheet = vc.sheetPresentationController {
+                    sheet.detents = [fraction]
+                    sheet.preferredCornerRadius = .chuRadius
+                }
+                
+                present(vc, animated: true)
+            })
+    }
+    
+    func presentShouldAddMedicineAlert() {
+        presentAlert(
+            title: String(localized: "알림"),
+            message: String(localized: "복약한 시간을 기록하려면\n먼저 복용 중인 약을 등록해야 해요."),
+            acceptTitle: String(localized: "등록"),
+            acceptTask: { [weak self] in
+                guard let self else { return }
+
+                // 모달 높이 조정
+                let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.3 }
+
+                let vc = AddMedicineVC()
+                if let sheet = vc.sheetPresentationController {
+                    sheet.detents = [fraction]
+                    sheet.preferredCornerRadius = .chuRadius
+                }
+                
+                present(vc, animated: true)
+            })
+    }
+    
+    func presentRemoveAlert(item: any EditButtonCellModel) {
+        guard let item = item as? LogData else { return }
+        
+        presentAlert(
+            title: String(localized: "알림"),
+            message: String(localized: "기록을 삭제할까요?"),
+            acceptTitle: String(localized: "삭제"),
+            acceptTask: { [weak self] in
+                LogDataManager.shared.delete(target: item)
+                self?.reloadEvent.onNext(())
+            })
     }
 }

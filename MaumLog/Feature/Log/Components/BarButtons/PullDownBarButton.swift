@@ -19,7 +19,7 @@ final class PullDownBarButton: UIBarButtonItem {
     
     // MARK: Interface
     
-    fileprivate let event = PublishSubject<LogVCButtonEvent>()
+    fileprivate let event = PublishSubject<LogButtonEvent>()
     
     // MARK: Life Cycle
     
@@ -75,5 +75,5 @@ extension Reactive where Base: PullDownBarButton {
         Binder(base) { ($1 ? $0.descendingOrder : $0.ascendingOrder)?.state = .on }
     }
     
-    var event: Observable<LogVCButtonEvent> { base.event.asObservable() }
+    var event: Observable<LogButtonEvent> { base.event.asObservable() }
 }

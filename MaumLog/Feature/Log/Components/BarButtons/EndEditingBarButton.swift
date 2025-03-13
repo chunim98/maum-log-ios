@@ -29,5 +29,5 @@ final class EndEditingBarButton: UIBarButtonItem {
 // MARK: - Reactive
 
 extension Reactive where Base: EndEditingBarButton {
-    var event: Observable<LogVCButtonEvent> { base.rx.tap.map { _ in .edit } }
+    var event: Observable<LogButtonEvent> { base.rx.tap.map { _ in .edit } }
 }
