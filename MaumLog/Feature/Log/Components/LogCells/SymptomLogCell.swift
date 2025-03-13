@@ -6,124 +6,120 @@
 //
 
 import UIKit
-import SnapKit
+
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class SymptomLogCell: UITableViewCell {
     
+    // MARK: Properties
+    
     static let identifier = "SymptomLogCell"
-    let bag = DisposeBag()
-    var item: (any EditButtonCellModel)?
-    
-    private var formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "a h:mm"
-        return formatter
-    }()
-    
-    private let cardData = BehaviorSubject<[SymptomCardData]>(value: [])
-    let itemToRemove = PublishSubject<EditButtonCellModel>()
+    private var bag = DisposeBag()
 
-    // MARK: - Components
-    let mainHStack = {
+    // MARK: Components
+    
+    private let mainHStack = {
         let sv = UIStackView()
-        sv.spacing = 10
         sv.alignment = .center
+        sv.spacing = 10
         return sv
     }()
     
-    let dateLabel = {
+    private let dateLabel = {
         let label = UILabel()
-        label.text = "오전 12:99"
-        label.textAlignment = .left
         label.font = .systemFont(ofSize: 14)
+        label.textAlignment = .left
+        label.text = "오전 12:99" // temp
         label.textColor = .gray
         return label
     }()
     
-    let deleteButton = {
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage(systemName: "multiply.circle.fill")?.applyingSymbolConfiguration(.init(pointSize: 15))
-        config.baseForegroundColor = .gray
-        config.cornerStyle = .capsule
-        let button = UIButton(configuration: config)
-        button.isHidden = false
-        return button
+    private let deleteImageView = {
+        let iv = UIImageView()
+        iv.image = UIImage(systemName: "multiply.circle.fill")?
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(.gray)
+        iv.contentMode = .scaleAspectFit
+        return iv
     }()
     
-    let infoCardCV = {
+    private let infoCardCV = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         cv.register(RateCardCell.self, forCellWithReuseIdentifier: RateCardCell.identifier)
-        cv.backgroundColor = .clear
-        cv.showsHorizontalScrollIndicator = false
         cv.setSinglelineLayout(spacing: 5, width: 100, height: 60)
+        cv.showsHorizontalScrollIndicator = false
+        cv.backgroundColor = .clear
         return cv
     }()
     
-    // MARK: - Life Cycle
+    // MARK: Life Cycle
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        
         setAutoLayout()
-        setBinding()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: .init(bottom: 1))
+        contentView.backgroundColor = .chuWhite
+        self.backgroundColor = .clear
+        self.selectionStyle = .none
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        dateLabel.text = ""
+        deleteImageView.isHidden = true
+        bag = DisposeBag() // 재사용 시, 델리게이트 중복 등록 오류 방지
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: Layout
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // 콘텐츠 뷰 설정
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 1, right: 0))
-        contentView.backgroundColor = .chuWhite
-        self.selectionStyle = .none
-        self.backgroundColor = .clear
-    }
-    
-    // MARK: - Layout
-    private func setAutoLayout(){
+    private func setAutoLayout() {
         contentView.addSubview(mainHStack)
         mainHStack.addArrangedSubview(dateLabel)
         mainHStack.addArrangedSubview(infoCardCV)
-        mainHStack.addArrangedSubview(deleteButton)
+        mainHStack.addArrangedSubview(deleteImageView)
 
-        mainHStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)) }
+        mainHStack.snp.makeConstraints {
+            let inset = UIEdgeInsets(horizontal: 10, vertical: 5)
+            $0.edges.equalToSuperview().inset(inset)
+        }
         dateLabel.snp.makeConstraints { $0.width.equalTo(65) }
         infoCardCV.snp.makeConstraints { $0.height.equalTo(60) }
     }
     
-    // MARK: - Binding
-    private func setBinding() {
+    // MARK: Configure
+    
+    func configure(_ data: EditButtonCellModel) {
+        guard
+            let data = data as? LogData,
+            !data.symptomCards.isEmpty
+        else { return }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "a h:mm"
+        
+        dateLabel.text = formatter.string(from: data.date)
+        deleteImageView.isHidden = !data.isEditMode
+        
         // 증상 카드 데이터 바인딩
-        cardData
-            .bind(to: infoCardCV.rx.items(cellIdentifier: RateCardCell.identifier, cellType: RateCardCell.self)) { index, item, cell in
-                cell.configure(item: item)
-            }
-            .disposed(by: bag)
-        
-        // 삭제 요청과 함께 아이템 전송
-        deleteButton
-            .rx.tap
-            .bind(with: self) { owner, _ in
-                guard let item = owner.item else { return }
-                owner.itemToRemove.onNext(item)
+        Observable.just(data.symptomCards)
+            .bind(to: infoCardCV.rx.items(
+                cellIdentifier: RateCardCell.identifier,
+                cellType: RateCardCell.self
+            )) { index, data, cell in
+                cell.configure(data)
             }
             .disposed(by: bag)
     }
-    
-    func configure(item: EditButtonCellModel) {
-        guard let item = item as? LogData else { return }
-        guard !(item.symptomCards.isEmpty) else { return }
-        self.item = item
-        
-        cardData.onNext(item.symptomCards)
-        
-        dateLabel.text = formatter.string(from: item.date)
-        deleteButton.isHidden = !(item.isEditMode)
-    }
-    
 }
 
 #Preview(traits: .fixedLayout(width: 400, height: 100)) {

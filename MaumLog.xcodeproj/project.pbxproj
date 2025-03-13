@@ -79,6 +79,7 @@
 		51B923C92D7F3D97005DFB43 /* MedicineSectionBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923C82D7F3D97005DFB43 /* MedicineSectionBodyView.swift */; };
 		51B923CB2D7F3EC3005DFB43 /* MedicineSectionBodyVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923CA2D7F3EBF005DFB43 /* MedicineSectionBodyVM.swift */; };
 		51B923CD2D7F3FF1005DFB43 /* Array+MedicineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923CC2D7F3FED005DFB43 /* Array+MedicineData.swift */; };
+		51C657A12D82E0A800AFEB0E /* UIEdgeInsets+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C657A02D82E0A800AFEB0E /* UIEdgeInsets+.swift */; };
 		51CD57122C7C49E700B8858D /* MedicineSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57112C7C49E700B8858D /* MedicineSectionView.swift */; };
 		51CD57202C7C5F0A00B8858D /* MedicineDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */; };
 		51CD57222C7C64D400B8858D /* MedicineSectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57212C7C64D400B8858D /* MedicineSectionVM.swift */; };
@@ -184,6 +185,7 @@
 		51B923C82D7F3D97005DFB43 /* MedicineSectionBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionBodyView.swift; sourceTree = "<group>"; };
 		51B923CA2D7F3EBF005DFB43 /* MedicineSectionBodyVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionBodyVM.swift; sourceTree = "<group>"; };
 		51B923CC2D7F3FED005DFB43 /* Array+MedicineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+MedicineData.swift"; sourceTree = "<group>"; };
+		51C657A02D82E0A800AFEB0E /* UIEdgeInsets+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+.swift"; sourceTree = "<group>"; };
 		51CD57112C7C49E700B8858D /* MedicineSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionView.swift; sourceTree = "<group>"; };
 		51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDataManager.swift; sourceTree = "<group>"; };
 		51CD57212C7C64D400B8858D /* MedicineSectionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionVM.swift; sourceTree = "<group>"; };
@@ -510,6 +512,7 @@
 		518E5F052CFDFA030067DF38 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				51C657A02D82E0A800AFEB0E /* UIEdgeInsets+.swift */,
 				51B923C22D7F067E005DFB43 /* Comparable+.swift */,
 				51B923A82D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift */,
 				518E5F032CFDF9F60067DF38 /* UIImage+.swift */,
@@ -763,6 +766,7 @@
 				516F59FB2C67B7F900BD640B /* ToggleTypeCell.swift in Sources */,
 				51B923CD2D7F3FF1005DFB43 /* Array+MedicineData.swift in Sources */,
 				51412A102C5EB2D900381B7C /* LogVC.swift in Sources */,
+				51C657A12D82E0A800AFEB0E /* UIEdgeInsets+.swift in Sources */,
 				51E4904C2C7DDA5B00F0150A /* LogData.swift in Sources */,
 				515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */,
 				51E490582C7DDC7100F0150A /* MedicineData.swift in Sources */,

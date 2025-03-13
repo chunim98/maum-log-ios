@@ -114,19 +114,21 @@ final class RateCardCell: UICollectionViewCell {
     
     // MARK: Configure
     
-    func configure(item: SymptomCardData) {
-        nameLabelContainer.backgroundColor = item.hex.toUIColor
-        rateViewsOutline.backgroundColor = item.hex.toUIColor
-        isNegative = item.isNegative
-        nameLabel.text = item.name
-        setRate(rate: item.rate)
+    func configure(_ data: SymptomCardData) {
+        nameLabelContainer.backgroundColor = data.hex.toUIColor
+        rateViewsOutline.backgroundColor = data.hex.toUIColor
+        isNegative = data.isNegative
+        nameLabel.text = data.name
+        setRate(rate: data.rate)
     }
     
+    // MARK: Methods
+    
     fileprivate func setRate(rate: Int) {
-        guard rate > 0 else { return }
-        let color: UIColor = isNegative ? .chuBadRate : .chuOtherRate
-        rateViews.forEach { $0.backgroundColor = .chuWhite }
-        rateViews[0..<rate].forEach { $0.backgroundColor = color }
+        rateViews.enumerated().forEach { i, view in
+            let color: UIColor = isNegative ? .chuBadRate : .chuOtherRate
+            view.backgroundColor = (i < rate) ? color : .chuWhite
+        }
     }
 }
 

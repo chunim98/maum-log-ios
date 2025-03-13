@@ -24,7 +24,6 @@ final class LogVC: UIViewController {
     // MARK: Interface
     
     let reloadSectionData = PublishSubject<Void>()
-    private let itemToRemove = PublishSubject<EditButtonCellModel>()
     
     // MARK: Components
     
@@ -119,7 +118,7 @@ final class LogVC: UIViewController {
         let input = LogVM.Input(
             buttonEvent: buttonEvent,
             reloadEvent: reloadSectionData.asObservable(),
-            itemToRemove: itemToRemove.asObservable()
+            itemToRemove: logTV.rx.modelSelected(EditButtonCellModel.self).asObservable()
         )
         let output = logVM.transform(input)
 
@@ -181,9 +180,7 @@ final class LogVC: UIViewController {
         
         let dataSource = DataSource<LogSectionData>(
             animationConfiguration: animeConfig
-        ) { [weak self] _, tableView, indexPath, item in
-            guard let self else { return UITableViewCell() }
-            
+        ) { _, tableView, indexPath, item in
             if item.medicineCards.isEmpty {
                 // 증상 기록을 표시해야 할 경우
                 guard let cell = tableView.dequeueReusableCell(
@@ -191,11 +188,7 @@ final class LogVC: UIViewController {
                     for: indexPath
                 ) as? SymptomLogCell
                 else { return UITableViewCell() }
-                
-                cell.configure(item: item)
-                cell.itemToRemove
-                    .bind(to: self.itemToRemove)
-                    .disposed(by: cell.bag)
+                cell.configure(item)
                 return cell
                 
             } else {
@@ -205,11 +198,7 @@ final class LogVC: UIViewController {
                     for: indexPath
                 ) as? MedicineLogCell
                 else { return UITableViewCell() }
-                
                 cell.configure(item: item)
-                cell.itemToRemove
-                    .bind(to: self.itemToRemove)
-                    .disposed(by: cell.bag)
                 return cell
             }
         }

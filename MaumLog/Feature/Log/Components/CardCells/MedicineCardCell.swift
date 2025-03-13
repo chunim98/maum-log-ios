@@ -57,7 +57,9 @@ final class MedicineCardCell: UICollectionViewCell {
         mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(2) }
     }
     
-    func configure(item: MedicineCardData) { nameLabel.text = item.name }
+    // MARK: Configure
+    
+    func configure(_ data: MedicineCardData) { nameLabel.text = data.name }
 }
 
 #Preview(traits: .fixedLayout(width: 150, height: 30)) {
