@@ -6,82 +6,83 @@
 //
 
 import UIKit
+
+import RxSwift
 import SnapKit
 
 final class RateCardCell: UICollectionViewCell {
     
-    static let identifier = "RateCardCell"
-    var isNegative = false
+    // MARK: Properties
     
-    // MARK: - Components
-    let mainVStack = {
+    static let identifier = "RateCardCell"
+    var isNegative = false; #warning("상태를 셀이 들고 있는 게 맞음?")
+    
+    // MARK: Components
+    
+    private let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.spacing = 2
         return sv
     }()
     
-    let nameLabelBackground = {
+    private let nameLabelContainer = {
         let sv = UIStackView()
+        sv.directionalLayoutMargins = .init(horizontal: 5)
         sv.isLayoutMarginsRelativeArrangement = true
-        sv.directionalLayoutMargins = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
-        sv.backgroundColor = .chuColorPalette[6] // 임시
-        sv.clipsToBounds = true
+        sv.backgroundColor = .chuTint // temp
         sv.layer.cornerRadius = 7
+        sv.clipsToBounds = true
         return sv
     }()
     
-    let nameLabel = {
+    private let nameLabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.text = "여덟글자테스트중"
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
         label.textColor = .chuWhite
+        label.text = "여덟글자테스트중" // temp
         return label
     }()
     
-    let rateViewsOutline = {
+    private let rateViewsOutline = {
         let sv  = UIStackView()
+        sv.directionalLayoutMargins = .init(edges: 2)
         sv.isLayoutMarginsRelativeArrangement = true
-        sv.directionalLayoutMargins = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
-        sv.backgroundColor = .chuColorPalette[6] // 임시
-        sv.clipsToBounds = true
+        sv.backgroundColor = .chuTint // temp
         sv.layer.cornerRadius = 7
-        return sv
-    }()
-    
-    let rateViewsBackground = {
-        let sv = UIStackView()
-        sv.isLayoutMarginsRelativeArrangement = true
-        sv.directionalLayoutMargins = .init(top: 1, leading: 1, bottom: 1, trailing: 1)
-        sv.backgroundColor = .chuWhite
         sv.clipsToBounds = true
-        sv.layer.cornerRadius = 5
         return sv
     }()
     
-    let rateViewsHStack = {
+    private let rateViewsContainer = {
+        let sv = UIStackView()
+        sv.directionalLayoutMargins = .init(edges: 1)
+        sv.isLayoutMarginsRelativeArrangement = true
+        sv.backgroundColor = .chuWhite
+        sv.layer.cornerRadius = 5
+        sv.clipsToBounds = true
+        return sv
+    }()
+    
+    private let rateViewsHStack = {
         let sv = UIStackView()
         sv.distribution = .fillEqually
-        sv.spacing = 1
-        sv.clipsToBounds = true
         sv.layer.cornerRadius = 4
+        sv.clipsToBounds = true
+        sv.spacing = 1
         return sv
     }()
     
-    let rateViews = {
-        var views = [UIView]()
-        for i in 0..<5 {
-            views.append(.init())
-        }
-        views.forEach {
-            $0.backgroundColor = .chuWhite // 임시
-        }
-        return views
-    }()
+    fileprivate let rateViews = { (0..<5).map { _ in
+        let view = UIView()
+        view.backgroundColor = .chuWhite // temp
+        return view
+    } }()
     
-    // MARK: - Life Cycle
+    // MARK: Life Cycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
@@ -91,49 +92,52 @@ final class RateCardCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Layout
-    private func setAutoLayout(){
+    // MARK: Layout
+    
+    private func setAutoLayout() {
         contentView.addSubview(mainVStack)
-        mainVStack.addArrangedSubview(nameLabelBackground)
-        nameLabelBackground.addArrangedSubview(nameLabel)
+        mainVStack.addArrangedSubview(nameLabelContainer)
         mainVStack.addArrangedSubview(rateViewsOutline)
-        rateViewsOutline.addArrangedSubview(rateViewsBackground)
-        rateViewsBackground.addArrangedSubview(rateViewsHStack)
-        rateViews.forEach { rateViewsHStack.addArrangedSubview($0) } // 뷰 5개 모두 저장
+        nameLabelContainer.addArrangedSubview(nameLabel)
+        rateViewsOutline.addArrangedSubview(rateViewsContainer)
+        rateViewsContainer.addArrangedSubview(rateViewsHStack)
+        rateViews.forEach { rateViewsHStack.addArrangedSubview($0) }
 
-        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(2) }
+        mainVStack.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(2)
+        }
         rateViewsOutline.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(14)
         }
     }
     
-    func configure(item: SymptomCardData){
-        nameLabelBackground.backgroundColor = item.hex.toUIColor
+    // MARK: Configure
+    
+    func configure(item: SymptomCardData) {
+        nameLabelContainer.backgroundColor = item.hex.toUIColor
         rateViewsOutline.backgroundColor = item.hex.toUIColor
-        nameLabel.text = item.name
         isNegative = item.isNegative
-        
+        nameLabel.text = item.name
         setRate(rate: item.rate)
     }
     
-    func setRate(rate: Int){
-        rateViews.forEach { $0.backgroundColor = .chuWhite } // 다시 호출되었을 때 초기화 하고 다시 그리기
+    fileprivate func setRate(rate: Int) {
         guard rate > 0 else { return }
-        
-        if isNegative {
-            for i in 1...rate {
-                rateViews[i - 1].backgroundColor = .chuBadRate
-            }
-        }else{
-            for i in 1...rate {
-                rateViews[i - 1].backgroundColor = .chuOtherRate
-            }
-        }
+        let color: UIColor = isNegative ? .chuBadRate : .chuOtherRate
+        rateViews.forEach { $0.backgroundColor = .chuWhite }
+        rateViews[0..<rate].forEach { $0.backgroundColor = color }
     }
-    
 }
 
 #Preview(traits: .fixedLayout(width: 100, height: 60)) {
     RateCardCell()
+}
+
+// MARK: - Reactive
+
+extension Reactive where Base: RateCardCell {
+    var rate: Binder<Float> {
+        Binder(base) { $0.setRate(rate: Int($1)) }
+    }
 }
