@@ -111,7 +111,7 @@ final class PendingLogCell: UITableViewCell {
             .rx.value
             .bind(with: self) { owner, value in
                 owner.slider.setValue(floorf(value), animated: false) //툭툭 끊기는 효과 주기
-                owner.infoCard.setRate(rate: Int(owner.slider.value)) //소수점 절사
+                owner.infoCard.rx.rate.onNext(owner.slider.value)
             }
             .disposed(by: bag)
         
@@ -131,7 +131,7 @@ final class PendingLogCell: UITableViewCell {
     }
     
     func configure(item: SymptomCardData) {
-        infoCard.configure(item: item)
+        infoCard.configure(item)
         
         slider.value = Float(item.rate)
         

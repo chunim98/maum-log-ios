@@ -6,56 +6,60 @@
 //
 
 import UIKit
+
 import SnapKit
 
 final class MedicineCardCell: UICollectionViewCell {
     
-    static let identifier = "MedicineCardCell"
-    var isNegative = false
+    // MARK: Properties
     
-    // MARK: - Components
-    let mainVStack = {
+    static let identifier = "MedicineCardCell"
+    
+    // MARK: Components
+    
+    private let mainVStack = {
         let sv = UIStackView()
-        sv.axis = .vertical
-        sv.backgroundColor = .chuBlack
+        sv.directionalLayoutMargins = .init(edges: 5)
         sv.isLayoutMarginsRelativeArrangement = true
-        sv.directionalLayoutMargins = .init(top: 5, leading: 5, bottom: 5, trailing: 5)
-        sv.clipsToBounds = true
+        sv.backgroundColor = .chuBlack
         sv.layer.cornerRadius = 10
+        sv.clipsToBounds = true
+        sv.axis = .vertical
         return sv
     }()
     
-    let nameLabel = {
+    private let nameLabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.text = "여덟글용" // 임시
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
         label.textColor = .chuWhite
-         return label
+        label.text = "여덟글용" // temp
+        return label
     }()
     
-    // MARK: - Life Cycle
+    // MARK: Life Cycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Layout
-    private func setAutoLayout(){
+    // MARK: Layout
+    
+    private func setAutoLayout() {
         contentView.addSubview(mainVStack)
         mainVStack.addArrangedSubview(nameLabel)
-        
         mainVStack.snp.makeConstraints { $0.edges.equalToSuperview().inset(2) }
     }
     
-    func configure(item: MedicineCardData){
-        nameLabel.text = item.name
-    }
+    // MARK: Configure
+    
+    func configure(_ data: MedicineCardData) { nameLabel.text = data.name }
 }
 
 #Preview(traits: .fixedLayout(width: 150, height: 30)) {

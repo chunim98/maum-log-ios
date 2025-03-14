@@ -6,60 +6,46 @@
 //
 
 import UIKit
-import SnapKit
+
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class CalendarSectionView: UIView {
+    
+    // MARK: Properties
+    
     private let calendarSectionVM = CalendarSectionVM()
     private let bag = DisposeBag()
     
-    let reloadCalender = PublishSubject<Void>()
-
-    // MARK: - Components
-    let mainVStack = {
-        let sv = UIStackView()
-        sv.axis = .vertical
-        sv.backgroundColor = .chuWhite
-        sv.clipsToBounds = true
-        sv.layer.cornerRadius = 15
-        return sv
-    }()
+    // MARK: Interface
     
-    let titleHStack = {
+    fileprivate let reloadEvent = PublishSubject<Void>()
+    
+    // MARK: Components
+    
+    private let sectionView = SectionView()
+    private let headerView = SectionHeaderView("평균 부작용 척도", areButtonsHidden: true)
+    private let calendarView = TrendCalendarView()
+    
+    private let tipLabelContainer = {
         let sv = UIStackView()
+        sv.directionalLayoutMargins = .init(edges: 10)
         sv.isLayoutMarginsRelativeArrangement = true
-        sv.directionalLayoutMargins = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
-        return sv
-    }()
-        
-    let titleLabel = {
-        let label = UILabel()
-        label.text = String(localized: "평균 부작용 척도")
-        label.font = .boldSystemFont(ofSize: 18)
-        label.textColor = .chuBlack
-        return label
-    }()
-    
-    let calendarView = TrendCalendarView()
-    
-    let tipLabelContainer = {
-        let sv = UIStackView()
-        sv.isLayoutMarginsRelativeArrangement = true
-        sv.directionalLayoutMargins = .init(top: 10, leading: 7.5, bottom: 7.5, trailing: 10)
         return sv
     }()
     
-    let tipLabel = {
+    private let tipLabel = {
         let label = UILabel()
-        label.text = String(localized: "* 기타 증상 항목은 계산에 포함되지 않아 \"없음\"으로 표시될 수 있습니다.")
+        label.text = "* 기타 증상 항목은 계산에 포함되지 않아 \"없음\"으로 표시될 수 있습니다."
         label.font = .boldSystemFont(ofSize: 12)
         label.adjustsFontSizeToFitWidth = true
         label.textColor = .lightGray
         return label
     }()
     
-    // MARK: - Life Cycle
+    // MARK: Life Cycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAutoLayout()
@@ -70,34 +56,41 @@ final class CalendarSectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Layout
+    // MARK: Layout
+    
     private func setAutoLayout() {
-        self.addSubview(mainVStack)
-
-        mainVStack.addArrangedSubview(titleHStack)
-        mainVStack.addArrangedSubview(DividerView(lineWidth: 1, lineColor: .chuIvory))
-        mainVStack.addArrangedSubview(calendarView)
-        mainVStack.addArrangedSubview(tipLabelContainer)
-        
-        titleHStack.addArrangedSubview(titleLabel)
+        self.addSubview(sectionView)
+        sectionView.headerVStack.addArrangedSubview(headerView)
+        sectionView.bodyVStack.addArrangedSubview(calendarView)
+        sectionView.footerVStack.addArrangedSubview(tipLabelContainer)
         tipLabelContainer.addArrangedSubview(tipLabel)
         
-        mainVStack.snp.makeConstraints { $0.edges.equalToSuperview() }
+        sectionView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
-    // MARK: - Binding
+    // MARK: Binding
+    
     private func setBinding() {
-        let input = CalendarSectionVM.Input(reloadCalender: reloadCalender.asObservable())
+        let input = CalendarSectionVM.Input(
+            reloadEvent: reloadEvent.asObservable()
+        )
         let output = calendarSectionVM.transform(input)
         
-        // 캘린더 업데이트
+        // 캘린더 데이터 바인딩
         output.calenderData
             .bind(to: calendarView.rx.calendarDataDic)
             .disposed(by: bag)
     }
 }
 
-
 #Preview(traits: .fixedLayout(width: 400, height: 600)) {
     CalendarSectionView()
+}
+
+// MARK: - Reactive
+
+extension Reactive where Base: CalendarSectionView {
+    var reloadBinder: Binder<Void> {
+        Binder(base) { $0.reloadEvent.onNext($1) }
+    }
 }

@@ -12,6 +12,18 @@ struct MedicineData: CapsuleCellModel {
     var createDate: Date = Date()
     let name: String
     var isEditMode: Bool = false // 코어데이터에 저장안되는 변수
+    
+    func updated(
+        createDate: Date? = nil,
+        name: String? = nil,
+        isEditMode: Bool? = nil
+    ) -> Self {
+        MedicineData(
+            createDate: createDate ?? self.createDate,
+            name: name ?? self.name,
+            isEditMode: isEditMode ?? self.isEditMode
+        )
+    }
 }
 
 extension MedicineData: Equatable, IdentifiableType {

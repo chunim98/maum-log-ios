@@ -10,12 +10,10 @@
 		510282B02C5D69C6008B8F15 /* RateCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510282AF2C5D69C6008B8F15 /* RateCardCell.swift */; };
 		5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103A2472C554F75008F8218 /* CapsuleCell.swift */; };
 		5103A24A2C555643008F8218 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103A2492C555643008F8218 /* HomeVM.swift */; };
-		5116017A2D035EC300F19A36 /* LogVC+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511601792D035EB900F19A36 /* LogVC+Alert.swift */; };
 		511831792C6C96D600B25184 /* LogSectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511831782C6C96D600B25184 /* LogSectionData.swift */; };
 		5122F4692C6B76CA0080A2D2 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 5122F4682C6B76CA0080A2D2 /* RxDataSources */; };
 		512445512C58C8910044B8A4 /* SymptomLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512445502C58C8910044B8A4 /* SymptomLogCell.swift */; };
 		5126AC822D01914B001625DB /* TrendCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5126AC812D019108001625DB /* TrendCalendarView.swift */; };
-		5126AC842D01A442001625DB /* TrendCalendarView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5126AC832D01A43E001625DB /* TrendCalendarView+Rx.swift */; };
 		512C87B72C752D5F0025A8A1 /* OutlinedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512C87B62C752D5F0025A8A1 /* OutlinedView.swift */; };
 		512C966D2C77AF4700FA1D22 /* DividerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512C966C2C77AF4700FA1D22 /* DividerView.swift */; };
 		513F6A402D04397500C5F071 /* EditButtonCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513F6A3F2D04397500C5F071 /* EditButtonCellModel.swift */; };
@@ -33,6 +31,10 @@
 		51563D732C52E09B005BBCC2 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 51563D722C52E09B005BBCC2 /* InfoPlist.xcstrings */; };
 		51563D7A2C52E509005BBCC2 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 51563D792C52E509005BBCC2 /* RxCocoa */; };
 		51563D7C2C52E509005BBCC2 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 51563D7B2C52E509005BBCC2 /* RxRelay */; };
+		515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */; };
+		515AFCF12D81A6CB0095CE93 /* LogButtonEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF02D81A6CA0095CE93 /* LogButtonEvent.swift */; };
+		515AFCF32D81A8770095CE93 /* PullDownBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */; };
+		515AFCF52D81B4190095CE93 /* EndEditingBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */; };
 		515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */; };
 		515B95662C766BC100B4FE26 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B95652C766BC100B4FE26 /* HapticManager.swift */; };
 		516130242C72300C0037127A /* SymptomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516130232C72300C0037127A /* SymptomSectionView.swift */; };
@@ -44,6 +46,7 @@
 		517E7F162C6143BF0003AAA3 /* PendingLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517E7F152C6143BF0003AAA3 /* PendingLogCell.swift */; };
 		517E7F192C61458A0003AAA3 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 517E7F182C61458A0003AAA3 /* SnapKit */; };
 		518386E72C64087700437696 /* PropertyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518386E62C64087700437696 /* PropertyWrapper.swift */; };
+		51869B232D81D55E008EFB7D /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51869B222D81D55D008EFB7D /* CircleButton.swift */; };
 		5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5188EC752C6696B3004873D1 /* SettingsVM.swift */; };
 		5188EC782C66979C004873D1 /* ButtonTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5188EC772C66979C004873D1 /* ButtonTypeCell.swift */; };
 		518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518E5EEB2CFDF9380067DF38 /* UIColor+.swift */; };
@@ -64,6 +67,19 @@
 		51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */; };
 		51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A0D2C42C6FD07400B564B3 /* LogDataManager.swift */; };
 		51AC42D92C746C6F0079CCB8 /* CalendarSectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC42D82C746C6F0079CCB8 /* CalendarSectionVM.swift */; };
+		51B923A92D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923A82D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift */; };
+		51B923AC2D7ED99A005DFB43 /* CircleAttachedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923AB2D7ED92F005DFB43 /* CircleAttachedLabel.swift */; };
+		51B923B12D7EE0FE005DFB43 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923B02D7EE0FE005DFB43 /* SectionView.swift */; };
+		51B923B32D7EE894005DFB43 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923B22D7EE894005DFB43 /* SectionHeaderView.swift */; };
+		51B923B72D7EEB11005DFB43 /* SymptomSectionBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923B62D7EEB11005DFB43 /* SymptomSectionBodyView.swift */; };
+		51B923BD2D7EF705005DFB43 /* SymptomSectionBodyVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923BC2D7EF703005DFB43 /* SymptomSectionBodyVM.swift */; };
+		51B923BF2D7EFEFC005DFB43 /* Array+SymptomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923BE2D7EFEF1005DFB43 /* Array+SymptomData.swift */; };
+		51B923C12D7F04F7005DFB43 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923C02D7F04F2005DFB43 /* MockData.swift */; };
+		51B923C32D7F067F005DFB43 /* Comparable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923C22D7F067E005DFB43 /* Comparable+.swift */; };
+		51B923C92D7F3D97005DFB43 /* MedicineSectionBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923C82D7F3D97005DFB43 /* MedicineSectionBodyView.swift */; };
+		51B923CB2D7F3EC3005DFB43 /* MedicineSectionBodyVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923CA2D7F3EBF005DFB43 /* MedicineSectionBodyVM.swift */; };
+		51B923CD2D7F3FF1005DFB43 /* Array+MedicineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B923CC2D7F3FED005DFB43 /* Array+MedicineData.swift */; };
+		51C657A12D82E0A800AFEB0E /* UIEdgeInsets+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C657A02D82E0A800AFEB0E /* UIEdgeInsets+.swift */; };
 		51CD57122C7C49E700B8858D /* MedicineSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57112C7C49E700B8858D /* MedicineSectionView.swift */; };
 		51CD57202C7C5F0A00B8858D /* MedicineDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */; };
 		51CD57222C7C64D400B8858D /* MedicineSectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57212C7C64D400B8858D /* MedicineSectionVM.swift */; };
@@ -83,7 +99,6 @@
 		51E739B12C653C5F00F957A3 /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */; };
 		51E7B71C2C7315FC00D6B7C4 /* SymptomSectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E7B71B2C7315FC00D6B7C4 /* SymptomSectionVM.swift */; };
 		51E7B71E2C7330D500D6B7C4 /* CalendarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E7B71D2C7330D500D6B7C4 /* CalendarSectionView.swift */; };
-		51F756FF2D01CFE1003FD254 /* HomeVC+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F756FE2D01CFDA003FD254 /* HomeVC+Alert.swift */; };
 		51FE74992C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE748F2C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift */; };
 		51FE749A2C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE74902C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift */; };
 		51FE749B2C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE74912C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift */; };
@@ -102,11 +117,9 @@
 		510282AF2C5D69C6008B8F15 /* RateCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateCardCell.swift; sourceTree = "<group>"; };
 		5103A2472C554F75008F8218 /* CapsuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleCell.swift; sourceTree = "<group>"; };
 		5103A2492C555643008F8218 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
-		511601792D035EB900F19A36 /* LogVC+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogVC+Alert.swift"; sourceTree = "<group>"; };
 		511831782C6C96D600B25184 /* LogSectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSectionData.swift; sourceTree = "<group>"; };
 		512445502C58C8910044B8A4 /* SymptomLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomLogCell.swift; sourceTree = "<group>"; };
 		5126AC812D019108001625DB /* TrendCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCalendarView.swift; sourceTree = "<group>"; };
-		5126AC832D01A43E001625DB /* TrendCalendarView+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrendCalendarView+Rx.swift"; sourceTree = "<group>"; };
 		512C87B62C752D5F0025A8A1 /* OutlinedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlinedView.swift; sourceTree = "<group>"; };
 		512C966C2C77AF4700FA1D22 /* DividerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerView.swift; sourceTree = "<group>"; };
 		513F6A3F2D04397500C5F071 /* EditButtonCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditButtonCellModel.swift; sourceTree = "<group>"; };
@@ -125,6 +138,10 @@
 		51563D702C52E08C005BBCC2 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		51563D722C52E09B005BBCC2 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		51563D752C52E0E7005BBCC2 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogBarButton.swift; sourceTree = "<group>"; };
+		515AFCF02D81A6CA0095CE93 /* LogButtonEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogButtonEvent.swift; sourceTree = "<group>"; };
+		515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullDownBarButton.swift; sourceTree = "<group>"; };
+		515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndEditingBarButton.swift; sourceTree = "<group>"; };
 		515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedRateCardCell.swift; sourceTree = "<group>"; };
 		515B95652C766BC100B4FE26 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		516130232C72300C0037127A /* SymptomSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionView.swift; sourceTree = "<group>"; };
@@ -135,6 +152,7 @@
 		517E7F132C6142A00003AAA3 /* AddLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogVM.swift; sourceTree = "<group>"; };
 		517E7F152C6143BF0003AAA3 /* PendingLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingLogCell.swift; sourceTree = "<group>"; };
 		518386E62C64087700437696 /* PropertyWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyWrapper.swift; sourceTree = "<group>"; };
+		51869B222D81D55D008EFB7D /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
 		5188EC752C6696B3004873D1 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
 		5188EC772C66979C004873D1 /* ButtonTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTypeCell.swift; sourceTree = "<group>"; };
 		518E5EEB2CFDF9380067DF38 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -155,6 +173,19 @@
 		51A0D2BE2C6FBCB300B564B3 /* SymptomDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomDataManager.swift; sourceTree = "<group>"; };
 		51A0D2C42C6FD07400B564B3 /* LogDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDataManager.swift; sourceTree = "<group>"; };
 		51AC42D82C746C6F0079CCB8 /* CalendarSectionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSectionVM.swift; sourceTree = "<group>"; };
+		51B923A82D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDirectionalEdgeInsets+.swift"; sourceTree = "<group>"; };
+		51B923AB2D7ED92F005DFB43 /* CircleAttachedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAttachedLabel.swift; sourceTree = "<group>"; };
+		51B923B02D7EE0FE005DFB43 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
+		51B923B22D7EE894005DFB43 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
+		51B923B62D7EEB11005DFB43 /* SymptomSectionBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionBodyView.swift; sourceTree = "<group>"; };
+		51B923BC2D7EF703005DFB43 /* SymptomSectionBodyVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionBodyVM.swift; sourceTree = "<group>"; };
+		51B923BE2D7EFEF1005DFB43 /* Array+SymptomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SymptomData.swift"; sourceTree = "<group>"; };
+		51B923C02D7F04F2005DFB43 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		51B923C22D7F067E005DFB43 /* Comparable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+.swift"; sourceTree = "<group>"; };
+		51B923C82D7F3D97005DFB43 /* MedicineSectionBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionBodyView.swift; sourceTree = "<group>"; };
+		51B923CA2D7F3EBF005DFB43 /* MedicineSectionBodyVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionBodyVM.swift; sourceTree = "<group>"; };
+		51B923CC2D7F3FED005DFB43 /* Array+MedicineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+MedicineData.swift"; sourceTree = "<group>"; };
+		51C657A02D82E0A800AFEB0E /* UIEdgeInsets+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+.swift"; sourceTree = "<group>"; };
 		51CD57112C7C49E700B8858D /* MedicineSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionView.swift; sourceTree = "<group>"; };
 		51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDataManager.swift; sourceTree = "<group>"; };
 		51CD57212C7C64D400B8858D /* MedicineSectionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionVM.swift; sourceTree = "<group>"; };
@@ -174,7 +205,6 @@
 		51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
 		51E7B71B2C7315FC00D6B7C4 /* SymptomSectionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionVM.swift; sourceTree = "<group>"; };
 		51E7B71D2C7330D500D6B7C4 /* CalendarSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSectionView.swift; sourceTree = "<group>"; };
-		51F756FE2D01CFDA003FD254 /* HomeVC+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+Alert.swift"; sourceTree = "<group>"; };
 		51FE748F2C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		51FE74902C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogCoreData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		51FE74912C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MedicineCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -207,6 +237,7 @@
 		5103A2442C5543D7008F8218 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				51B923C02D7F04F2005DFB43 /* MockData.swift */,
 				51E4904A2C7DDA0C00F0150A /* LogData */,
 				51E4904D2C7DDAA600F0150A /* SymptomData */,
 				51E490562C7DDC1800F0150A /* MedicineData */,
@@ -226,10 +257,10 @@
 		511601782D03375200F19A36 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
-				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
-				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
-				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
+				51869B212D81D493008EFB7D /* CircleButton */,
+				515AFCED2D81A66A0095CE93 /* BarButtons */,
+				515AFCF72D81C3CF0095CE93 /* CardCells */,
+				515AFCF62D81C3C20095CE93 /* LogCells */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -238,7 +269,6 @@
 			isa = PBXGroup;
 			children = (
 				5126AC812D019108001625DB /* TrendCalendarView.swift */,
-				5126AC832D01A43E001625DB /* TrendCalendarView+Rx.swift */,
 			);
 			path = TrendCalendarView;
 			sourceTree = "<group>";
@@ -278,6 +308,34 @@
 			path = MaumLog;
 			sourceTree = "<group>";
 		};
+		515AFCED2D81A66A0095CE93 /* BarButtons */ = {
+			isa = PBXGroup;
+			children = (
+				515AFCF22D81A8770095CE93 /* PullDownBarButton.swift */,
+				515AFCF42D81B40B0095CE93 /* EndEditingBarButton.swift */,
+				515AFCEE2D81A6840095CE93 /* AddLogBarButton.swift */,
+			);
+			path = BarButtons;
+			sourceTree = "<group>";
+		};
+		515AFCF62D81C3C20095CE93 /* LogCells */ = {
+			isa = PBXGroup;
+			children = (
+				512445502C58C8910044B8A4 /* SymptomLogCell.swift */,
+				51FE74A32C7CB7CC00EDA685 /* MedicineLogCell.swift */,
+			);
+			path = LogCells;
+			sourceTree = "<group>";
+		};
+		515AFCF72D81C3CF0095CE93 /* CardCells */ = {
+			isa = PBXGroup;
+			children = (
+				510282AF2C5D69C6008B8F15 /* RateCardCell.swift */,
+				51FE74A52C7CB8C500EDA685 /* MedicineCardCell.swift */,
+			);
+			path = CardCells;
+			sourceTree = "<group>";
+		};
 		516130222C721AC00037127A /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -305,6 +363,14 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		51869B212D81D493008EFB7D /* CircleButton */ = {
+			isa = PBXGroup;
+			children = (
+				51869B222D81D55D008EFB7D /* CircleButton.swift */,
+			);
+			path = CircleButton;
+			sourceTree = "<group>";
+		};
 		518E5EDF2CFDF35C0067DF38 /* Feature */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,8 +389,9 @@
 			children = (
 				518E5F062CFE05AA0067DF38 /* Components */,
 				51563D5D2C52DFFF005BBCC2 /* HomeVC.swift */,
-				51F756FE2D01CFDA003FD254 /* HomeVC+Alert.swift */,
 				5103A2492C555643008F8218 /* HomeVM.swift */,
+				51B923BE2D7EFEF1005DFB43 /* Array+SymptomData.swift */,
+				51B923CC2D7F3FED005DFB43 /* Array+MedicineData.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -354,8 +421,8 @@
 			children = (
 				511601782D03375200F19A36 /* Components */,
 				51412A0F2C5EB2D900381B7C /* LogVC.swift */,
-				511601792D035EB900F19A36 /* LogVC+Alert.swift */,
 				51412A112C5EB7CB00381B7C /* LogVM.swift */,
+				515AFCF02D81A6CA0095CE93 /* LogButtonEvent.swift */,
 			);
 			path = Log;
 			sourceTree = "<group>";
@@ -421,6 +488,7 @@
 		518E5EE92CFDF5980067DF38 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				51B923AB2D7ED92F005DFB43 /* CircleAttachedLabel.swift */,
 				51E739A62C64969600F957A3 /* TabBarVC.swift */,
 				512C87B62C752D5F0025A8A1 /* OutlinedView.swift */,
 				512C966C2C77AF4700FA1D22 /* DividerView.swift */,
@@ -444,6 +512,9 @@
 		518E5F052CFDFA030067DF38 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				51C657A02D82E0A800AFEB0E /* UIEdgeInsets+.swift */,
+				51B923C22D7F067E005DFB43 /* Comparable+.swift */,
+				51B923A82D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift */,
 				518E5F032CFDF9F60067DF38 /* UIImage+.swift */,
 				518E5F012CFDF9F00067DF38 /* CGFloat+.swift */,
 				518E5EFF2CFDF9DF0067DF38 /* Array+Int.swift */,
@@ -467,9 +538,53 @@
 				51F756FB2D01C7B7003FD254 /* SymptomSection */,
 				51F756FC2D01C7E3003FD254 /* MedicineSection */,
 				51F756FD2D01C7F7003FD254 /* CalendarSection */,
-				5103A2472C554F75008F8218 /* CapsuleCell.swift */,
+				51B923AA2D7ED89E005DFB43 /* CapsuleCell */,
+				51B923AE2D7EE0D0005DFB43 /* SectionView */,
+				51B923B42D7EE96E005DFB43 /* SectionHeaderView */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		51B923AA2D7ED89E005DFB43 /* CapsuleCell */ = {
+			isa = PBXGroup;
+			children = (
+				5103A2472C554F75008F8218 /* CapsuleCell.swift */,
+			);
+			path = CapsuleCell;
+			sourceTree = "<group>";
+		};
+		51B923AE2D7EE0D0005DFB43 /* SectionView */ = {
+			isa = PBXGroup;
+			children = (
+				51B923B02D7EE0FE005DFB43 /* SectionView.swift */,
+			);
+			path = SectionView;
+			sourceTree = "<group>";
+		};
+		51B923B42D7EE96E005DFB43 /* SectionHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				51B923B22D7EE894005DFB43 /* SectionHeaderView.swift */,
+			);
+			path = SectionHeaderView;
+			sourceTree = "<group>";
+		};
+		51B923B52D7EEAF2005DFB43 /* SymptomSectionBodyView */ = {
+			isa = PBXGroup;
+			children = (
+				51B923B62D7EEB11005DFB43 /* SymptomSectionBodyView.swift */,
+				51B923BC2D7EF703005DFB43 /* SymptomSectionBodyVM.swift */,
+			);
+			path = SymptomSectionBodyView;
+			sourceTree = "<group>";
+		};
+		51B923C72D7F3D80005DFB43 /* MedicineSectionBodyView */ = {
+			isa = PBXGroup;
+			children = (
+				51B923C82D7F3D97005DFB43 /* MedicineSectionBodyView.swift */,
+				51B923CA2D7F3EBF005DFB43 /* MedicineSectionBodyVM.swift */,
+			);
+			path = MedicineSectionBodyView;
 			sourceTree = "<group>";
 		};
 		51E4904A2C7DDA0C00F0150A /* LogData */ = {
@@ -504,6 +619,7 @@
 		51F756FB2D01C7B7003FD254 /* SymptomSection */ = {
 			isa = PBXGroup;
 			children = (
+				51B923B52D7EEAF2005DFB43 /* SymptomSectionBodyView */,
 				516130232C72300C0037127A /* SymptomSectionView.swift */,
 				51E7B71B2C7315FC00D6B7C4 /* SymptomSectionVM.swift */,
 			);
@@ -513,6 +629,7 @@
 		51F756FC2D01C7E3003FD254 /* MedicineSection */ = {
 			isa = PBXGroup;
 			children = (
+				51B923C72D7F3D80005DFB43 /* MedicineSectionBodyView */,
 				51CD57112C7C49E700B8858D /* MedicineSectionView.swift */,
 				51CD57212C7C64D400B8858D /* MedicineSectionVM.swift */,
 			);
@@ -622,44 +739,56 @@
 				516F59FD2C67BC5700BD640B /* SettingValuesStorage.swift in Sources */,
 				51E739A72C64969600F957A3 /* TabBarVC.swift in Sources */,
 				518E5F002CFDF9DF0067DF38 /* Array+Int.swift in Sources */,
+				515AFCF52D81B4190095CE93 /* EndEditingBarButton.swift in Sources */,
 				512C966D2C77AF4700FA1D22 /* DividerView.swift in Sources */,
+				51B923CB2D7F3EC3005DFB43 /* MedicineSectionBodyVM.swift in Sources */,
 				518E5F022CFDF9F00067DF38 /* CGFloat+.swift in Sources */,
 				518E5EF02CFDF96A0067DF38 /* UIViewController+.swift in Sources */,
 				512445512C58C8910044B8A4 /* SymptomLogCell.swift in Sources */,
 				51FE74A62C7CB8C500EDA685 /* MedicineCardCell.swift in Sources */,
 				518386E72C64087700437696 /* PropertyWrapper.swift in Sources */,
 				5103A24A2C555643008F8218 /* HomeVM.swift in Sources */,
+				515AFCF12D81A6CB0095CE93 /* LogButtonEvent.swift in Sources */,
 				5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */,
 				51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */,
 				518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */,
 				517E7F102C60FF730003AAA3 /* AddLogVC.swift in Sources */,
 				511831792C6C96D600B25184 /* LogSectionData.swift in Sources */,
+				51B923AC2D7ED99A005DFB43 /* CircleAttachedLabel.swift in Sources */,
+				51B923B32D7EE894005DFB43 /* SectionHeaderView.swift in Sources */,
 				517E7F162C6143BF0003AAA3 /* PendingLogCell.swift in Sources */,
 				51E4905E2C7DF15700F0150A /* EmptyView.swift in Sources */,
+				51B923BF2D7EFEFC005DFB43 /* Array+SymptomData.swift in Sources */,
 				51E6A22A2C664BEB004C2BBA /* SettingsVC.swift in Sources */,
 				518E5F042CFDF9F60067DF38 /* UIImage+.swift in Sources */,
 				510282B02C5D69C6008B8F15 /* RateCardCell.swift in Sources */,
+				51B923C92D7F3D97005DFB43 /* MedicineSectionBodyView.swift in Sources */,
 				516F59FB2C67B7F900BD640B /* ToggleTypeCell.swift in Sources */,
+				51B923CD2D7F3FF1005DFB43 /* Array+MedicineData.swift in Sources */,
 				51412A102C5EB2D900381B7C /* LogVC.swift in Sources */,
+				51C657A12D82E0A800AFEB0E /* UIEdgeInsets+.swift in Sources */,
 				51E4904C2C7DDA5B00F0150A /* LogData.swift in Sources */,
+				515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */,
 				51E490582C7DDC7100F0150A /* MedicineData.swift in Sources */,
 				5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */,
 				51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */,
-				5126AC842D01A442001625DB /* TrendCalendarView+Rx.swift in Sources */,
 				51E739AF2C6526AC00F957A3 /* AddSymptomVC.swift in Sources */,
 				518E5EF42CFDF97F0067DF38 /* DateFormatter+.swift in Sources */,
 				518E5EF22CFDF9730067DF38 /* UICollectionView+.swift in Sources */,
 				5188EC782C66979C004873D1 /* ButtonTypeCell.swift in Sources */,
 				51412A122C5EB7CB00381B7C /* LogVM.swift in Sources */,
 				518E5EFC2CFDF9C30067DF38 /* Array+Int16.swift in Sources */,
+				51B923B12D7EE0FE005DFB43 /* SectionView.swift in Sources */,
 				51CD57292C7C8DEA00B8858D /* AddMedicineVM.swift in Sources */,
 				51563D5A2C52DFFF005BBCC2 /* AppDelegate.swift in Sources */,
 				51563D642C52DFFF005BBCC2 /* MaumLog.xcdatamodeld in Sources */,
+				51B923A92D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift in Sources */,
 				513F6A422D04398500C5F071 /* CapsuleCellModel.swift in Sources */,
 				516130242C72300C0037127A /* SymptomSectionView.swift in Sources */,
 				5126AC822D01914B001625DB /* TrendCalendarView.swift in Sources */,
 				51CD57222C7C64D400B8858D /* MedicineSectionVM.swift in Sources */,
 				518E5EEE2CFDF9580067DF38 /* AttributeContainer+.swift in Sources */,
+				51B923C12D7F04F7005DFB43 /* MockData.swift in Sources */,
 				51CD57272C7C8D8200B8858D /* AddMedicineVC.swift in Sources */,
 				512C87B72C752D5F0025A8A1 /* OutlinedView.swift in Sources */,
 				51E7B71C2C7315FC00D6B7C4 /* SymptomSectionVM.swift in Sources */,
@@ -667,7 +796,7 @@
 				518E5EF62CFDF9910067DF38 /* Int+.swift in Sources */,
 				51E4905A2C7DDCAA00F0150A /* MedicineSectionData.swift in Sources */,
 				51E490512C7DDB9000F0150A /* SymptomSectionData.swift in Sources */,
-				51F756FF2D01CFE1003FD254 /* HomeVC+Alert.swift in Sources */,
+				51B923BD2D7EF705005DFB43 /* SymptomSectionBodyVM.swift in Sources */,
 				513F6A402D04397500C5F071 /* EditButtonCellModel.swift in Sources */,
 				51CD57122C7C49E700B8858D /* MedicineSectionView.swift in Sources */,
 				515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */,
@@ -678,17 +807,19 @@
 				51AC42D92C746C6F0079CCB8 /* CalendarSectionVM.swift in Sources */,
 				51E7B71E2C7330D500D6B7C4 /* CalendarSectionView.swift in Sources */,
 				5195AB382C69EBD9000A7BED /* AddSymptomVM.swift in Sources */,
+				51B923B72D7EEB11005DFB43 /* SymptomSectionBodyView.swift in Sources */,
 				51FE74992C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift in Sources */,
 				51FE749A2C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift in Sources */,
 				51FE749B2C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift in Sources */,
 				518E5EFE2CFDF9D30067DF38 /* Array+Int32.swift in Sources */,
 				51FE749C2C7CA29400EDA685 /* MedicineCoreData+CoreDataProperties.swift in Sources */,
 				51FE749D2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataClass.swift in Sources */,
-				5116017A2D035EC300F19A36 /* LogVC+Alert.swift in Sources */,
-				5143DD2A2D05F66400335F36 /* UIControl+Combine.swift in Sources */,
+				51B923C32D7F067F005DFB43 /* Comparable+.swift in Sources */,
+				515AFCF32D81A8770095CE93 /* PullDownBarButton.swift in Sources */,
 				51FE749E2C7CA29400EDA685 /* MedicineCardCoreData+CoreDataProperties.swift in Sources */,
 				51FE749F2C7CA29400EDA685 /* SymptomCardCoreData+CoreDataClass.swift in Sources */,
 				51FE74A02C7CA29400EDA685 /* SymptomCardCoreData+CoreDataProperties.swift in Sources */,
+				51869B232D81D55E008EFB7D /* CircleButton.swift in Sources */,
 				518E5EFA2CFDF9AB0067DF38 /* Int32+.swift in Sources */,
 				51FE74A42C7CB7CC00EDA685 /* MedicineLogCell.swift in Sources */,
 				51FE74A12C7CA29400EDA685 /* SymptomCoreData+CoreDataClass.swift in Sources */,

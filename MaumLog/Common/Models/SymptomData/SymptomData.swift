@@ -14,6 +14,22 @@ struct SymptomData: CapsuleCellModel {
     let isNegative: Bool
     var createDate: Date = Date()
     var isEditMode: Bool = false // 코어데이터에 저장안되는 변수
+    
+    func updated(
+        name: String? = nil,
+        hex: Int? = nil,
+        isNegative: Bool? = nil,
+        createDate: Date? = nil,
+        isEditMode: Bool? = nil
+    ) -> Self {
+        SymptomData(
+            name: name ?? self.name,
+            hex: hex ?? self.hex,
+            isNegative: isNegative ?? self.isNegative,
+            createDate: createDate ?? self.createDate,
+            isEditMode: isEditMode ?? self.isEditMode
+        )
+    }
 }
 
 extension SymptomData: Equatable, IdentifiableType {

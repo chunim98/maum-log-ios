@@ -6,145 +6,152 @@
 //
 
 import UIKit
+
 import RxSwift
 import RxCocoa
 
 final class LogVM {
 
     struct Input {
-        let tappedAddButton: Observable<Void>
-        let reloadSectionData: Observable<Void>
-        let tappedEditButton: Observable<Void>
-        let tappedEditDoneButton: Observable<Void>
-        let changeSorting: Observable<Bool>
-        let tappedTakeMedicineButton: Observable<Void>
-        let itemToRemove: Observable<EditButtonCellModel>
+        let buttonEvent: Observable<LogButtonEvent>
+        let reloadEvent: Observable<Void>
+        let selectedModel: Observable<EditButtonCellModel>
     }
     
     struct Output {
-        let goAddLog: Observable<Void>
-        let presentShouldAddSymptomAlert: Observable<Void>
-        let sectionData: Observable<[LogSectionData]>
-        let isEditMode: Observable<Bool>
+        let pushAddLogEvent: Observable<Void>
+        let presentShouldAddSymptomAlertEvent: Observable<Void>
+        let logSectionDataArr: Observable<[LogSectionData]>
+        let isEditing: Observable<Bool>
         let isAscendingOrder: Observable<Bool>
-        let logDataIsEmpty: Observable<Bool>
-        let presentShouldAddMedicineAlert: Observable<Void>
-        let presentTakeMedicineAlert: Observable<Void>
-        let presentRemoveAlert: Observable<EditButtonCellModel>
+        let isDataEmpty: Observable<Bool>
+        let presentShouldAddMedicineAlertEvent: Observable<Void>
+        let presentTakeMedicineAlertEvent: Observable<Void>
+        let itemToRemove: Observable<EditButtonCellModel>
     }
     
     private let bag = DisposeBag()
     
     func transform (_ input: Input) -> Output {
-        // 로그 데이터
-        let logData = BehaviorSubject<[LogData]>(value: LogDataManager.shared.read())
-        // 정렬 설정 값
-        let isAscendingOrder = BehaviorSubject<Bool>(value: SettingValuesStorage.shared.isAscendingOrder)
+        let logDataArr = BehaviorSubject<[LogData]>(value: LogDataManager.shared.read())
+        let isEditing = BehaviorSubject<Bool>(value: false)
+        let isAscendingOrder = BehaviorSubject<Bool>(
+            value: SettingValuesStorage.shared.isAscendingOrder
+        )
+        
+        // 버튼 이벤트 분기한 프로퍼티
+        let sortByDescendingEvent = input.buttonEvent.filter { $0 == .sortByDescending }
+        let sortByAscendingEvent = input.buttonEvent.filter { $0 == .sortByAscending }
+        let pushAddLogEvent_ = input.buttonEvent.filter { $0 == .pushAddLog }
+        let intakeEvent = input.buttonEvent.filter { $0 == .intake }
+        let editEvent = input.buttonEvent.filter { $0 == .edit }
 
-        // MARK: - Observables
         // 로그 테이블 뷰 리로드
-        input.reloadSectionData
+        input.reloadEvent
             .map { LogDataManager.shared.read() }
-            .bind(to: logData)
+            .bind(to: logDataArr)
             .disposed(by: bag)
         
-        // 하나도 기록한 게 없는지
-        let logDataIsEmpty = logData
+        // 기록이 없다면 백그라운드 뷰 표시
+        let isDataEmpty = logDataArr
             .map { $0.isEmpty }
         
-        // 편집 모드, 초기 값이 있어야 로그 리스트 표시 가능
-        let isEditMode = Observable
-            .merge(
-                input.tappedEditButton.map { true },
-                input.tappedEditDoneButton.map { false })
-            .startWith(false)
-            .share(replay: 1)
+        // 편집 모드 상태 전환
+        editEvent
+            .withLatestFrom(isEditing) { _, bool in !bool }
+            .bind(to: isEditing)
+            .disposed(by: bag)
         
-        // 정렬 변경
-        input.changeSorting
+        // 오름차 순 정렬
+        sortByAscendingEvent
+            .map { _ in false }
+            .do(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 }) // 설정값 보존
             .bind(to: isAscendingOrder)
             .disposed(by: bag)
         
-        // 정렬이 바뀌면 설정 값을 업데이트
-        isAscendingOrder
-            .bind(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 })
+        // 내림차 순 정렬
+        sortByDescendingEvent
+            .map { _ in true }
+            .do(onNext: { SettingValuesStorage.shared.isAscendingOrder = $0 }) // 설정값 보존
+            .bind(to: isAscendingOrder)
             .disposed(by: bag)
         
-        // 로그데이터, 편집모드 여부, 오름차 정렬 여부 조합해서 sectionData로 내보냄 (꽤 복잡하다)
-        let sectionData = Observable
-            .combineLatest(logData, isEditMode, isAscendingOrder)
-            .map { data, editMode, isAscendingOrder in
-                
-                // 편집모드인지 아닌지 수정해주는 코드(기본값 false)
-                let logData = data.map {
-                    var log = $0
-                    log.isEditMode = editMode
-                    return log
-                }
-                
-                // 포메터로 문자열화 된 날짜 기준 그루핑 (헤더로 사용할거라 DateComponant는 사용불가)
-                let grouped = Dictionary(grouping: logData) { DateFormatter.forSort.string(from: $0.date) }
-                // 딕셔너리 map돌리기
-                var sectionData = grouped.map { LogSectionData(items: $1, dateForSorting: $0) }
-                // 순서가 섞여있을테니 정렬(오름차순)
-                sectionData.sort()
-                
-                if isAscendingOrder {
-                    for i in 0..<sectionData.count {
-                        // 내림차순이었던 내부 데이터를 오름차순으로 변경
-                        sectionData[i].items.reverse()
-                    }
-                } else {
-                    // 내림차순으로 정렬 (내부 데이터 내림차순)
-                    sectionData.reverse()
-                }
-                
-                return sectionData
-            }
-            .share(replay: 1)
+        // 로그, 편집, 정렬 상태를 조합해서 sectionData로 만듦
+        let logSectionDataArr = Observable
+            .combineLatest(logDataArr, isEditing, isAscendingOrder)
+            .compactMap { [weak self] in self?.getLogSectionDataArr($0, $1, $2) }
         
         // 기록 추가 모달 띄우기
-        let goAddLog = input.tappedAddButton
-            .filter { !(SymptomDataManager.shared.read().isEmpty) }
+        let pushAddLogEvent = pushAddLogEvent_
+            .filter { _ in !(SymptomDataManager.shared.read().isEmpty) }
+            .map { _ in }
         
         // 등록한 증상이 없다면 증상 부터 등록하라는 얼럿 띄우기
-        let presentShouldAddSymptomAlert = input.tappedAddButton
-            .filter { SymptomDataManager.shared.read().isEmpty }
+        let presentShouldAddSymptomAlertEvent = pushAddLogEvent_
+            .filter { _ in SymptomDataManager.shared.read().isEmpty }
+            .map { _ in }
         
         // 등록한 약이 없다면 먼저 등록부터 하라는 얼럿 띄우기
-        let presentShouldAddMedicineAlert = input.tappedTakeMedicineButton
-            .filter { MedicineDataManager.shared.read().isEmpty }
+        let presentShouldAddMedicineAlertEvent = intakeEvent
+            .filter { _ in MedicineDataManager.shared.read().isEmpty }
+            .map { _ in }
         
         // 약물 섭취 기록 추가 (등록된 약이 있을 경우에만)
-        input.tappedTakeMedicineButton
-            .filter { !(MedicineDataManager.shared.read().isEmpty) }
-            .map {
-                let data = MedicineDataManager.shared.read()
-                let mediCardData = data.map { MedicineCardData(name: $0.name) }
-                LogDataManager.shared.create(from: mediCardData)
-                // 업데이트가 반영된 값 불러오기
-                return LogDataManager.shared.read()
-            }
-            .bind(to: logData)
+        intakeEvent
+            .compactMap { [weak self] _ in self?.appendMedicineLog() }
+            .bind(to: logDataArr)
             .disposed(by: bag)
         
         // 약 먹었다는 얼럿 띄우기 (등록된 약이 있을 경우에만)
-        let presentTakeMedicineAlert = input.tappedTakeMedicineButton
-            .filter { !(MedicineDataManager.shared.read().isEmpty) }
+        let presentTakeMedicineAlertEvent = intakeEvent
+            .filter { _ in !(MedicineDataManager.shared.read().isEmpty) }
+            .map { _ in }
         
-        // 삭제 얼럿을 띄우는 메시지 전송
-        let presentRemoveAlert = input.itemToRemove
+        // 편집 상태일 때, 삭제할 아이템 전달
+        let itemToRemove = input.selectedModel
+            .withLatestFrom(isEditing) { $1 ? $0 : nil }
+            .compactMap { $0 }
 
-        
         return Output(
-            goAddLog: goAddLog,
-            presentShouldAddSymptomAlert: presentShouldAddSymptomAlert,
-            sectionData: sectionData,
-            isEditMode: isEditMode,
+            pushAddLogEvent: pushAddLogEvent,
+            presentShouldAddSymptomAlertEvent: presentShouldAddSymptomAlertEvent,
+            logSectionDataArr: logSectionDataArr,
+            isEditing: isEditing,
             isAscendingOrder: isAscendingOrder.asObservable(),
-            logDataIsEmpty: logDataIsEmpty,
-            presentShouldAddMedicineAlert: presentShouldAddMedicineAlert,
-            presentTakeMedicineAlert: presentTakeMedicineAlert,
-            presentRemoveAlert: presentRemoveAlert)
+            isDataEmpty: isDataEmpty,
+            presentShouldAddMedicineAlertEvent: presentShouldAddMedicineAlertEvent,
+            presentTakeMedicineAlertEvent: presentTakeMedicineAlertEvent,
+            itemToRemove: itemToRemove
+        )
+    }
+    
+    // MARK: Methods
+    
+    private func getLogSectionDataArr(
+        _ logDataArr: [LogData],
+        _ isEditing: Bool,
+        _ isAscending: Bool
+    ) -> [LogSectionData] {
+        Dictionary(
+            grouping: logDataArr.map { $0.updated(isEditMode: isEditing) } // 편집 상태 반영
+        ) {
+            // 문자열화 된 날짜 기준 그루핑 (헤더로 사용할거라 DateComponant는 사용불가)
+            DateFormatter.forSort.string(from: $0.date)
+        }.map {
+            let items = isAscending ? $1.reversed() : $1 // 내부 데이터도 정렬
+            return LogSectionData(items: items, dateForSorting: $0)
+        }.sorted {
+            isAscending ? ($0 < $1) : ($0 > $1)
+        }
+    }
+    
+    private func appendMedicineLog() -> [LogData]? {
+        let mediData = MedicineDataManager.shared.read()
+        guard !mediData.isEmpty else { return nil }
+        
+        let mediCardData = mediData.map { MedicineCardData(name: $0.name) }
+        LogDataManager.shared.create(from: mediCardData)
+        
+        return LogDataManager.shared.read() // 업데이트가 반영된 값 불러오기
     }
 }
