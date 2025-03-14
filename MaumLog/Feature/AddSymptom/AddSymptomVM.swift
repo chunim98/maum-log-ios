@@ -22,7 +22,6 @@ final class AddSymptomVM {
     
     struct Output {
         let colorPaletteData: Observable<[Int]>
-        let clippedText: Observable<String>
         let isEnabledConfirmButton: Observable<Bool>
         let justDismiss: Observable<Void>
         let selectedColor: Observable<UIColor>
@@ -50,24 +49,8 @@ final class AddSymptomVM {
         // 컬러 팔레트 데이터
         let colorPaletteData = Observable.just(colorPalette)
         
-        // 텍스트 필드 8글자 제한
-        let clippedText = input.textOfTextField
-            .map {
-                // 공백은 제거
-                let text = $0.trimmingCharacters(in: .whitespaces)
-                
-                // 텍스트 8글자 제한
-                if text.count > 8 {
-                    let index = text.index(text.startIndex, offsetBy: 8)
-                    return String(text[..<index])
-                } else {
-                    return text
-                }
-            }
-            .share(replay: 1)
-        
         // 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
-        let isEnabledConfirmButton = clippedText
+        let isEnabledConfirmButton = input.textOfTextField
             .map { !($0.isEmpty) }
         
         // 저장 버튼 눌렀을 때의 저장 로직
@@ -75,7 +58,7 @@ final class AddSymptomVM {
             .merge( // Bool타입으로 변환해서 어떤 버튼이 눌렸는지 구분
                 input.tappedNegativeConfirmButton.map { true },
                 input.tappedOtherConfirmButton.map { false })
-            .withLatestFrom(Observable.combineLatest(clippedText, selectedColor)) { isNegative, combined in
+            .withLatestFrom(Observable.combineLatest(input.textOfTextField, selectedColor)) { isNegative, combined in
                 let (clippedText, selectedColor) = combined
                 return SymptomData(name: clippedText, hex: selectedColor.toHexInt, isNegative: isNegative)
             }
@@ -103,7 +86,6 @@ final class AddSymptomVM {
         
         return Output(
             colorPaletteData: colorPaletteData,
-            clippedText: clippedText,
             isEnabledConfirmButton: isEnabledConfirmButton,
             justDismiss: justDismiss,
             selectedColor: selectedColor.asObservable(),

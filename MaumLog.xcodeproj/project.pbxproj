@@ -20,7 +20,9 @@
 		513F6A422D04398500C5F071 /* CapsuleCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513F6A412D04398500C5F071 /* CapsuleCellModel.swift */; };
 		51412A102C5EB2D900381B7C /* LogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51412A0F2C5EB2D900381B7C /* LogVC.swift */; };
 		51412A122C5EB7CB00381B7C /* LogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51412A112C5EB7CB00381B7C /* LogVM.swift */; };
-		5143DD2A2D05F66400335F36 /* UIControl+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5143DD292D05F66200335F36 /* UIControl+Combine.swift */; };
+		514BA1F62D847D96001A6138 /* CapsuleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BA1F52D847D96001A6138 /* CapsuleTextField.swift */; };
+		514BA1F82D84833D001A6138 /* CapsuleTextFieldVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BA1F72D848336001A6138 /* CapsuleTextFieldVM.swift */; };
+		514BA1FA2D84905C001A6138 /* ColorPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BA1F92D84905C001A6138 /* ColorPaletteView.swift */; };
 		51563D5A2C52DFFF005BBCC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51563D592C52DFFF005BBCC2 /* AppDelegate.swift */; };
 		51563D5C2C52DFFF005BBCC2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51563D5B2C52DFFF005BBCC2 /* SceneDelegate.swift */; };
 		51563D5E2C52DFFF005BBCC2 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51563D5D2C52DFFF005BBCC2 /* HomeVC.swift */; };
@@ -127,6 +129,9 @@
 		51412A0F2C5EB2D900381B7C /* LogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogVC.swift; sourceTree = "<group>"; };
 		51412A112C5EB7CB00381B7C /* LogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogVM.swift; sourceTree = "<group>"; };
 		5143DD292D05F66200335F36 /* UIControl+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Combine.swift"; sourceTree = "<group>"; };
+		514BA1F52D847D96001A6138 /* CapsuleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleTextField.swift; sourceTree = "<group>"; };
+		514BA1F72D848336001A6138 /* CapsuleTextFieldVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleTextFieldVM.swift; sourceTree = "<group>"; };
+		514BA1F92D84905C001A6138 /* ColorPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteView.swift; sourceTree = "<group>"; };
 		51563D562C52DFFF005BBCC2 /* MaumLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaumLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51563D592C52DFFF005BBCC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		51563D5B2C52DFFF005BBCC2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -282,6 +287,33 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		514BA1F22D847D27001A6138 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				514BA1F42D847D4F001A6138 /* CapsuleTextField */,
+				514BA1FB2D84974C001A6138 /* ColorPaletteView */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		514BA1F42D847D4F001A6138 /* CapsuleTextField */ = {
+			isa = PBXGroup;
+			children = (
+				514BA1F52D847D96001A6138 /* CapsuleTextField.swift */,
+				514BA1F72D848336001A6138 /* CapsuleTextFieldVM.swift */,
+			);
+			path = CapsuleTextField;
+			sourceTree = "<group>";
+		};
+		514BA1FB2D84974C001A6138 /* ColorPaletteView */ = {
+			isa = PBXGroup;
+			children = (
+				514BA1F92D84905C001A6138 /* ColorPaletteView.swift */,
+				51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */,
+			);
+			path = ColorPaletteView;
+			sourceTree = "<group>";
+		};
 		51563D4D2C52DFFF005BBCC2 = {
 			isa = PBXGroup;
 			children = (
@@ -399,9 +431,9 @@
 		518E5EE12CFDF3A10067DF38 /* AddSymptom */ = {
 			isa = PBXGroup;
 			children = (
+				514BA1F22D847D27001A6138 /* Components */,
 				51E739AE2C6526AC00F957A3 /* AddSymptomVC.swift */,
 				5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */,
-				51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */,
 			);
 			path = AddSymptom;
 			sourceTree = "<group>";
@@ -729,6 +761,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				514BA1F82D84833D001A6138 /* CapsuleTextFieldVM.swift in Sources */,
 				51E4905C2C7DDCDE00F0150A /* MedicineCardData.swift in Sources */,
 				517E7F122C6106FE0003AAA3 /* LoggableCapsuleCell.swift in Sources */,
 				51E739B12C653C5F00F957A3 /* ColorPaletteCell.swift in Sources */,
@@ -736,6 +769,7 @@
 				518E5F0E2CFE160E0067DF38 /* OnlyOnce.swift in Sources */,
 				51563D5E2C52DFFF005BBCC2 /* HomeVC.swift in Sources */,
 				51E4904F2C7DDB4D00F0150A /* SymptomData.swift in Sources */,
+				514BA1F62D847D96001A6138 /* CapsuleTextField.swift in Sources */,
 				516F59FD2C67BC5700BD640B /* SettingValuesStorage.swift in Sources */,
 				51E739A72C64969600F957A3 /* TabBarVC.swift in Sources */,
 				518E5F002CFDF9DF0067DF38 /* Array+Int.swift in Sources */,
@@ -785,6 +819,7 @@
 				51B923A92D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift in Sources */,
 				513F6A422D04398500C5F071 /* CapsuleCellModel.swift in Sources */,
 				516130242C72300C0037127A /* SymptomSectionView.swift in Sources */,
+				514BA1FA2D84905C001A6138 /* ColorPaletteView.swift in Sources */,
 				5126AC822D01914B001625DB /* TrendCalendarView.swift in Sources */,
 				51CD57222C7C64D400B8858D /* MedicineSectionVM.swift in Sources */,
 				518E5EEE2CFDF9580067DF38 /* AttributeContainer+.swift in Sources */,

@@ -6,141 +6,105 @@
 //
 
 import UIKit
-import SnapKit
+
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class AddSymptomVC: UIViewController {
     
+    // MARK: Properties
+    
     private let addSymptomVM = AddSymptomVM()
     private let bag = DisposeBag()
-    private let once = OnlyOnce()
     var dismissTask: (() -> Void)?
     
-    private let selectedColorFromPalette = PublishSubject<UIColor>()
+    // MARK: Components
     
-    // MARK: - Components
-    let titleBackground = {
+    private let titleBackground = {
         let view = UIView()
         view.backgroundColor = .chuIvory
         return view
     }()
     
-    let titleLabel = {
+    private let titleLabel = {
         let label = UILabel()
-        label.text = String(localized: "새 증상 등록")
         label.font = .boldSystemFont(ofSize: 18)
-        label.textColor = .chuBlack
         label.textAlignment = .center
+        label.textColor = .chuBlack
+        label.text = "새 증상 등록"
         return label
     }()
     
-    let closeButton = {
+    private let closeButton = {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "x")?
-            .resizeImage(newWidth: 22)
             .withRenderingMode(.alwaysTemplate)
+            .resizeImage(newWidth: 22)
         config.baseForegroundColor = .chuBlack
         return UIButton(configuration: config)
     }()
     
-    let mainVStack = {
+    private let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = .chuSpace
+        sv.spacing = 15
         return sv
     }()
     
-    let textFieldHStack = {
+    private let textFieldHStack = {
         let sv = UIStackView()
-        sv.spacing = .chuSpace
+        sv.spacing = 15
         return sv
     }()
     
-    let colorPickerButton = {
+    private let colorPickerButton = {
         let button = UIColorWell()
-        button.supportsAlpha = false // 색상피커에서 불투명도 옵션을 제거
-        button.title = String(localized: "색상 지정")
         button.selectedColor = .chuColorPalette[1]
+        button.supportsAlpha = false // 색상피커에서 불투명도 옵션을 제거
+        button.title = "색상 지정"
         return button
     }()
     
-    let capsuleView = {
-        let view = UIView()
-        view.backgroundColor = .chuColorPalette[1]
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 25
-        return view
-    }()
+    private let capsuleTextField = CapsuleTextField()
     
-    let textField = {
-        let tf = UITextField()
-        // tf.attributedPlaceholder = NSAttributedString(
-        //     string: String(localized: "증상명 입력(6글자 제한)"),
-        //     attributes: [ // 플레이스 홀더 색상 커스텀
-        //         NSAttributedString.Key.foregroundColor : UIColor.chuHalfBlack,
-        //         NSAttributedString.Key.backgroundColor : UIColor.chuIvory ] )
-        tf.placeholder = String(localized: "증상 입력 (최대 8자)")
-        tf.font = .boldSystemFont(ofSize: 20)
-        tf.textColor = .chuBlack
-        tf.textAlignment = .center
-        tf.returnKeyType = .done // 키보드 리턴키를 "완료"로 변경
-        tf.clearButtonMode = .whileEditing
-        tf.borderStyle = .roundedRect
-        tf.backgroundColor = .chuWhite
-        return tf
-    }()
+    private let colorPaletteView = ColorPaletteView()
     
-    let colorPaletteCVBackgroundView = {
-        let view = UIView()
-        view.backgroundColor = .chuWhite
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 25
-        return view
-    }()
-    
-    let colorPaletteCV: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        cv.register(ColorPaletteCell.self, forCellWithReuseIdentifier: ColorPaletteCell.identifier) // 셀의 등록과정 (스토리보드 사용시에는 스토리보드에서 자동등록)
-        cv.showsVerticalScrollIndicator = false // 스크롤 바 숨기기
-        cv.backgroundColor = .chuWhite
-        cv.clipsToBounds = true
-        cv.layer.cornerRadius = 15
-        return cv
-    }()
-    
-    let confirmButtonHStack = {
+    private let confirmButtonHStack = {
         let sv = UIStackView()
-        sv.spacing = .chuSpace
         sv.distribution = .fillEqually
         sv.layer.cornerRadius = 25
         sv.clipsToBounds = true
+        sv.spacing = 15
         return sv
     }()
     
-    let negativeConfirmButton = {
+    private let negativeConfirmButton = {
         var config = UIButton.Configuration.filled()
-        config.title = String(localized: "부작용으로 추가")
         config.baseBackgroundColor = .chuBadRate
         config.baseForegroundColor = .chuWhite
+        config.title = "부작용으로 추가"
         config.cornerStyle = .small
+        
         let button = UIButton(configuration: config)
         button.isEnabled = false
         return button
     }()
     
-    let otherConfirmButton = {
+    private let otherConfirmButton = {
         var config = UIButton.Configuration.filled()
-        config.title = String(localized: "기타 증상으로 추가")
         config.baseBackgroundColor = .chuOtherRate
         config.baseForegroundColor = .chuWhite
+        config.title = "기타 증상으로 추가"
         config.cornerStyle = .small
+        
         let button = UIButton(configuration: config)
         button.isEnabled = false
         return button
     }()
 
-    // MARK: - Life Cycle
+    // MARK: Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
@@ -148,27 +112,18 @@ final class AddSymptomVC: UIViewController {
         setBinding()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        once.excute {
-            colorPaletteCV.layoutIfNeeded()
-            setColorPaletteCVLayout()
-        }
-    }
+    // MARK: Layout
     
-    // MARK: - Layout
     func setAutoLayout() {
         view.addSubview(mainVStack)
         view.addSubview(titleBackground)
         mainVStack.addArrangedSubview(textFieldHStack)
-        mainVStack.addArrangedSubview(colorPaletteCVBackgroundView)
+        mainVStack.addArrangedSubview(colorPaletteView)
         mainVStack.addArrangedSubview(confirmButtonHStack)
         textFieldHStack.addArrangedSubview(colorPickerButton)
-        textFieldHStack.addArrangedSubview(capsuleView)
-        colorPaletteCVBackgroundView.addSubview(colorPaletteCV)
+        textFieldHStack.addArrangedSubview(capsuleTextField)
         confirmButtonHStack.addArrangedSubview(negativeConfirmButton)
         confirmButtonHStack.addArrangedSubview(otherConfirmButton)
-        capsuleView.addSubview(textField)
         titleBackground.addSubview(titleLabel)
         titleBackground.addSubview(closeButton)
         
@@ -185,45 +140,26 @@ final class AddSymptomVC: UIViewController {
             $0.horizontalEdges.equalToSuperview().inset(CGFloat.chuSpace)
             $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).inset(CGFloat.chuSpace.reverse) // 키보드 올라왔을 때 레이아웃 동적 변환
         }
-        textField.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
         colorPickerButton.snp.makeConstraints { $0.width.height.equalTo(CGFloat.chuHeight) }
-        colorPaletteCV.snp.makeConstraints { $0.edges.equalToSuperview().inset(10) }
         confirmButtonHStack.snp.makeConstraints { $0.height.equalTo(CGFloat.chuHeight) }
     }
     
-    private func setColorPaletteCVLayout() {
-        colorPaletteCV.setMultilineLayout(spacing: .chuSpace, itemCount: 6)
-    }
+    // MARK: Binding
     
-    // MARK: - Binding
     func setBinding() {
         let selectedColorFromPicker = colorPickerButton
             .rx.controlEvent(.valueChanged)
-            .map { [weak self] _ in self?.colorPickerButton.selectedColor }
-            .compactMap { $0 }
+            .compactMap { [weak self] _ in self?.colorPickerButton.selectedColor }
                 
         let input = AddSymptomVM.Input(
             tappedNegativeConfirmButton: negativeConfirmButton.rx.tap.asObservable(),
             tappedOtherConfirmButton: otherConfirmButton.rx.tap.asObservable(),
-            textOfTextField: textField.rx.text.orEmpty.asObservable(),
+            textOfTextField: capsuleTextField.rx.clippedText,
             tappedCloseButton: closeButton.rx.tap.asObservable(),
-            selectedColorFromPalette: selectedColorFromPalette.asObservable(),
+            selectedColorFromPalette: colorPaletteView.rx.selectedColor,
             selectedColorFromPicker: selectedColorFromPicker)
         
         let output = addSymptomVM.transform(input)
-        
-        // 컬러 팔레트 컬렉션 뷰 데이터 소스
-        output.colorPaletteData
-            .bind(to: colorPaletteCV.rx.items(cellIdentifier: ColorPaletteCell.identifier, cellType: ColorPaletteCell.self)) { index, item, cell in
-                cell.configure(hex: item)
-                cell.colorButtonTask = { [weak self] in self?.selectedColorFromPalette.onNext(item.toUIColor) }
-            }
-            .disposed(by: bag)
-        
-        // 텍스트 필드에 공백을 제외한 텍스트 바인딩
-        output.clippedText
-            .bind(to: textField.rx.text)
-            .disposed(by: bag)
         
         // 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
         output.isEnabledConfirmButton
@@ -234,7 +170,7 @@ final class AddSymptomVC: UIViewController {
         output.presentDuplicateAlert
             .bind(with: self) { owner, name in
                 // 얼럿 뜨기 전 키보드 닫아줘야 함
-                owner.textField.endEditing(true)
+                owner.capsuleTextField.endEditing(true)
                 // 얼럿 띄우기
                 owner.presentAcceptAlert(
                     title: String(localized: "등록 실패"),
@@ -258,18 +194,10 @@ final class AddSymptomVC: UIViewController {
         
         // 초기 색상, 업데이트 색상 바인딩
         output.selectedColor
-            .bind(to: colorPickerButton.rx.selectedColor, capsuleView.rx.backgroundColor)
-            .disposed(by: bag)
-        
-        // 키보드의 done 버튼을 누르면 키보드 닫기
-        textField
-            .rx.controlEvent(.editingDidEndOnExit)
-            .subscribe()
+            .bind(to: colorPickerButton.rx.selectedColor, capsuleTextField.rx.capsuleColor)
             .disposed(by: bag)
     }
-
 }
-
 
 #Preview(traits: .fixedLayout(width: 400, height: 400)) {
     AddSymptomVC()
