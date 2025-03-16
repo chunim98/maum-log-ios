@@ -40,6 +40,9 @@
 		515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */; };
 		515B95662C766BC100B4FE26 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B95652C766BC100B4FE26 /* HapticManager.swift */; };
 		516130242C72300C0037127A /* SymptomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516130232C72300C0037127A /* SymptomSectionView.swift */; };
+		5167EA572D85BB8F00D76889 /* ConfirmButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167EA562D85BB8F00D76889 /* ConfirmButton.swift */; };
+		5167EA592D85CACC00D76889 /* AddSymptomEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167EA582D85CAC700D76889 /* AddSymptomEvent.swift */; };
+		5167EA5E2D85F26900D76889 /* AddSymptomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167EA5D2D85F26900D76889 /* AddSymptomHeaderView.swift */; };
 		516F59FB2C67B7F900BD640B /* ToggleTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F59FA2C67B7F900BD640B /* ToggleTypeCell.swift */; };
 		516F59FD2C67BC5700BD640B /* SettingValuesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F59FC2C67BC5700BD640B /* SettingValuesStorage.swift */; };
 		517E7F102C60FF730003AAA3 /* AddLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517E7F0F2C60FF730003AAA3 /* AddLogVC.swift */; };
@@ -150,6 +153,9 @@
 		515B95632C7624CD00B4FE26 /* NamedRateCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedRateCardCell.swift; sourceTree = "<group>"; };
 		515B95652C766BC100B4FE26 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		516130232C72300C0037127A /* SymptomSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionView.swift; sourceTree = "<group>"; };
+		5167EA562D85BB8F00D76889 /* ConfirmButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmButton.swift; sourceTree = "<group>"; };
+		5167EA582D85CAC700D76889 /* AddSymptomEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymptomEvent.swift; sourceTree = "<group>"; };
+		5167EA5D2D85F26900D76889 /* AddSymptomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymptomHeaderView.swift; sourceTree = "<group>"; };
 		516F59FA2C67B7F900BD640B /* ToggleTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTypeCell.swift; sourceTree = "<group>"; };
 		516F59FC2C67BC5700BD640B /* SettingValuesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingValuesStorage.swift; sourceTree = "<group>"; };
 		517E7F0F2C60FF730003AAA3 /* AddLogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogVC.swift; sourceTree = "<group>"; };
@@ -290,6 +296,8 @@
 		514BA1F22D847D27001A6138 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				5167EA5C2D85F25600D76889 /* AddSymptomHeaderView */,
+				5167EA552D85BB1500D76889 /* ConfirmButton */,
 				514BA1F42D847D4F001A6138 /* CapsuleTextField */,
 				514BA1FB2D84974C001A6138 /* ColorPaletteView */,
 			);
@@ -386,6 +394,22 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		5167EA552D85BB1500D76889 /* ConfirmButton */ = {
+			isa = PBXGroup;
+			children = (
+				5167EA562D85BB8F00D76889 /* ConfirmButton.swift */,
+			);
+			path = ConfirmButton;
+			sourceTree = "<group>";
+		};
+		5167EA5C2D85F25600D76889 /* AddSymptomHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				5167EA5D2D85F26900D76889 /* AddSymptomHeaderView.swift */,
+			);
+			path = AddSymptomHeaderView;
+			sourceTree = "<group>";
+		};
 		518386E82C6408C100437696 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -434,6 +458,7 @@
 				514BA1F22D847D27001A6138 /* Components */,
 				51E739AE2C6526AC00F957A3 /* AddSymptomVC.swift */,
 				5195AB372C69EBD9000A7BED /* AddSymptomVM.swift */,
+				5167EA582D85CAC700D76889 /* AddSymptomEvent.swift */,
 			);
 			path = AddSymptom;
 			sourceTree = "<group>";
@@ -763,6 +788,7 @@
 			files = (
 				514BA1F82D84833D001A6138 /* CapsuleTextFieldVM.swift in Sources */,
 				51E4905C2C7DDCDE00F0150A /* MedicineCardData.swift in Sources */,
+				5167EA572D85BB8F00D76889 /* ConfirmButton.swift in Sources */,
 				517E7F122C6106FE0003AAA3 /* LoggableCapsuleCell.swift in Sources */,
 				51E739B12C653C5F00F957A3 /* ColorPaletteCell.swift in Sources */,
 				515B95662C766BC100B4FE26 /* HapticManager.swift in Sources */,
@@ -836,10 +862,12 @@
 				51CD57122C7C49E700B8858D /* MedicineSectionView.swift in Sources */,
 				515B95642C7624CD00B4FE26 /* NamedRateCardCell.swift in Sources */,
 				51563D5C2C52DFFF005BBCC2 /* SceneDelegate.swift in Sources */,
+				5167EA5E2D85F26900D76889 /* AddSymptomHeaderView.swift in Sources */,
 				517E7F142C6142A00003AAA3 /* AddLogVM.swift in Sources */,
 				518E5EF82CFDF9A20067DF38 /* Int16+.swift in Sources */,
 				51E490552C7DDBF500F0150A /* SymptomCardData.swift in Sources */,
 				51AC42D92C746C6F0079CCB8 /* CalendarSectionVM.swift in Sources */,
+				5167EA592D85CACC00D76889 /* AddSymptomEvent.swift in Sources */,
 				51E7B71E2C7330D500D6B7C4 /* CalendarSectionView.swift in Sources */,
 				5195AB382C69EBD9000A7BED /* AddSymptomVM.swift in Sources */,
 				51B923B72D7EEB11005DFB43 /* SymptomSectionBodyView.swift in Sources */,

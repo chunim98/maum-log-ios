@@ -19,7 +19,7 @@ final class ColorPaletteCell: UICollectionViewCell {
     
     private let circleView = {
         let view = UIView()
-        view.layer.cornerRadius = 25
+        view.layer.cornerRadius = 15
         view.clipsToBounds = true
         return view
     }()

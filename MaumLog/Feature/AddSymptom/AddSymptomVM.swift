@@ -12,89 +12,66 @@ import RxCocoa
 final class AddSymptomVM {
 
     struct Input {
-        let tappedNegativeConfirmButton: Observable<Void>
-        let tappedOtherConfirmButton: Observable<Void>
-        let textOfTextField: Observable<String>
-        let tappedCloseButton: Observable<Void>
-        let selectedColorFromPalette: Observable<UIColor>
-        let selectedColorFromPicker: Observable<UIColor>
+        let closeButtonEvent: Observable<AddSymptomEvent>
+        let confirmButtonEvent: Observable<ConfirmButton.Event>
+        let clippedText: Observable<String>
+        let selectedColor: Observable<UIColor>
     }
     
     struct Output {
-        let colorPaletteData: Observable<[Int]>
-        let isEnabledConfirmButton: Observable<Bool>
-        let justDismiss: Observable<Void>
+        let isConfirmButtonEnabled: Observable<Bool>
+        let addSymptomEvent: Observable<AddSymptomEvent>
         let selectedColor: Observable<UIColor>
-        let presentDuplicateAlert: Observable<String>
-        let saveAndDismiss: Observable<Void>
     }
     
     private let bag = DisposeBag()
-    private let colorPalette = [
-        0x6d6a74, 0x8e8a95, 0xb2b8c0, 0x6a5976, 0xd1b8b4, 0xd4c6c3,
-        0xd6c9c6, 0x9c7f8a, 0xdca46d, 0xc48b6d, 0x8d8a95, 0x7d676a,
-        0x5f5a64, 0x8c7d8a, 0xb1a5b1, 0xb9b5bf, 0xd2b5b5, 0xdfc7c4,
-        0xd4b8a6, 0x8e7d7b, 0x7b6d71, 0xa28d8d, 0x7f6f7b, 0x6b5a6b,
-        0x9d7a73, 0xb4a79b, 0x6b6f43, 0x8a8c5e, 0x9a9e71, 0xb4b86e]
     
     func transform(_ input: Input) -> Output {
-        // 중복 얼럿 메시지 전송
-        let presentDuplicateAlert = PublishSubject<String>()
-        // 저장 후 화면 닫기 메시지 전송
-        let saveAndDismiss = PublishSubject<Void>()
-        // randomElement가 nil일 수가 없음
-        let selectedColor = BehaviorSubject(value: colorPalette.randomElement()!.toUIColor)
+        let symptomDataArr = BehaviorSubject(value: SymptomDataManager.shared.read())
+        
+        // 텍스트 필드가 채워지면, 추가 버튼 활성화
+        let isEnabledConfirmButton = input.clippedText
+            .map { !$0.isEmpty }
 
-        // MARK: - Observables
-        // 컬러 팔레트 데이터
-        let colorPaletteData = Observable.just(colorPalette)
-        
-        // 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
-        let isEnabledConfirmButton = input.textOfTextField
-            .map { !($0.isEmpty) }
-        
-        // 저장 버튼 눌렀을 때의 저장 로직
-        Observable
-            .merge( // Bool타입으로 변환해서 어떤 버튼이 눌렸는지 구분
-                input.tappedNegativeConfirmButton.map { true },
-                input.tappedOtherConfirmButton.map { false })
-            .withLatestFrom(Observable.combineLatest(input.textOfTextField, selectedColor)) { isNegative, combined in
-                let (clippedText, selectedColor) = combined
-                return SymptomData(name: clippedText, hex: selectedColor.toHexInt, isNegative: isNegative)
-            }
-            .bind(with: self) { owner, symptomData in
-                let isDuplicated = owner.checkDuplicate(text: symptomData.name)
-                
-                // 중복 체크 후 저장 or 중복 얼럿 띄우기
-                if !isDuplicated {
-                    SymptomDataManager.shared.create(from: symptomData)
-                    saveAndDismiss.onNext(())
-                } else {
-                    presentDuplicateAlert.onNext(symptomData.name)
-                }
-            }
-            .disposed(by: bag)
-
-        // 화면 닫기 메시지 전송
-        let justDismiss = input.tappedCloseButton
-        
-        // 선택한 색상 업데이트
-        Observable
-            .merge(input.selectedColorFromPalette, input.selectedColorFromPicker)
-            .bind(to: selectedColor)
-            .disposed(by: bag)
+        // 확인 버튼이 눌렸을 때, 데이터의 중복 여부에 따라 다른 이벤트 방출
+        let saveOrAlertEvent = input.confirmButtonEvent
+            .withLatestFrom(Observable.combineLatest(
+                input.selectedColor.startWith(.chuTint),
+                input.clippedText,
+                symptomDataArr
+            )) { ($0, $1.0, $1.1, $1.2) }
+            .flatMap(attemptToAddSymptom)
         
         return Output(
-            colorPaletteData: colorPaletteData,
-            isEnabledConfirmButton: isEnabledConfirmButton,
-            justDismiss: justDismiss,
-            selectedColor: selectedColor.asObservable(),
-            presentDuplicateAlert: presentDuplicateAlert.asObservable(),
-            saveAndDismiss: saveAndDismiss.asObservable())
+            isConfirmButtonEnabled: isEnabledConfirmButton,
+            addSymptomEvent: Observable.merge(saveOrAlertEvent, input.closeButtonEvent),
+            selectedColor: input.selectedColor
+        )
     }
     
-    // MARK: - Methods
-    private func checkDuplicate(text: String) -> Bool {
-        SymptomDataManager.shared.read().contains { $0.name == text }
+    // MARK: Methods
+    
+    private func attemptToAddSymptom(
+        buttonEvent: ConfirmButton.Event,
+        selectedColor: UIColor,
+        clippedText: String,
+        symptomDataArr: [SymptomData]
+    ) -> Observable<AddSymptomEvent> {
+        Observable.create { observer in
+            guard !symptomDataArr.contains(where: { $0.name == clippedText }) else {
+                observer.onNext(.presentDuplicateAlert(clippedText))
+                return Disposables.create()
+            }
+
+            let symptomData = SymptomData(
+                name: clippedText,
+                hex: selectedColor.toHexInt,
+                isNegative: buttonEvent == .negative
+            )
+            SymptomDataManager.shared.create(from: symptomData)
+            observer.onNext(.save)
+            
+            return Disposables.create()
+        }
     }
 }

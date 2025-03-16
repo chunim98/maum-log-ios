@@ -58,7 +58,7 @@ extension UIColor {
         return array
     }
     
-    static let chuTint = UIColor.chuColorPalette.randomElement()
+    static let chuTint = UIColor.chuColorPalette.randomElement()!
     
     var toHexInt: Int {
         // CGColor를 sRGB로 변환

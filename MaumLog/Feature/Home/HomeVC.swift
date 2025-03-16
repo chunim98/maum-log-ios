@@ -184,10 +184,9 @@ extension Reactive where Base: HomeVC {
             let fraction = UISheetPresentationController.Detent.custom { _ in
                 base.view.frame.height * 0.5
             }
-            
             let vc = AddSymptomVC()
             vc.sheetPresentationController?.detents = [fraction]
-            vc.sheetPresentationController?.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
+            vc.sheetPresentationController?.preferredCornerRadius = 15 // 모달 모서리 굴곡
             vc.dismissTask = { base.symptomView.rx.reloadBinder.onNext(()) } // 창 닫을 때, 새로고침
             base.present(vc, animated: true)
         }
@@ -200,7 +199,7 @@ extension Reactive where Base: HomeVC {
             }
             let vc = AddMedicineVC()
             vc.sheetPresentationController?.detents = [fraction]
-            vc.sheetPresentationController?.preferredCornerRadius = .chuRadius // 모달 모서리 굴곡
+            vc.sheetPresentationController?.preferredCornerRadius = 15 // 모달 모서리 굴곡
             vc.dismissTask = { base.medicineView.rx.reloadBinder.onNext(()) } // 창 닫을 때, 새로고침
             base.present(vc, animated: true)
         }

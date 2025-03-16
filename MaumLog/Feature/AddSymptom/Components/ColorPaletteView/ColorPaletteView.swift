@@ -64,7 +64,11 @@ final class ColorPaletteView: UIView {
     
     private func setPaletteCVLayout() {
         self.layoutIfNeeded()
-        paletteCV.setMultilineLayout(spacing: 15, itemCount: 6, itemHeight: 50)
+        paletteCV.setMultilineLayout(
+            spacing: 15,
+            itemCount: 6,
+            itemSize: CGSize(width: 50, height: 50)
+        )
     }
     
     private func setAutoLayout() {
