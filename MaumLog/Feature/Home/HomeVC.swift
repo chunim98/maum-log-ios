@@ -17,6 +17,7 @@ final class HomeVC: UIViewController {
     
     private let homeVM = HomeVM()
     private let bag = DisposeBag()
+    weak var coordinator: HomeCoordinator?
     
     // MARK: Components
     
@@ -172,11 +173,7 @@ extension Reactive where Base: HomeVC {
     }
     
     fileprivate var pushSettingsBinder: Binder<Void> {
-        Binder(base) { base, _ in
-            let vc = SettingsVC()
-            vc.hidesBottomBarWhenPushed = true
-            base.navigationController?.pushViewController(vc, animated: true)
-        }
+        Binder(base) { base, _ in base.coordinator?.pushSettingsVC() }
     }
     
     fileprivate var pushAddSymptomBinder: Binder<Void> {

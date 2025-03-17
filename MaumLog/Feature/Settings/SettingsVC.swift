@@ -6,14 +6,16 @@
 //
 
 import UIKit
-import SnapKit
+
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class SettingsVC: UIViewController {
     
     private let settingsVM = SettingsVM()
     private let bag = DisposeBag()
+    weak var coordinator: SettingsCoordinator?
     
     // MARK: - Components
     let settingsTV: UITableView = {
@@ -34,6 +36,12 @@ final class SettingsVC: UIViewController {
         
         setAutoLayout()
         setNavigationBar(title: String(localized: "설정"))
+    }
+    
+    // 화면이 사라질 때 코디네이터의 deinit은 따로 처리해야 함
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        coordinator?.didFinish()
     }
     
     // MARK: - Layout

@@ -20,6 +20,7 @@ final class LogVC: UIViewController {
 
     private let logVM = LogVM()
     private let bag = DisposeBag()
+    weak var coordinator: Coordinator?
     
     // MARK: Interface
     

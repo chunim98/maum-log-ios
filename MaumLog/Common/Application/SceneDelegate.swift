@@ -10,7 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    var appCoordinator: AppCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -18,9 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        window = UIWindow(windowScene: windowScene) // 스토리보드 안쓰면 무조건 있어야 하는 코드
-        window?.rootViewController = TabBarVC() // 스토리보드 안쓰면 무조건 있어야 하는 코드
-        window?.makeKeyAndVisible() // 이건 뭐하는 건지 모르겠는데 일단 있어야 하는 코드인듯
+        window = UIWindow(windowScene: windowScene)
+        
+        appCoordinator = AppCoordinator()
+        window?.rootViewController = appCoordinator?.navigationController
+        appCoordinator?.push()
+        
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -43,6 +43,9 @@
 		5167EA572D85BB8F00D76889 /* ConfirmButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167EA562D85BB8F00D76889 /* ConfirmButton.swift */; };
 		5167EA592D85CACC00D76889 /* AddSymptomEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167EA582D85CAC700D76889 /* AddSymptomEvent.swift */; };
 		5167EA5E2D85F26900D76889 /* AddSymptomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167EA5D2D85F26900D76889 /* AddSymptomHeaderView.swift */; };
+		516A87632D86EE7F00B3CC2F /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516A87622D86EE6F00B3CC2F /* Coordinator.swift */; };
+		516A87652D86EF3100B3CC2F /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516A87642D86EF3000B3CC2F /* AppCoordinator.swift */; };
+		516A87692D86F00700B3CC2F /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516A87682D86F00300B3CC2F /* HomeCoordinator.swift */; };
 		516F59FB2C67B7F900BD640B /* ToggleTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F59FA2C67B7F900BD640B /* ToggleTypeCell.swift */; };
 		516F59FD2C67BC5700BD640B /* SettingValuesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F59FC2C67BC5700BD640B /* SettingValuesStorage.swift */; };
 		517E7F102C60FF730003AAA3 /* AddLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517E7F0F2C60FF730003AAA3 /* AddLogVC.swift */; };
@@ -104,6 +107,9 @@
 		51E739B12C653C5F00F957A3 /* ColorPaletteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */; };
 		51E7B71C2C7315FC00D6B7C4 /* SymptomSectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E7B71B2C7315FC00D6B7C4 /* SymptomSectionVM.swift */; };
 		51E7B71E2C7330D500D6B7C4 /* CalendarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E7B71D2C7330D500D6B7C4 /* CalendarSectionView.swift */; };
+		51EA48FA2D881CDD00695B98 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EA48F92D881CD800695B98 /* SettingsCoordinator.swift */; };
+		51EA48FC2D88566600695B98 /* LogCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EA48FB2D88565800695B98 /* LogCoordinator.swift */; };
+		51EA48FF2D88584E00695B98 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EA48FE2D88584900695B98 /* TabBarCoordinator.swift */; };
 		51FE74992C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE748F2C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift */; };
 		51FE749A2C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE74902C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift */; };
 		51FE749B2C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE74912C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift */; };
@@ -156,6 +162,9 @@
 		5167EA562D85BB8F00D76889 /* ConfirmButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmButton.swift; sourceTree = "<group>"; };
 		5167EA582D85CAC700D76889 /* AddSymptomEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymptomEvent.swift; sourceTree = "<group>"; };
 		5167EA5D2D85F26900D76889 /* AddSymptomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymptomHeaderView.swift; sourceTree = "<group>"; };
+		516A87622D86EE6F00B3CC2F /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		516A87642D86EF3000B3CC2F /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		516A87682D86F00300B3CC2F /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		516F59FA2C67B7F900BD640B /* ToggleTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTypeCell.swift; sourceTree = "<group>"; };
 		516F59FC2C67BC5700BD640B /* SettingValuesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingValuesStorage.swift; sourceTree = "<group>"; };
 		517E7F0F2C60FF730003AAA3 /* AddLogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogVC.swift; sourceTree = "<group>"; };
@@ -216,6 +225,9 @@
 		51E739B02C653C5F00F957A3 /* ColorPaletteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteCell.swift; sourceTree = "<group>"; };
 		51E7B71B2C7315FC00D6B7C4 /* SymptomSectionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionVM.swift; sourceTree = "<group>"; };
 		51E7B71D2C7330D500D6B7C4 /* CalendarSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSectionView.swift; sourceTree = "<group>"; };
+		51EA48F92D881CD800695B98 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
+		51EA48FB2D88565800695B98 /* LogCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCoordinator.swift; sourceTree = "<group>"; };
+		51EA48FE2D88584900695B98 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		51FE748F2C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		51FE74902C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogCoreData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		51FE74912C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MedicineCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -252,7 +264,6 @@
 				51E4904A2C7DDA0C00F0150A /* LogData */,
 				51E4904D2C7DDAA600F0150A /* SymptomData */,
 				51E490562C7DDC1800F0150A /* MedicineData */,
-				513F6A432D0439A700C5F071 /* Protocols */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -289,6 +300,7 @@
 			children = (
 				513F6A3F2D04397500C5F071 /* EditButtonCellModel.swift */,
 				513F6A412D04398500C5F071 /* CapsuleCellModel.swift */,
+				516A87622D86EE6F00B3CC2F /* Coordinator.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -444,6 +456,7 @@
 			isa = PBXGroup;
 			children = (
 				518E5F062CFE05AA0067DF38 /* Components */,
+				516A87682D86F00300B3CC2F /* HomeCoordinator.swift */,
 				51563D5D2C52DFFF005BBCC2 /* HomeVC.swift */,
 				5103A2492C555643008F8218 /* HomeVM.swift */,
 				51B923BE2D7EFEF1005DFB43 /* Array+SymptomData.swift */,
@@ -477,6 +490,7 @@
 			isa = PBXGroup;
 			children = (
 				511601782D03375200F19A36 /* Components */,
+				51EA48FB2D88565800695B98 /* LogCoordinator.swift */,
 				51412A0F2C5EB2D900381B7C /* LogVC.swift */,
 				51412A112C5EB7CB00381B7C /* LogVM.swift */,
 				515AFCF02D81A6CA0095CE93 /* LogButtonEvent.swift */,
@@ -498,6 +512,7 @@
 		518E5EE52CFDF4B50067DF38 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				51EA48F92D881CD800695B98 /* SettingsCoordinator.swift */,
 				51E6A2292C664BEB004C2BBA /* SettingsVC.swift */,
 				5188EC752C6696B3004873D1 /* SettingsVM.swift */,
 				5188EC772C66979C004873D1 /* ButtonTypeCell.swift */,
@@ -514,6 +529,7 @@
 				51563D652C52E001005BBCC2 /* Assets.xcassets */,
 				5103A2442C5543D7008F8218 /* Models */,
 				516130222C721AC00037127A /* CoreData */,
+				513F6A432D0439A700C5F071 /* Protocols */,
 				518E5EE92CFDF5980067DF38 /* Components */,
 				518E5EEA2CFDF5B00067DF38 /* Managers */,
 				518E5F052CFDFA030067DF38 /* Extensions */,
@@ -527,6 +543,7 @@
 		518E5EE72CFDF5210067DF38 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				516A87642D86EF3000B3CC2F /* AppCoordinator.swift */,
 				51563D592C52DFFF005BBCC2 /* AppDelegate.swift */,
 				51563D5B2C52DFFF005BBCC2 /* SceneDelegate.swift */,
 			);
@@ -545,8 +562,8 @@
 		518E5EE92CFDF5980067DF38 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				51EA48FD2D88584000695B98 /* TabBar */,
 				51B923AB2D7ED92F005DFB43 /* CircleAttachedLabel.swift */,
-				51E739A62C64969600F957A3 /* TabBarVC.swift */,
 				512C87B62C752D5F0025A8A1 /* OutlinedView.swift */,
 				512C966C2C77AF4700FA1D22 /* DividerView.swift */,
 				51E4905D2C7DF15700F0150A /* EmptyView.swift */,
@@ -671,6 +688,15 @@
 				51E4905B2C7DDCDE00F0150A /* MedicineCardData.swift */,
 			);
 			path = MedicineData;
+			sourceTree = "<group>";
+		};
+		51EA48FD2D88584000695B98 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				51EA48FE2D88584900695B98 /* TabBarCoordinator.swift */,
+				51E739A62C64969600F957A3 /* TabBarVC.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		51F756FB2D01C7B7003FD254 /* SymptomSection */ = {
@@ -807,9 +833,12 @@
 				512445512C58C8910044B8A4 /* SymptomLogCell.swift in Sources */,
 				51FE74A62C7CB8C500EDA685 /* MedicineCardCell.swift in Sources */,
 				518386E72C64087700437696 /* PropertyWrapper.swift in Sources */,
+				516A87692D86F00700B3CC2F /* HomeCoordinator.swift in Sources */,
 				5103A24A2C555643008F8218 /* HomeVM.swift in Sources */,
 				515AFCF12D81A6CB0095CE93 /* LogButtonEvent.swift in Sources */,
+				51EA48FF2D88584E00695B98 /* TabBarCoordinator.swift in Sources */,
 				5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */,
+				51EA48FA2D881CDD00695B98 /* SettingsCoordinator.swift in Sources */,
 				51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */,
 				518E5EEC2CFDF9380067DF38 /* UIColor+.swift in Sources */,
 				517E7F102C60FF730003AAA3 /* AddLogVC.swift in Sources */,
@@ -830,6 +859,8 @@
 				51E4904C2C7DDA5B00F0150A /* LogData.swift in Sources */,
 				515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */,
 				51E490582C7DDC7100F0150A /* MedicineData.swift in Sources */,
+				516A87632D86EE7F00B3CC2F /* Coordinator.swift in Sources */,
+				51EA48FC2D88566600695B98 /* LogCoordinator.swift in Sources */,
 				5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */,
 				51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */,
 				51E739AF2C6526AC00F957A3 /* AddSymptomVC.swift in Sources */,
@@ -839,6 +870,7 @@
 				51412A122C5EB7CB00381B7C /* LogVM.swift in Sources */,
 				518E5EFC2CFDF9C30067DF38 /* Array+Int16.swift in Sources */,
 				51B923B12D7EE0FE005DFB43 /* SectionView.swift in Sources */,
+				516A87652D86EF3100B3CC2F /* AppCoordinator.swift in Sources */,
 				51CD57292C7C8DEA00B8858D /* AddMedicineVM.swift in Sources */,
 				51563D5A2C52DFFF005BBCC2 /* AppDelegate.swift in Sources */,
 				51563D642C52DFFF005BBCC2 /* MaumLog.xcdatamodeld in Sources */,
