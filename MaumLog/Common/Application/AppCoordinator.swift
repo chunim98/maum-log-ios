@@ -8,15 +8,15 @@
 import UIKit
 
 final class AppCoordinator: Coordinator {
-    weak var parent: Coordinator?
+    weak var parent: Coordinator? // 사용 안함
     var childrens = [Coordinator]()
     let navigationController = UINavigationController()
     
-    func push() {
+    func start() {
         let tabBarCoordinator = TabBarCoordinator(navigationController)
         tabBarCoordinator.parent = self
         childrens.append(tabBarCoordinator)
-        tabBarCoordinator.push()
+        tabBarCoordinator.start()
     }
     
     deinit {

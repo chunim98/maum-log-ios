@@ -20,7 +20,7 @@ final class LogVC: UIViewController {
 
     private let logVM = LogVM()
     private let bag = DisposeBag()
-    weak var coordinator: Coordinator?
+    weak var coordinator: LogCoordinator?
     
     // MARK: Interface
     
@@ -224,15 +224,10 @@ extension Reactive where Base: LogVC {
     
     fileprivate var pushAddLogBinder: Binder<Void> {
         Binder(base) { base, _ in
-            let fraction = UISheetPresentationController.Detent.custom { _ in
-                base.view.frame.height * 0.8
+            let height = base.view.frame.height * 0.8
+            base.coordinator?.presentAddLogVC(height) {
+                base.reloadEvent.onNext(())
             }
-            let vc = AddLogVC()
-            vc.sheetPresentationController?.detents = [fraction, .large()]
-            vc.sheetPresentationController?.preferredCornerRadius = .chuRadius
-            vc.sheetPresentationController?.prefersGrabberVisible = true
-            vc.dismissTask = { base.reloadEvent.onNext(()) }
-            base.present(vc, animated: true)
         }
     }
     
@@ -277,16 +272,8 @@ extension LogVC {
             acceptTask: { [weak self] in
                 guard let self else { return }
                 
-                // 모달 높이 조정
-                let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.6 }
-
-                let vc = AddSymptomVC()
-                if let sheet = vc.sheetPresentationController {
-                    sheet.detents = [fraction]
-                    sheet.preferredCornerRadius = .chuRadius
-                }
-                
-                present(vc, animated: true)
+                let height = self.view.frame.height * 0.6
+                coordinator?.presentAddSymptomVC(height)
             })
     }
     
@@ -297,17 +284,9 @@ extension LogVC {
             acceptTitle: String(localized: "등록"),
             acceptTask: { [weak self] in
                 guard let self else { return }
-
-                // 모달 높이 조정
-                let fraction = UISheetPresentationController.Detent.custom { _ in self.view.frame.height * 0.3 }
-
-                let vc = AddMedicineVC()
-                if let sheet = vc.sheetPresentationController {
-                    sheet.detents = [fraction]
-                    sheet.preferredCornerRadius = .chuRadius
-                }
                 
-                present(vc, animated: true)
+                let height = self.view.frame.height * 0.3
+                coordinator?.presentAddMedicineVC(height)
             })
     }
     

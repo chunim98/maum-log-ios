@@ -8,23 +8,27 @@
 import UIKit
 
 final class SettingsCoordinator: Coordinator {
+    
+    // MARK: Components
+    
     weak var parent: Coordinator?
     var childrens = [Coordinator]()
     let navigationController : UINavigationController
     
+    // MARK: Life Cycle
+    
     init(_ navigationController: UINavigationController) {
-        print("SettingsCoordinator 생성")
         self.navigationController = navigationController
     }
     
-    func push() {
+    func start() {
         let vc = SettingsVC()
         vc.coordinator = self
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func didFinish() { parent?.childDidFinish(self) }
+    func finish() { parent?.childDidFinish(self) }
     
     deinit { print("SettingsCoordinator 소멸") }
 }

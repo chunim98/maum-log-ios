@@ -17,6 +17,7 @@ final class AddSymptomVC: UIViewController {
     
     private let addSymptomVM = AddSymptomVM()
     private let bag = DisposeBag()
+    weak var coordinator: AddSymptomCoordinator?
     var dismissTask: (() -> Void)?
     
     // MARK: Components
@@ -54,6 +55,11 @@ final class AddSymptomVC: UIViewController {
         view.backgroundColor = .chuIvory
         setAutoLayout()
         setBinding()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        coordinator?.finish()
     }
     
     // MARK: Layout

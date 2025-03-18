@@ -178,27 +178,19 @@ extension Reactive where Base: HomeVC {
     
     fileprivate var pushAddSymptomBinder: Binder<Void> {
         Binder(base) { base, _ in
-            let fraction = UISheetPresentationController.Detent.custom { _ in
-                base.view.frame.height * 0.5
+            let height = base.view.frame.height * 0.5
+            base.coordinator?.presentAddSymptomVC(height) {
+                base.symptomView.rx.reloadBinder.onNext(())
             }
-            let vc = AddSymptomVC()
-            vc.sheetPresentationController?.detents = [fraction]
-            vc.sheetPresentationController?.preferredCornerRadius = 15 // 모달 모서리 굴곡
-            vc.dismissTask = { base.symptomView.rx.reloadBinder.onNext(()) } // 창 닫을 때, 새로고침
-            base.present(vc, animated: true)
         }
     }
     
     fileprivate var pushAddMedicineBinder: Binder<Void> {
         Binder(base) { base, _ in
-            let fraction = UISheetPresentationController.Detent.custom { _ in
-                base.view.frame.height * 0.3
+            let height = base.view.frame.height * 0.3
+            base.coordinator?.presentAddMedicineVC(height) {
+                base.medicineView.rx.reloadBinder.onNext(())
             }
-            let vc = AddMedicineVC()
-            vc.sheetPresentationController?.detents = [fraction]
-            vc.sheetPresentationController?.preferredCornerRadius = 15 // 모달 모서리 굴곡
-            vc.dismissTask = { base.medicineView.rx.reloadBinder.onNext(()) } // 창 닫을 때, 새로고침
-            base.present(vc, animated: true)
         }
     }
     

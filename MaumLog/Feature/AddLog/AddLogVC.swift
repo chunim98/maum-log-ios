@@ -14,6 +14,7 @@ final class AddLogVC: UIViewController {
     
     private let addLogVM = AddLogVM()
     private let bag = DisposeBag()
+    weak var coordinator: AddLogCoordinator?
     var dismissTask: (() -> Void)?
     
     private let addPendingLog = PublishSubject<SymptomCardData>()
@@ -179,6 +180,11 @@ final class AddLogVC: UIViewController {
         
         setAutoLayout()
         setBinding()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        coordinator?.finish()
     }
     
     // MARK: - Layout

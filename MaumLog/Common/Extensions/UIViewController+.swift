@@ -52,7 +52,7 @@ extension UIViewController {
         navigationBarAppearance.shadowColor = .clear // 그림자 없애기
         
         if let title { // 타이틀 설정
-            navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.chuBlack] // 타이틀 색깔
+            navigationBarAppearance.titleTextAttributes = [.foregroundColor : UIColor.chuBlack] // 타이틀 색깔
             navigationController?.navigationBar.tintColor = .chuBlack
             self.title = title
         }

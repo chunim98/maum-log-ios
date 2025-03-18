@@ -6,13 +6,15 @@
 //
 
 import UIKit
-import SnapKit
 import Combine
+
+import SnapKit
 
 final class AddMedicineVC: UIViewController {
     
     private let addMedicineVM = AddMedicineVM()
     private var cancellables = Set<AnyCancellable>()
+    weak var coordinator: AddMedicineCoordinator?
     var dismissTask: (() -> Void)?
     
     private let input = PassthroughSubject<AddMedicineVM.Input, Never>()
@@ -93,6 +95,11 @@ final class AddMedicineVC: UIViewController {
         
         setAutoLayout()
         setBinding()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        coordinator?.finish()
     }
     
     // MARK: - Layout

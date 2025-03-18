@@ -16,7 +16,7 @@ final class TabBarCoordinator: Coordinator {
         self.navigationController = navigationController
     }
     
-    func push() {
+    func start() {
         let tabbarController = TabBarVC()
         let homeCoordinator = HomeCoordinator()
         let logCoordinator = LogCoordinator()
@@ -33,8 +33,8 @@ final class TabBarCoordinator: Coordinator {
             logCoordinator.navigationController,
         ]
         
-        homeCoordinator.push()
-        logCoordinator.push()
+        homeCoordinator.start()
+        logCoordinator.start()
 
         navigationController.isNavigationBarHidden = true
         navigationController.pushViewController(tabbarController, animated: true)

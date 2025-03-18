@@ -41,7 +41,7 @@ final class SettingsVC: UIViewController {
     // 화면이 사라질 때 코디네이터의 deinit은 따로 처리해야 함
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
-        coordinator?.didFinish()
+        coordinator?.finish()
     }
     
     // MARK: - Layout

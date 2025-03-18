@@ -8,11 +8,16 @@
 import UIKit
 
 final class HomeCoordinator: Coordinator {
+    
+    // MARK: Components
+    
     weak var parent: Coordinator?
     var childrens = [Coordinator]()
     let navigationController = UINavigationController()
+        
+    // MARK: Life Cycle
     
-    func push() {
+    func start() {
         let vc = HomeVC()
         vc.tabBarItem = UITabBarItem(
             title: "대시보드",
@@ -23,14 +28,42 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    deinit { print("HomeCoordinator deinit") }
+    
+    // MARK: Methods
+    
     func pushSettingsVC() {
-        let settingsCoordinator = SettingsCoordinator(navigationController)
-        settingsCoordinator.parent = self
-        childrens.append(settingsCoordinator)
-        settingsCoordinator.push()
+        let coordinator = SettingsCoordinator(navigationController)
+        coordinator.parent = self
+        childrens.append(coordinator)
+        coordinator.start()
     }
     
-    deinit {
-        print("HomeCoordinator deinit")
+    func presentAddSymptomVC(
+        _ height: CGFloat,
+        _ dismissHandler: @escaping () -> Void
+    ) {
+        let coordinator = AddSymptomCoordinator(
+            navigationController,
+            height,
+            dismissHandler
+        )
+        coordinator.parent = self
+        childrens.append(coordinator)
+        coordinator.start()
+    }
+    
+    func presentAddMedicineVC(
+        _ height: CGFloat,
+        _ dismissHandler: @escaping () -> Void
+    ) {
+        let coordinator = AddMedicineCoordinator(
+            navigationController,
+            height,
+            dismissHandler
+        )
+        coordinator.parent = self
+        childrens.append(coordinator)
+        coordinator.start()
     }
 }

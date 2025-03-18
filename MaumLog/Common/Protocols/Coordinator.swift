@@ -12,7 +12,7 @@ protocol Coordinator: AnyObject {
     var childrens: [Coordinator] { get set } // 자식을 배열에 넣어 강한 참조를 유지
     var navigationController : UINavigationController { get }
     
-    func push() // 이 이름은 나중에 다시 생각해봐야 할 것 같음
+    func start()
 }
 
 extension Coordinator {
