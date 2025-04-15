@@ -12,87 +12,42 @@ import SnapKit
 
 final class AddMedicineVC: UIViewController {
     
+    // MARK: Properties
+    
     private let addMedicineVM = AddMedicineVM()
     private var cancellables = Set<AnyCancellable>()
     weak var coordinator: AddMedicineCoordinator?
     var dismissTask: (() -> Void)?
     
-    private let input = PassthroughSubject<AddMedicineVM.Input, Never>()
+    // MARK: Components
     
-    // MARK: - Components
-    let titleBackground = {
-        let view = UIView()
-        view.backgroundColor = .chuIvory
-        return view
-    }()
-    
-    let titleLabel = {
-        let label = UILabel()
-        label.text = String(localized: "복용 중인 약 등록")
-        label.font = .boldSystemFont(ofSize: 18)
-        label.textColor = .chuBlack
-        label.textAlignment = .center
-        return label
-    }()
-    
-    let closeButton = {
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage(named: "x")?
-            .resizeImage(newWidth: 22)
-            .withRenderingMode(.alwaysTemplate)
-        config.baseForegroundColor = .chuBlack
-        return UIButton(configuration: config)
-    }()
-    
-    let mainVStack = {
+    private let mainVStack = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = .chuSpace / 2
+        sv.spacing = 15
         return sv
     }()
 
-    let capsuleView = {
-        let view = UIView()
-        view.backgroundColor = .chuBlack
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 25
-        return view
-    }()
+    private let headerView = AddMedicineHeaderView()
     
-    let textField = {
-        let tf = UITextField()
-        tf.placeholder = String(localized: "약 이름 입력 (최대 12자)")
-        tf.font = .boldSystemFont(ofSize: 20)
-        tf.textColor = .chuBlack
-        tf.textAlignment = .center
-        tf.returnKeyType = .done // 키보드 리턴키를 "완료"로 변경
-        tf.clearButtonMode = .whileEditing
-        tf.borderStyle = .roundedRect
-        tf.backgroundColor = .chuWhite
-        return tf
-    }()
+    private let capsuleTextField = AddMedicineCapsuleTextField()
     
-    let stretchableView = UIView()
-
-    let confirmButton = {
+    private let confirmButton = {
         var config = UIButton.Configuration.filled()
-        config.title = String(localized: "추가")
         config.baseBackgroundColor = .chuBlack
         config.baseForegroundColor = .chuWhite
         config.cornerStyle = .capsule
+        config.title = "추가"
         let button = UIButton(configuration: config)
         button.isEnabled = false
         return button
     }()
 
-    // MARK: - Life Cycle
+    // MARK: Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .chuIvory
-        closeButton.addTarget(self, action: #selector(handleCloseButtonEvent), for: .touchUpInside)
-        confirmButton.addTarget(self, action: #selector(handleConfirmButtonEvent), for: .touchUpInside)
-        textField.delegate = self
-        
         setAutoLayout()
         setBinding()
     }
@@ -102,102 +57,73 @@ final class AddMedicineVC: UIViewController {
         coordinator?.finish()
     }
     
-    // MARK: - Layout
-    func setAutoLayout() {
+    // MARK: Layout
+    
+    private func setAutoLayout() {
         view.addSubview(mainVStack)
-        view.addSubview(titleBackground)
-        mainVStack.addArrangedSubview(capsuleView)
-        mainVStack.addArrangedSubview(stretchableView)
+        mainVStack.addArrangedSubview(headerView)
+        mainVStack.addArrangedSubview(capsuleTextField)
+        mainVStack.addArrangedSubview(UIView())
         mainVStack.addArrangedSubview(confirmButton)
-        capsuleView.addSubview(textField)
-        titleBackground.addSubview(titleLabel)
-        titleBackground.addSubview(closeButton)
 
-        titleBackground.snp.makeConstraints { $0.top.leading.trailing.equalToSuperview() }
-        titleLabel.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: .chuSpace, bottom: 10, right: .chuSpace))
-        }
-        closeButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
-            $0.centerY.equalToSuperview()
-        }
         mainVStack.snp.makeConstraints {
-            $0.top.equalTo(titleBackground.snp.bottom).inset(CGFloat.chuSpace.reverse)
-            $0.horizontalEdges.equalToSuperview().inset(CGFloat.chuSpace)
-            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).inset(CGFloat.chuSpace.reverse) // 키보드 올라왔을 때 레이아웃 동적 변환
+            $0.top.horizontalEdges.equalToSuperview().inset(15)
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).inset(-15)
         }
-        capsuleView.snp.makeConstraints { $0.height.equalTo(CGFloat.chuHeight) }
-        textField.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
-        confirmButton.snp.makeConstraints { $0.height.equalTo(CGFloat.chuHeight) }
+        capsuleTextField.snp.makeConstraints { $0.height.equalTo(50) }
+        confirmButton.snp.makeConstraints { $0.height.equalTo(50) }
     }
     
-    // MARK: - Binding
-    func setBinding() {
-        // Input
-        NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification, object: self.textField)
-            .compactMap{ $0.object as? UITextField}
-            .map{ $0.text ?? "" }
-            .sink { [weak self] text in
-                self?.input.send(.textOfTextField(text))
-            }
+    // MARK: Binding
+    
+    private func setBinding() {
+        let confirmButtonEventPublisher = confirmButton
+            .publisher(for: .touchUpInside)
+            .map { _ in }
+            .eraseToAnyPublisher()
+        
+        let input = AddMedicineVM.Input(
+            closeButtonEvent: headerView.closeButtonEventPublisher,
+            clippedText: capsuleTextField.clippedTextPublisher,
+            confirmButtonEvent: confirmButtonEventPublisher
+        )
+        let output = addMedicineVM.transform(input)
+        
+        // 텍스트 필드가 채워지면, 추가 버튼 활성화
+        output.isConfirmButtonEnabled
+            .sink { [weak self] in self?.confirmButton.isEnabled = $0 }
             .store(in: &cancellables)
         
-        
-        let output = addMedicineVM.transform(input.eraseToAnyPublisher())
-        
-        output.sink { [weak self] event in
-            guard let self else { return }
-            
-            switch event {
-            case .clippedText(let text):
-                /// 텍스트 필드에 공백을 제외한 텍스트 바인딩
-                textField.text = text
-                
-            case .isEnabledConfirmButton(let bool):
-                /// 텍스트 필드에 뭐라도 쳐야 추가버튼 활성화
-                confirmButton.isEnabled = bool
-                
-            case .justDismiss:
-                /// 그냥 화면 닫기
-                dismiss(animated: true)
-                
-            case .presentDuplicateAlert(let name):
-                /// 중복 얼럿 띄우기
-                
-                // 얼럿 뜨기 전 키보드 닫아줘야 함
-                textField.endEditing(true)
-                // 얼럿 띄우기
-                presentAcceptAlert(
-                    title: String(localized: "등록 실패"),
-                    message: String(localized: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."))
-                
-            case .saveAndDismiss:
-                /// 저장했으니 이제 화면 닫기
-                HapticManager.shared.occurSuccess()
-                dismissTask?()
-                dismiss(animated: true)
-            }
-        }
-        .store(in: &cancellables)
-    }
-    
-    @objc private func handleConfirmButtonEvent() {
-        input.send(.tappedConfirmButton)
-    }
-    
-    @objc private func handleCloseButtonEvent() {
-        input.send(.tappedCloseButton)
+        // 화면 전환 이벤트 바인딩
+        output.addMedicineEvent
+            .sink { [weak self] in self?.handleAddMedicineEvent($0) }
+            .store(in: &cancellables)
     }
 }
 
-extension AddMedicineVC: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        /// 키보드의 done 버튼을 누르면 키보드 닫기
-        /// input으로 이벤트 안보내는 이유는 비효율적이라?
-        
-        textField.endEditing(true)
-        return true
+// MARK: - Event Handling
+
+extension AddMedicineVC {
+    private func handleAddMedicineEvent(_ event: AddMedicineEvent) {
+        switch event {
+        // 저장하고 닫기
+        case .save:
+            HapticManager.shared.occurSuccess()
+            dismissTask?()
+            dismiss(animated: true)
+            
+        // 저장 없이 닫기
+        case .dismiss:
+            dismiss(animated: true)
+            
+        // 중복 얼럿 표시
+        case .presentDuplicateAlert(let name):
+            capsuleTextField.endEditing(true) // 표시 전 키보드 닫아줘야 함
+            presentAcceptAlert(
+                title: "등록 실패",
+                message: "\"\(name)\"은(는) 이미 등록된 이름이에요.\n다른 이름으로 다시 시도해주세요."
+            )
+        }
     }
 }
 

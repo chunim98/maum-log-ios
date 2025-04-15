@@ -95,7 +95,6 @@
 		51CD57202C7C5F0A00B8858D /* MedicineDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */; };
 		51CD57222C7C64D400B8858D /* MedicineSectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57212C7C64D400B8858D /* MedicineSectionVM.swift */; };
 		51CD57272C7C8D8200B8858D /* AddMedicineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */; };
-		51CD57292C7C8DEA00B8858D /* AddMedicineVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */; };
 		51E4904C2C7DDA5B00F0150A /* LogData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E4904B2C7DDA5B00F0150A /* LogData.swift */; };
 		51E4904F2C7DDB4D00F0150A /* SymptomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E4904E2C7DDB4D00F0150A /* SymptomData.swift */; };
 		51E490512C7DDB9000F0150A /* SymptomSectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E490502C7DDB9000F0150A /* SymptomSectionData.swift */; };
@@ -113,6 +112,13 @@
 		51EA48FA2D881CDD00695B98 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EA48F92D881CD800695B98 /* SettingsCoordinator.swift */; };
 		51EA48FC2D88566600695B98 /* LogCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EA48FB2D88565800695B98 /* LogCoordinator.swift */; };
 		51EA48FF2D88584E00695B98 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EA48FE2D88584900695B98 /* TabBarCoordinator.swift */; };
+		51EC920B2DAD52D900562DBF /* AddMedicineHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC920A2DAD52D900562DBF /* AddMedicineHeaderView.swift */; };
+		51EC920D2DAD536300562DBF /* UIControl+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC920C2DAD536100562DBF /* UIControl+Combine.swift */; };
+		51EC92242DAD582900562DBF /* AddMedicineCapsuleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC92232DAD582600562DBF /* AddMedicineCapsuleTextField.swift */; };
+		51EC92272DAD593500562DBF /* AddMedicineVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC92262DAD593400562DBF /* AddMedicineVM.swift */; };
+		51EC922B2DAD612000562DBF /* AddMedicineCapsuleTextFieldVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC922A2DAD611F00562DBF /* AddMedicineCapsuleTextFieldVM.swift */; };
+		51EC922D2DAD61B600562DBF /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC922C2DAD61B500562DBF /* UITextField+.swift */; };
+		51EC92312DAD713600562DBF /* AddMedicineEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC92302DAD713600562DBF /* AddMedicineEvent.swift */; };
 		51FE74992C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE748F2C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift */; };
 		51FE749A2C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE74902C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift */; };
 		51FE749B2C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE74912C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift */; };
@@ -140,7 +146,6 @@
 		513F6A412D04398500C5F071 /* CapsuleCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleCellModel.swift; sourceTree = "<group>"; };
 		51412A0F2C5EB2D900381B7C /* LogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogVC.swift; sourceTree = "<group>"; };
 		51412A112C5EB7CB00381B7C /* LogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogVM.swift; sourceTree = "<group>"; };
-		5143DD292D05F66200335F36 /* UIControl+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Combine.swift"; sourceTree = "<group>"; };
 		514BA1F52D847D96001A6138 /* CapsuleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleTextField.swift; sourceTree = "<group>"; };
 		514BA1F72D848336001A6138 /* CapsuleTextFieldVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleTextFieldVM.swift; sourceTree = "<group>"; };
 		514BA1F92D84905C001A6138 /* ColorPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteView.swift; sourceTree = "<group>"; };
@@ -216,7 +221,6 @@
 		51CD571F2C7C5F0A00B8858D /* MedicineDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDataManager.swift; sourceTree = "<group>"; };
 		51CD57212C7C64D400B8858D /* MedicineSectionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineSectionVM.swift; sourceTree = "<group>"; };
 		51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineVC.swift; sourceTree = "<group>"; };
-		51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineVM.swift; sourceTree = "<group>"; };
 		51E4904B2C7DDA5B00F0150A /* LogData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogData.swift; sourceTree = "<group>"; };
 		51E4904E2C7DDB4D00F0150A /* SymptomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomData.swift; sourceTree = "<group>"; };
 		51E490502C7DDB9000F0150A /* SymptomSectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSectionData.swift; sourceTree = "<group>"; };
@@ -234,6 +238,13 @@
 		51EA48F92D881CD800695B98 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		51EA48FB2D88565800695B98 /* LogCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCoordinator.swift; sourceTree = "<group>"; };
 		51EA48FE2D88584900695B98 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
+		51EC920A2DAD52D900562DBF /* AddMedicineHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineHeaderView.swift; sourceTree = "<group>"; };
+		51EC920C2DAD536100562DBF /* UIControl+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Combine.swift"; sourceTree = "<group>"; };
+		51EC92232DAD582600562DBF /* AddMedicineCapsuleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineCapsuleTextField.swift; sourceTree = "<group>"; };
+		51EC92262DAD593400562DBF /* AddMedicineVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineVM.swift; sourceTree = "<group>"; };
+		51EC922A2DAD611F00562DBF /* AddMedicineCapsuleTextFieldVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineCapsuleTextFieldVM.swift; sourceTree = "<group>"; };
+		51EC922C2DAD61B500562DBF /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
+		51EC92302DAD713600562DBF /* AddMedicineEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineEvent.swift; sourceTree = "<group>"; };
 		51FE748F2C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		51FE74902C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LogCoreData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		51FE74912C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MedicineCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -486,10 +497,11 @@
 		518E5EE22CFDF40C0067DF38 /* AddMedicine */ = {
 			isa = PBXGroup;
 			children = (
+				51EC92082DAD52B400562DBF /* Components */,
 				515C1CE82D897E03004B7A5B /* AddMedicineCoordinator.swift */,
 				51CD57262C7C8D8200B8858D /* AddMedicineVC.swift */,
-				51CD57282C7C8DEA00B8858D /* AddMedicineVM.swift */,
-				5143DD292D05F66200335F36 /* UIControl+Combine.swift */,
+				51EC92262DAD593400562DBF /* AddMedicineVM.swift */,
+				51EC92302DAD713600562DBF /* AddMedicineEvent.swift */,
 			);
 			path = AddMedicine;
 			sourceTree = "<group>";
@@ -595,6 +607,8 @@
 		518E5F052CFDFA030067DF38 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				51EC922C2DAD61B500562DBF /* UITextField+.swift */,
+				51EC920C2DAD536100562DBF /* UIControl+Combine.swift */,
 				51C657A02D82E0A800AFEB0E /* UIEdgeInsets+.swift */,
 				51B923C22D7F067E005DFB43 /* Comparable+.swift */,
 				51B923A82D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift */,
@@ -706,6 +720,32 @@
 				51E739A62C64969600F957A3 /* TabBarVC.swift */,
 			);
 			path = TabBar;
+			sourceTree = "<group>";
+		};
+		51EC92082DAD52B400562DBF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				51EC92252DAD583100562DBF /* AddMedicineHeaderView */,
+				51EC92222DAD581400562DBF /* AddMedicineCapsuleTextField */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		51EC92222DAD581400562DBF /* AddMedicineCapsuleTextField */ = {
+			isa = PBXGroup;
+			children = (
+				51EC92232DAD582600562DBF /* AddMedicineCapsuleTextField.swift */,
+				51EC922A2DAD611F00562DBF /* AddMedicineCapsuleTextFieldVM.swift */,
+			);
+			path = AddMedicineCapsuleTextField;
+			sourceTree = "<group>";
+		};
+		51EC92252DAD583100562DBF /* AddMedicineHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				51EC920A2DAD52D900562DBF /* AddMedicineHeaderView.swift */,
+			);
+			path = AddMedicineHeaderView;
 			sourceTree = "<group>";
 		};
 		51F756FB2D01C7B7003FD254 /* SymptomSection */ = {
@@ -846,6 +886,7 @@
 				5103A24A2C555643008F8218 /* HomeVM.swift in Sources */,
 				515AFCF12D81A6CB0095CE93 /* LogButtonEvent.swift in Sources */,
 				51EA48FF2D88584E00695B98 /* TabBarCoordinator.swift in Sources */,
+				51EC920D2DAD536300562DBF /* UIControl+Combine.swift in Sources */,
 				5188EC762C6696B3004873D1 /* SettingsVM.swift in Sources */,
 				51EA48FA2D881CDD00695B98 /* SettingsCoordinator.swift in Sources */,
 				51A0D2C52C6FD07400B564B3 /* LogDataManager.swift in Sources */,
@@ -866,12 +907,14 @@
 				51412A102C5EB2D900381B7C /* LogVC.swift in Sources */,
 				51C657A12D82E0A800AFEB0E /* UIEdgeInsets+.swift in Sources */,
 				51E4904C2C7DDA5B00F0150A /* LogData.swift in Sources */,
+				51EC920B2DAD52D900562DBF /* AddMedicineHeaderView.swift in Sources */,
 				515AFCEF2D81A6980095CE93 /* AddLogBarButton.swift in Sources */,
 				51E490582C7DDC7100F0150A /* MedicineData.swift in Sources */,
 				516A87632D86EE7F00B3CC2F /* Coordinator.swift in Sources */,
 				51EA48FC2D88566600695B98 /* LogCoordinator.swift in Sources */,
 				5103A2482C554F75008F8218 /* CapsuleCell.swift in Sources */,
 				51A0D2BF2C6FBCB300B564B3 /* SymptomDataManager.swift in Sources */,
+				51EC922B2DAD612000562DBF /* AddMedicineCapsuleTextFieldVM.swift in Sources */,
 				51E739AF2C6526AC00F957A3 /* AddSymptomVC.swift in Sources */,
 				518E5EF42CFDF97F0067DF38 /* DateFormatter+.swift in Sources */,
 				518E5EF22CFDF9730067DF38 /* UICollectionView+.swift in Sources */,
@@ -881,13 +924,14 @@
 				518E5EFC2CFDF9C30067DF38 /* Array+Int16.swift in Sources */,
 				51B923B12D7EE0FE005DFB43 /* SectionView.swift in Sources */,
 				516A87652D86EF3100B3CC2F /* AppCoordinator.swift in Sources */,
-				51CD57292C7C8DEA00B8858D /* AddMedicineVM.swift in Sources */,
 				51563D5A2C52DFFF005BBCC2 /* AppDelegate.swift in Sources */,
+				51EC92242DAD582900562DBF /* AddMedicineCapsuleTextField.swift in Sources */,
 				51563D642C52DFFF005BBCC2 /* MaumLog.xcdatamodeld in Sources */,
 				51B923A92D7ED6B7005DFB43 /* NSDirectionalEdgeInsets+.swift in Sources */,
 				513F6A422D04398500C5F071 /* CapsuleCellModel.swift in Sources */,
 				516130242C72300C0037127A /* SymptomSectionView.swift in Sources */,
 				514BA1FA2D84905C001A6138 /* ColorPaletteView.swift in Sources */,
+				51EC92272DAD593500562DBF /* AddMedicineVM.swift in Sources */,
 				5126AC822D01914B001625DB /* TrendCalendarView.swift in Sources */,
 				51CD57222C7C64D400B8858D /* MedicineSectionVM.swift in Sources */,
 				515C1CE92D897E0B004B7A5B /* AddMedicineCoordinator.swift in Sources */,
@@ -911,10 +955,12 @@
 				518E5EF82CFDF9A20067DF38 /* Int16+.swift in Sources */,
 				51E490552C7DDBF500F0150A /* SymptomCardData.swift in Sources */,
 				51AC42D92C746C6F0079CCB8 /* CalendarSectionVM.swift in Sources */,
+				51EC922D2DAD61B600562DBF /* UITextField+.swift in Sources */,
 				5167EA592D85CACC00D76889 /* AddSymptomEvent.swift in Sources */,
 				51E7B71E2C7330D500D6B7C4 /* CalendarSectionView.swift in Sources */,
 				5195AB382C69EBD9000A7BED /* AddSymptomVM.swift in Sources */,
 				51B923B72D7EEB11005DFB43 /* SymptomSectionBodyView.swift in Sources */,
+				51EC92312DAD713600562DBF /* AddMedicineEvent.swift in Sources */,
 				51FE74992C7CA29400EDA685 /* LogCoreData+CoreDataClass.swift in Sources */,
 				51FE749A2C7CA29400EDA685 /* LogCoreData+CoreDataProperties.swift in Sources */,
 				51FE749B2C7CA29400EDA685 /* MedicineCoreData+CoreDataClass.swift in Sources */,
