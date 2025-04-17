@@ -22,6 +22,7 @@
 | 이름 | 목적 |
 | --- | --- |
 | RxSwift | UIKit 환경에서 반응형 프로그래밍과 추적이 쉬운 데이터 흐름을 구현합니다. |
+| Combine | UIKit 환경에서 반응형 프로그래밍과 추적이 쉬운 데이터 흐름을 구현합니다. |
 | RxDataSources | RxCocoa로 TableView 바인딩 시 애니메이션을 적용합니다. |
 | CoreData | 투약 기록에 관한 데이터를 관리합니다. |
 | SnapKit | AutoLayout 제약조건 코드의 가독성을 개선합니다. |
@@ -46,7 +47,7 @@
 <br/>
 
 ## 문제 해결
-[🔗 문제 해결 사례](https://axiomatic-mambo-9a8.notion.site/180b946392fe80dc8950ed09335e5ff9?pvs=4)
+[🔗 문제 해결 사례(리팩토링 이전)](https://axiomatic-mambo-9a8.notion.site/180b946392fe80dc8950ed09335e5ff9?pvs=4)
 
 <br/>
 
